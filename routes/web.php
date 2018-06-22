@@ -26,6 +26,6 @@ Route::resource('/banks','BanksController');
 
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::resource('/bankTransfers','BankTransfersController');
-    Route::get('/bank/transfer/{x}','BankTransfersController@generatePDF');
+    Route::resource('/bank-transfers','BankTransfersController');
+    Route::get('/bank-transfers/pdf/{x}','BankTransfersController@generatePDF');
 });
