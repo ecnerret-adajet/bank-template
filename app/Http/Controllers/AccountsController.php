@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Account;
 use App\Bank;
-use Carbon\Carbon;
-use App\Manager;
 
-class BanksController extends Controller
+class AccountsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +15,7 @@ class BanksController extends Controller
      */
     public function index()
     {
-        $banks = Bank::all();
-        return view('banks.index', compact('banks'));
+        //
     }
 
     /**
@@ -28,7 +25,8 @@ class BanksController extends Controller
      */
     public function create()
     {
-        return view('banks.create');
+        $banks = Bank::pluck('name','id');
+        return view('accounts.create',compact('banks'));
     }
 
     /**
@@ -40,15 +38,14 @@ class BanksController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'branch' => 'required',
-            'location' => 'required'
+            'account_number',
+            'bank_list',
         ]);
 
-        $bank = Auth::user()->banks()->create($request->all());
+        $account = Account::create($request->all());
+        $account->bank()->associate($request->input('bank_list'));
 
-        return redirect('banks');
-
+        return redirect('accounts');
     }
 
     /**

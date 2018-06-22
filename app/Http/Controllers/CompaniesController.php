@@ -3,9 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Company;
+use Carbon\Carbon;
 
 class CompaniesController extends Controller
 {
+
+    /**
+     * Display all company
+     */
+    public function allCompany()
+    {
+        $companies = Company::all();
+        return $companies;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,7 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        //
+        return view('companies.index');
     }
 
     /**
@@ -34,7 +46,16 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $company = new Company;
+        $company->name = $request->input('name');
+        $company->save();
+
+        return Response::json(array('success' => true), 200);
+
     }
 
     /**

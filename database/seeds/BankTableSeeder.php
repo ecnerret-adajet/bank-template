@@ -12,12 +12,18 @@ class BankTableSeeder extends Seeder
     public function run()
     {
           DB::table('banks')->insert([
-            ['name' => 'Bank of the philippine island'],
-            ['name' => 'Banco de oro'],
-            ['name' => 'Security Bank'],
-            ['name' => 'China Bank'],
-            ['name' => 'East west bank'],
-            ['name' => 'Philippine National Bank']
+            [
+                'user_id' => 1,
+                'name' => 'Bank of the Philippine Islands',
+                'branch' => 'Plaza Cervantes Branch',
+                'location' => 'Manila'
+            ],
+            [
+                'user_id' => 2,
+                'name' => 'Bank of the Philippine Islands',
+                'branch' => 'Iloilo Branch',
+                'location' => 'Iloilo'
+            ],
         ]);
     }
 }

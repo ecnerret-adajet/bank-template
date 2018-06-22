@@ -26,4 +26,24 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // Relationship Model
+
+    public function bankTransfers()
+    {
+        return $this->hasMany(BankTransfer::class);
+    }
+
+    public function banks()
+    {
+        return $this->hasMany(Bank::class);
+    }
+
+    public function signatories()
+    {
+        return $this->hasMany(Signatory::class);
+    }
+
+
+
 }
