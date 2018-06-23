@@ -42,7 +42,7 @@
                 <h4 class="card-title mt-4">Manager's Check</h4>
             </div>
                 <div class="card-footer">
-                <a href="{{ url('/bank-transfers/create') }}">
+                <a href="{{ url('/manager-checks/create') }}">
                     Create Now
                 </a>
                     

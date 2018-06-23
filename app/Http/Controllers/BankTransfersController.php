@@ -76,7 +76,7 @@ class BankTransfersController extends Controller
         $bankTransfer->signatory()->associate($request->input('signatory_list'));
         $bankTransfer->save();
 
-        return redirect('bankTransfers/'.$bankTransfer->id);
+        return redirect('bank-transfers/'.$bankTransfer->id);
     }
 
     /**
@@ -98,9 +98,9 @@ class BankTransfersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BankTransfer $bank_transfer)
     {
-        //
+        return view('bankTransfers.show', compact('bank_transfer'));
     }
 
     /**

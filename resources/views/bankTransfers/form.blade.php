@@ -104,7 +104,7 @@
           <div class="col">
              <div class="form-group">
                 <label for="exampleSelect2">Authorized Signatory</label>
-                {!! Form::select('signatory_list', $signatories, null, ['placeholder' => 'Select Bank', 'class' => 'form-control'] ) !!}
+                {!! Form::select('signatory_list', $signatories, null, ['placeholder' => 'Select Signatory', 'class' => 'form-control'] ) !!}
                 @if ($errors->has('signatory_list'))
                     <div class="form-control-feedback">
                     <small class="text-danger">

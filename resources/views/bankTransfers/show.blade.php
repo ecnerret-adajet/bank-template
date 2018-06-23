@@ -12,12 +12,13 @@
         </div><!-- /.row -->
     </div>
 
-    {!! Form::model($bank_transfer = new \App\BankTransfer, ['url' => 'bank-transfers', 'files' => 'true', 'enctype' => 'multipart\form-data']) !!}
-    {!! csrf_field() !!}
-        <form>
-        @include('bankTransfers.form')
-        </form>
-    {!! Form::close() !!} 
+    <div class="row">
+        <div class="col">
+
+        <a href="{{ url('bank-transfers/pdf/'.$bank_transfer->id) }}" target="_blank" class="btn btn-info">View PDF</a>
+
+        </div>
+    </div>
    
 </div>
 @endsection
