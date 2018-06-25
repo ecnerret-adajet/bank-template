@@ -141,6 +141,7 @@ export default {
                 nature: this.nature,
                 ref_num: this.ref_num,
                 amount: this.amount,
+                status: 0,
             })
             .then(response => {
                 this.payees.push(response.data);
@@ -194,7 +195,7 @@ export default {
             })
             .catch((error) => {
                 console.log(error);
-            });;
+            });
 
         } 
     },

@@ -4,20 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ManagerCheck extends Model
+class Payroll extends Model
 {
-
-    protected $table = 'manager_checks';
-
-    protected $fillable = [
-        'ref_num',
-        'mc_cost',
-        'grand_total',
-        'account_number',
-        'company',
-        'status'
+    protected $unguard = [
+        '*',
     ];
-    
+
     // Model Relationships
 
     public function user()
@@ -35,8 +27,10 @@ class ManagerCheck extends Model
         return $this->belongsTo(Signatory::class);
     }
 
-    public function payees()
+    public function applicants()
     {
-        return $this->hasMany(Payee::class);
+        return $this->hasMany(Applicant::class);
     }
+
+
 }

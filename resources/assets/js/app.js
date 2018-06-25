@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('mc-form-table', require('./components/MCFormTable.vue'));
+Vue.component('payroll-form-table', require('./components/PayrollFormTable.vue'));
 
 const app = new Vue({
     el: '#app'

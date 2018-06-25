@@ -50,7 +50,25 @@
             </div>
 
         </div>
-        <div class="col"></div>
+        <div class="col">
+
+               <div class="card border-primary mb-3">
+            
+            <div class="card-body text-center">
+            
+                <img src="{{ asset('/fonts/flat/atm.svg') }}" style="height: 100px; width:auto" alt="bank_transfer">
+
+                <h4 class="card-title mt-4">Payroll Application</h4>
+            </div>
+                <div class="card-footer">
+                <a href="{{ url('/payrolls/create') }}">
+                    Create Now
+                </a>
+                    
+                </div>
+            </div>
+
+        </div>
     </div>
 
 
