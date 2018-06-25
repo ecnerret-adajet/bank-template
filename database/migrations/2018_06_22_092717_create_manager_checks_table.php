@@ -21,7 +21,6 @@ class CreateManagerChecksTable extends Migration
             $table->integer('manager_id')->unsigned();
             $table->double('mc_cost')->unsigned();
             $table->double('grand_total')->unsigned();
-            $table->string('payees',2000);
             $table->string('account_number');
             $table->string('company');
             $table->timestamps();

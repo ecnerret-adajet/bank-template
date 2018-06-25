@@ -33,13 +33,19 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Banks</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Report</a>
+            </li>
             </ul>
         </div>
             </div>
        
         </nav>
 
-        @yield('content')
+        <div class="mb-4">
+            @yield('content')
+        </div>
+
     </div>
 
     <!-- Scripts -->

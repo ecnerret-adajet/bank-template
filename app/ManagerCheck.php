@@ -13,7 +13,8 @@ class ManagerCheck extends Model
         'ref_num',
         'mc_cost',
         'grand_total',
-        'account_number'
+        'account_number',
+        'company'
     ];
     
     // Model Relationships
@@ -31,5 +32,10 @@ class ManagerCheck extends Model
     public function signatory()
     {
         return $this->belongsTo(Signatory::class);
+    }
+
+    public function payees()
+    {
+        return $this->hasMany(Payee::class);
     }
 }

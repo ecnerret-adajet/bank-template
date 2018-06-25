@@ -13888,7 +13888,7 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(39));
+Vue.component('mc-form-table', __webpack_require__(39));
 
 var app = new Vue({
   el: '#app'
@@ -45623,7 +45623,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\ExampleComponent.vue"
+Component.options.__file = "resources\\assets\\js\\components\\MCFormTable.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -45632,9 +45632,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0ca92eac", Component.options)
+    hotAPI.createRecord("data-v-189cc4ed", Component.options)
   } else {
-    hotAPI.reload("data-v-0ca92eac", Component.options)
+    hotAPI.reload("data-v-189cc4ed", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -45775,11 +45775,202 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
+    props: ['user_id'],
+    data: function data() {
+        return {
+            name: '',
+            nature: '',
+            ref_num: '',
+            amount: '',
+            mc_cost: '',
+            payees: [],
+            beforeEditCache: {
+                name: '',
+                nature: '',
+                ref_num: '',
+                amount: ''
+            }
+        };
+    },
+
+
+    directives: {
+        focus: {
+            // directive definition
+            inserted: function inserted(el) {
+                el.focus();
+            }
+        }
+    },
+
+    created: function created() {
+        this.getPayee();
+    },
+
+
+    methods: {
+        getPayee: function getPayee() {
+            var _this = this;
+
+            axios.get('/payees').then(function (response) {
+                return _this.payees = response.data;
+            });
+        },
+        resetFields: function resetFields() {
+            // reset fields
+            this.name = '';
+            this.nature = '';
+            this.ref_num = '';
+            this.amount = '';
+        },
+        addItem: function addItem() {
+            var _this2 = this;
+
+            axios.post('/payees/' + this.user_id, {
+                name: this.name,
+                nature: this.nature,
+                ref_num: this.ref_num,
+                amount: this.amount
+            }).then(function (response) {
+                _this2.payees.push(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+            this.resetFields();
+        },
+        editItem: function editItem(payee) {
+            var _this3 = this;
+
+            axios.put('/payees/' + payee.id).then(function (response) {
+                console.log(response.data);
+                _this3.beforeEditCache.name = payee.name;
+                _this3.beforeEditCache.nature = payee.nature;
+                _this3.beforeEditCache.ref_num = payee.ref_num;
+                _this3.beforeEditCache.amount = payee.amount;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        updateItem: function updateItem(payee) {
+            if (payee.name.trim().length == 0) {
+                payee.name = this.beforeEditCache.name;
+            }
+
+            if (payee.nature.trim().length == 0) {
+                payee.nature = this.beforeEditCache.nature;
+            }
+
+            if (payee.ref_num.length == 0) {
+                payee.ref_num = this.beforeEditCache.ref_num;
+            }
+
+            if (payee.amount.length == 0) {
+                payee.amount = this.beforeEditCache.amount;
+            }
+
+            payee.editing = false;
+        },
+        removeItem: function removeItem(payee) {
+            var _this4 = this;
+
+            axios.delete('/payees/' + payee.id).then(function (response) {
+                _this4.payees.splice(_this4.payees.indexOf(payee), 1);
+            }).catch(function (error) {
+                console.log(error);
+            });;
+        }
+    },
+
+    computed: {
+        allowToSubmit: function allowToSubmit() {
+            return this.name.trim().length > 0 && this.nature.trim().length > 0 && this.ref_num.trim().length > 0 && this.amount.trim().length > 0;
+        },
+        grandTotal: function grandTotal() {
+            var finalTotal = 0,
+                payeeTotal;
+            payeeTotal = this.payees.reduce(function (total, payee) {
+                return total + Number(payee.amount);
+            }, 0);
+            finalTotal = payeeTotal + Number(this.mc_cost);
+            return finalTotal;
+        }
     }
+
 });
 
 /***/ }),
@@ -45790,28 +45981,427 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("p", [_vm._v("Payees Table")]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-bordered mt-3" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        [
+          _vm._l(_vm.payees, function(payee, index) {
+            return _c("tr", { key: index }, [
+              _c("td", [
+                payee.status == 0
+                  ? _c(
+                      "div",
+                      {
+                        on: {
+                          dblclick: function($event) {
+                            _vm.editItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(payee.name))]
+                    )
+                  : _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: payee.name,
+                          expression: "payee.name"
+                        },
+                        { name: "focus", rawName: "v-focus" }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: payee.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(payee, "name", $event.target.value)
+                        }
+                      }
+                    })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                payee.status == 0
+                  ? _c(
+                      "div",
+                      {
+                        on: {
+                          dblclick: function($event) {
+                            _vm.editItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(payee.nature))]
+                    )
+                  : _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: payee.nature,
+                          expression: "payee.nature"
+                        },
+                        { name: "focus", rawName: "v-focus" }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: payee.nature },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(payee, "nature", $event.target.value)
+                        }
+                      }
+                    })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                payee.status == 0
+                  ? _c(
+                      "div",
+                      {
+                        on: {
+                          dblclick: function($event) {
+                            _vm.editItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(payee.ref_num))]
+                    )
+                  : _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: payee.ref_num,
+                          expression: "payee.ref_num"
+                        },
+                        { name: "focus", rawName: "v-focus" }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number" },
+                      domProps: { value: payee.ref_num },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(payee, "ref_num", $event.target.value)
+                        }
+                      }
+                    })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                payee.status == 0
+                  ? _c(
+                      "div",
+                      {
+                        on: {
+                          dblclick: function($event) {
+                            _vm.editItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(payee.amount))]
+                    )
+                  : _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: payee.amount,
+                          expression: "payee.amount"
+                        },
+                        { name: "focus", rawName: "v-focus" }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number" },
+                      domProps: { value: payee.amount },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(payee, "amount", $event.target.value)
+                        }
+                      }
+                    })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                payee.status == 0
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn-block",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.removeItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  : _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn-block",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.updateItem(payee)
+                          }
+                        }
+                      },
+                      [_vm._v("Update")]
+                    )
+              ])
+            ])
+          }),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.name,
+                      expression: "name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "name",
+                    placeholder: "Enter Name"
+                  },
+                  domProps: { value: _vm.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.nature,
+                      expression: "nature"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "nature",
+                    placeholder: "Enter Nature"
+                  },
+                  domProps: { value: _vm.nature },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.nature = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.ref_num,
+                      expression: "ref_num"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "number",
+                    id: "ref_number",
+                    placeholder: "Enter Reference Number"
+                  },
+                  domProps: { value: _vm.ref_num },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.ref_num = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.amount,
+                      expression: "amount"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "number",
+                    id: "amount",
+                    placeholder: "Enter Amount"
+                  },
+                  domProps: { value: _vm.amount },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.amount = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-block",
+                  attrs: { type: "button", disabled: !_vm.allowToSubmit },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.addItem($event)
+                    }
+                  }
+                },
+                [_vm._v("Add")]
+              )
+            ])
+          ])
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row mt-3" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "form-group text-right" }, [
+          _c("label", [_vm._v("MC Cost:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.mc_cost,
+                expression: "mc_cost"
+              }
+            ],
+            staticClass: "form-control w-25 ml-auto",
+            attrs: {
+              type: "number",
+              id: "grand-total",
+              name: "mc_cost",
+              placeholder: "MC Cost"
+            },
+            domProps: { value: _vm.mc_cost },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.mc_cost = $event.target.value
+              }
+            }
+          })
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row mb-3" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "form-group text-right" }, [
+          _c("label", [_vm._v("Grand Total:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.grandTotal,
+                expression: "grandTotal"
+              }
+            ],
+            staticClass: "form-control w-25 ml-auto",
+            attrs: {
+              type: "number",
+              id: "grand-total",
+              name: "grand_total",
+              placeholder: "Grand Total"
+            },
+            domProps: { value: _vm.grandTotal },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.grandTotal = $event.target.value
+              }
+            }
+          })
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _vm._v(
-                "\n                    I'm an example component!\n                "
-              )
-            ])
-          ])
-        ])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Payee")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Nature")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Reference Number")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Amount")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Option")])
       ])
     ])
   }
@@ -45821,7 +46411,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0ca92eac", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-189cc4ed", module.exports)
   }
 }
 

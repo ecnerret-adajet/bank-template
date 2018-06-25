@@ -71,7 +71,6 @@ class BankTransfersController extends Controller
             'from_account' => $request->input('from_account'),
             'to_account' => $request->input('to_account'),
         ]);
-        $bankTransfer->user()->associate(Auth::user()->id);
         $bankTransfer->manager()->associate($request->input('manager_list'));
         $bankTransfer->signatory()->associate($request->input('signatory_list'));
         $bankTransfer->save();
@@ -89,7 +88,7 @@ class BankTransfersController extends Controller
         $f = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
 
         $pdf = PDF::loadView('bankTransfers.pdf', compact('x','f'));
-        return $pdf->stream('bankTransfers.pdf');    
+        return $pdf->setPaper('letter')->stream('bankTransfers.pdf');    
     }
 
     /**

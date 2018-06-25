@@ -51,6 +51,16 @@
 </div>
 
 
+    <!-- Table for payees -->
+
+    <div class="row">
+        <div class="col"> 
+                <mc-form-table user_id="{{ Auth::user()->id }}"></mc-form-table>
+            </table> 
+        </div>
+    </div>
+
+
 
  <div class="row">
 

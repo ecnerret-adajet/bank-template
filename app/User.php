@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->hasMany(BankTransfer::class);
     }
 
+    public function managerChecks()
+    {
+        return $this->hasMany(ManagerCheck::class);
+    }
+
     public function banks()
     {
         return $this->hasMany(Bank::class);
@@ -42,6 +47,11 @@ class User extends Authenticatable
     public function signatories()
     {
         return $this->hasMany(Signatory::class);
+    }
+
+    public function payees()
+    {
+        return $this->hasMany(Payee::class);
     }
 
 

@@ -19,4 +19,9 @@ class Payee extends Model
     {
         return $this->belongsTo(ManagerCheck::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

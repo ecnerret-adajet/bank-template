@@ -29,6 +29,17 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/bank-transfers','BankTransfersController');
     Route::get('/bank-transfers/pdf/{x}','BankTransfersController@generatePDF');
 
+
+    Route::get('/payees','ManagerChecksController@getPayee');
+    Route::post('/payees/{user_id}','ManagerChecksController@storePayee');
+    Route::put('/payees/{payee}','ManagerChecksController@payeeStatus');
+    Route::delete('/payees/{payee}','ManagerChecksController@destroyPayee');
+
+    // Manager check resource
     Route::resource('/manager-checks','ManagerChecksController');
-    // Route::get('/manager-checks/pdf/{x}','ManagerChecksController@generatePDF');
+    Route::get('/manager-checks/pdf/{x}','ManagerChecksController@generatePDF');
+   
+
+
+
 });

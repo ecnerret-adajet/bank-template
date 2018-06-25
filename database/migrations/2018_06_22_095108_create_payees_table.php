@@ -16,10 +16,12 @@ class CreatePayeesTable extends Migration
         Schema::create('payees', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('manager_check_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('name');
             $table->string('nature');
             $table->string('ref_num');
             $table->double('amount');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
