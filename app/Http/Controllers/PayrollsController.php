@@ -10,6 +10,7 @@ use App\Applicant;
 use App\Company;
 use App\Signatory;
 use App\Manager;
+use App\PayrollType;
 use PDF;
 
 class PayrollsController extends Controller
@@ -22,6 +23,16 @@ class PayrollsController extends Controller
     public function index()
     {
         //
+    }
+
+
+    /**
+     * Show payroll application type
+     */
+    public function getPayrollTypes()
+    {
+        $payrollTypes = PayrollType::all();
+        return $payrollTypes;
     }
 
     /**
@@ -59,13 +70,11 @@ class PayrollsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'company' => 'required',
             'branch' => 'required'
         ]);
 
         $applicant = Auth::user()->applicants()->create([
             'name' => $request->input('name'),
-            'company' => $request->input('company'),
             'branch' => $request->input('branch'),
             'status' => 0,
         ]);
@@ -83,16 +92,24 @@ class PayrollsController extends Controller
     {
         $this->validate($request, [
             'manager_list' => 'required',
-            'signatory_list' => 'required'
-        ]);
+            'payroll_type' => 'required',
+            'company_list' => 'required',
+            'signatory1' => 'required',
+            'signatory2' => 'required',
+        ]); 
 
         $last_count = !empty(Payroll::first()) ? Payroll::orderBy('id','DESC')->first()->id : 0;
 
-        $payroll = new Payroll;
-        $payroll->user_id = Auth::user()->id;
-        $payroll->ref_num = 'LFUGGOC-PA-'.sprintf('%08d', $last_count);
+        $payroll = Auth::user()->payrolls()->create([
+            'ref_num' => 'LFUGGOC-PA-'.sprintf('%08d', $last_count),
+            'signatories' => json_encode([
+                $request->input('signatory1'),
+                $request->input('signatory2')
+            ])
+        ]);
+        $payroll->type()->associate($request->input('payroll_type'));
         $payroll->manager()->associate($request->input('manager_list'));
-        $payroll->signatory()->associate($request->input('signatory_list'));
+        $payroll->company()->associate($request->input('company_list'));
         $payroll->save();
 
         $applicant = Applicant::where('user_id', Auth::user()->id)
@@ -100,7 +117,7 @@ class PayrollsController extends Controller
                                 ->where('payroll_id',0)
                                 ->update([ 'payroll_id' => $payroll->id ]);
 
-        return redirect('payrolls/'.$payroll->id);
+        return ['redirect' => route('payrolls.show', $payroll)];
     }
 
     /**

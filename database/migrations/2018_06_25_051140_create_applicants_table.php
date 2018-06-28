@@ -18,7 +18,6 @@ class CreateApplicantsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('payroll_id')->unsigned();
             $table->string('name');
-            $table->string('company');
             $table->string('branch');
             $table->boolean('status')->default(0);
             $table->timestamps();

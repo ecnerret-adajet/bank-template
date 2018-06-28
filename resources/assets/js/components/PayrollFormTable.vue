@@ -5,8 +5,7 @@
             <thead>
                 <tr>
                 <th scope="col">Employee Name</th>
-                <th scope="col">Company</th>
-                <th scope="col">BPI Branch</th>
+                <th scope="col">Branch</th>
                 <th scope="col">Option</th>
                 </tr>
             </thead>
@@ -15,13 +14,6 @@
             <td>
                 <div v-if="applicant.status == 0" @dblclick="editItem(applicant)">{{ applicant.name }}</div>
                 <input v-if="applicant.status == 1" type="text" class="form-control" v-model="applicant.name" v-focus>
-            </td>
-            <td>
-                <div v-if="applicant.status == 0" @dblclick="editItem(applicant)">{{ applicant.company }}</div>
-                <select v-else class="form-control" v-model="applicant.company" v-focus>
-                    <option value="" disabled selected>Select Company</option>
-                    <option v-for="(company,i) in companies" :key="i" selected :value="company.name">{{ company.name }}</option>
-                </select>
             </td>
             <td>
                 <div v-if="applicant.status == 0" @dblclick="editItem(applicant)">{{ applicant.branch }}</div>
@@ -40,14 +32,6 @@
             <td>
                 <div class="form-group">
                     <input type="text" class="form-control" id="name" v-model="name" placeholder="Enter Name">
-                </div>
-            </td>
-            <td>
-                 <div class="form-group">
-                    <select class="form-control" v-model="company" v-focus>
-                        <option value="" disabled selected>Select Company</option>
-                        <option v-for="(company,i) in companies" :key="i" selected :value="company.name">{{ company.name }}</option>
-                    </select>
                 </div>
             </td>
             <td>
@@ -73,10 +57,8 @@ export default {
     data() {
         return {
             name: '',
-            company: '',
             branch: '',
             applicants: [],
-            companies: [],
             banks: [],
             beforeEditCache: {
                 name: '',
@@ -97,7 +79,6 @@ export default {
 
     created() {
         this.getApplicants()
-        this.getCompanies()
         this.getBanks()
     },
 
@@ -109,24 +90,17 @@ export default {
 
         resetFields() {
             this.name = '';
-            this.company = '';
             this.branch = '';
         },
 
-        getCompanies() {
-            axios.get('/companies')
-            .then(response => this.companies = response.data);
-        },
-
         getBanks() {
-            axios.get('/banks')
+            axios.get('/getBanks')
             .then(response => this.banks = response.data);
         },
 
         addItem() {
             axios.post('/applicants/' + this.user_id, {
                 name: this.name,
-                company: this.company,
                 branch: this.branch,
                 status: 0,
             })
@@ -156,7 +130,6 @@ export default {
     computed: {
         allowToSubmit() {
             return this.name.trim().length > 0 &&
-                   this.company.trim().length > 0 &&
                    this.branch.trim().length > 0;
         }
     }

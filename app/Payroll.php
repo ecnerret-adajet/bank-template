@@ -6,11 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payroll extends Model
 {
-    protected $unguard = [
-        '*',
+    protected $fillable = [
+        'ref_num',
+        'signatories'
     ];
 
     // Model Relationships
+    /**
+     * Convet array to string conversion
+     */
+    public function setSignatoriesAttribute($value)
+    {
+        $this->attributes['signatories'] = json_encode($value);
+    }
 
     public function user()
     {
@@ -22,14 +30,19 @@ class Payroll extends Model
         return $this->belongsTo(manager::class);
     }
 
-    public function signatory()
-    {
-        return $this->belongsTo(Signatory::class);
-    }
-
     public function applicants()
     {
         return $this->hasMany(Applicant::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(PayrollType::class,'payroll_type_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 

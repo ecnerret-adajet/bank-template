@@ -18,6 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('name');
             $table->string('department')->nullable();
             $table->string('abbrv');
+            $table->string('avatar')->default('companies/avatar.png');
             $table->timestamps();
         });
     }

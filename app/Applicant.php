@@ -8,7 +8,6 @@ class Applicant extends Model
 {
     protected $fillable = [
         'name',
-        'company',
         'branch',
         'status',
     ];

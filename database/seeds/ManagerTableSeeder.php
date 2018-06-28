@@ -17,14 +17,18 @@ class ManagerTableSeeder extends Seeder
                 'title' => 'Ms.',
                 'first_name' => 'Marie Jessica',
                 'middle_name' => 'P',
-                'last_name' => 'Calma'
+                'last_name' => 'Calma',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now(),
             ],
             [
                 'bank_id' => 2,
                 'title' => 'Ms.',
                 'first_name' => 'Marissa',
                 'middle_name' => 'P',
-                'last_name' => 'Suegay'
+                'last_name' => 'Suegay',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now(),
             ]
         ]);
     }

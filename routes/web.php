@@ -47,8 +47,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/manager-checks','ManagerChecksController');
     Route::get('/manager-checks/pdf/{x}','ManagerChecksController@generatePDF');
 
+    // Route setup for Branch Manager
+    Route::get('/getManagers','ManagersController@getManagers');
+
     // Route setup for applicant - payroll
     Route::get('/applicants','PayrollsController@getApplicant');
+    Route::get('/getPayrollTypes','PayrollsController@getPayrollTypes');
     Route::post('/applicants/{user_id}','PayrollsController@storeApplicant');
     Route::put('/applicants/{applicant}','PayrollsController@statusApplicant');
     Route::delete('/applicants/{applicant}','PayrollsController@destroyApplicant');

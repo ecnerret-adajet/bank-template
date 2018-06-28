@@ -31,6 +31,15 @@ class ManagersController extends Controller
     }
 
     /**
+     * Display managers JSON
+     */
+    public function getManagers()
+    {
+        $managers = Manager::all();
+        return $managers;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -16,7 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('mc-form-table', require('./components/MCFormTable.vue'));
-Vue.component('payroll-form-table', require('./components/PayrollFormTable.vue'));
+Vue.component('payroll-form', require('./components/PayrollForm.vue'));
  
 // Report's component
 Vue.component('reportParent', require('./components/ReportParent.vue'));

@@ -1,4 +1,4 @@
- <div class="row">
+ {{-- <div class="row">
 
         <div class="col">
              <div class="form-group">
@@ -14,19 +14,21 @@
             </div>
         </div>
 
- </div>
+ </div> --}}
 
     <!-- Table for payees -->
 
     <div class="row">
         <div class="col"> 
-            <payroll-form-table user_id="{{ Auth::user()->id }}"></payroll-form-table>
+            
+            <payroll-form user_id="{{ Auth::user()->id }}"></payroll-form>
+
         </div>
     </div>
 
 
 
- <div class="row">
+ {{-- <div class="row">
 
           <div class="col">
              <div class="form-group">
@@ -51,4 +53,4 @@
         <div class="col">
             <button type="submit" class="btn btn-primary btn-block">Publish</button>
         </div>
-    </div>
+    </div> --}}

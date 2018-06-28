@@ -18,6 +18,7 @@ class CreatePayrollsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('manager_id')->unsigned();
             $table->integer('payroll_type_id')->unsigned();
+            $table->integer('company_id')->unsigned();
             $table->string('ref_num');
             $table->string('signatories');
             $table->timestamps();

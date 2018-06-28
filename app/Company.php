@@ -9,7 +9,8 @@ class Company extends Model
     protected $fillable = [
         'name',
         'department',
-        'abbrv'
+        'abbrv',
+        'avatar'
     ];
 
     public function getFullCompanyAttribute()
