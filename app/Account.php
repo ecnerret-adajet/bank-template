@@ -19,6 +19,7 @@ class Account extends Model
         return [
             'id' => $this->id,
             'account_number' => $this->account_number,
+            'bank' => $this->bank->branch,
             'company' => $this->company
         ];
     }

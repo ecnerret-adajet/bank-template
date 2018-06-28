@@ -21,6 +21,16 @@ class AccountsController extends Controller
     }
 
     /**
+     * Show all account - with company
+     */
+    public function getAccounts()
+    {
+        $accounts = Account::all();
+
+        return $accounts;
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

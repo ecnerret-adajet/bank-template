@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     // Reoute Setup for bank accounts 
     Route::resource('/accounts','AccountsController');
+    Route::get('/getAccounts','AccountsController@getAccounts');
 
     //Route Setup for bank listing
     Route::resource('/banks','BanksController');

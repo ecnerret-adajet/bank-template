@@ -31,16 +31,8 @@ class BankTransfersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $companies = Company::pluck('name','name');
-        $accounts = Account::pluck('account_number','account_number');
-        // $banks = Bank::pluck('branch',);
-        $signatories = Signatory::get()->pluck('full_name','id');
-        
-        return view('bankTransfers.create',compact('accounts',
-                    'managers',
-                    'companies',
-                    'signatories'));
+    {        
+        return view('bankTransfers.create');
     }
 
     /**
@@ -53,29 +45,36 @@ class BankTransfersController extends Controller
     {
         $this->validate($request, [
             'amount' => 'required',
-            'from_company' => 'required',
-            'to_company' => 'required',
             'from_account' => 'required',
             'to_account' => 'required',
-            'manager_list' => 'required',
-            'signatory_list' => 'required',
+            'bank_list' => 'required',
+            'signatory1' => 'required',
+            'signatory2' => 'required',
         ]);
 
         $last_count = !empty(BankTransfer::first()) ? BankTransfer::orderBy('id','DESC')->first()->id : 0;
+        $bank = Bank::whereId($request->input('bank_list'))->first();
+        $from = Account::where('id',$request->input('from_account'))->with('company')->first();
+        $to = Account::where('id',$request->input('to_account'))->with('company')->first();
         
         $bankTransfer = Auth::user()->bankTransfers()->create([
             'ref_num' => 'PFMC-BT-'.sprintf('%08d', $last_count),
             'amount' => $request->input('amount'),
-            'from_company' => $request->input('from_company'),
-            'to_company' => $request->input('to_company'),
-            'from_account' => $request->input('from_account'),
-            'to_account' => $request->input('to_account'),
+            'manager_id' => $bank->manager->id,
+            'from_company' => $from->company->name,
+            'to_company' => $to->company->name,
+            'from_account' => $from->account_number,
+            'to_account' => $to->account_number,
+            'signatories' => json_encode([
+                $request->input('signatory1'),
+                $request->input('signatory2')
+            ])
         ]);
-        $bankTransfer->manager()->associate($request->input('manager_list'));
-        $bankTransfer->signatory()->associate($request->input('signatory_list'));
+        $bankTransfer->manager()->associate($bank->manager->id);
+        $bankTransfer->bank()->associate($bank->id);
         $bankTransfer->save();
 
-        return redirect('bank-transfers/'.$bankTransfer->id);
+        return ['redirect' => route('bank-transfers.show', $bankTransfer)];
     }
 
     /**

@@ -12,12 +12,12 @@
         </div><!-- /.row -->
     </div>
 
-    {!! Form::model($bank_transfer = new \App\BankTransfer, ['url' => 'bank-transfers', 'files' => 'true', 'enctype' => 'multipart\form-data']) !!}
+    {{-- {!! Form::model($bank_transfer = new \App\BankTransfer, ['url' => 'bank-transfers', 'files' => 'true', 'enctype' => 'multipart\form-data']) !!}
     {!! csrf_field() !!}
-        <form>
+        <form> --}}
         @include('bankTransfers.form')
-        </form>
-    {!! Form::close() !!} 
+        {{-- </form>
+    {!! Form::close() !!}  --}}
    
 </div>
 @endsection

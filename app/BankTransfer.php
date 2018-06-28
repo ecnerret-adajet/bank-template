@@ -15,7 +15,7 @@ class BankTransfer extends Model
         'from_account',
         'to_account',
         'amount',
-        'signatories'
+        'signatories',
     ];
 
     /**
@@ -24,6 +24,11 @@ class BankTransfer extends Model
     public function setSignatoriesAttribute($value)
     {
         $this->attributes['signatories'] = json_encode($value);
+    }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = trim(str_replace(['PHP',',','.'],'',$value));
     }
 
     // Model Relationships
@@ -40,7 +45,7 @@ class BankTransfer extends Model
 
     public function bank()
     {
-        return $this->manager->bank;
+        return $this->belongsTo(Bank::class);
     }
 
 }
