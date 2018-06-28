@@ -19,8 +19,14 @@ class Bank extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function account()
+    public function accounts()
     {
-        return $this->hasOne(Account::class);
+        return $this->hasMany(Account::class);
     }
+
+    public function manager()
+    {
+        return $this->hasOne(Manager::class);
+    }
+
 }

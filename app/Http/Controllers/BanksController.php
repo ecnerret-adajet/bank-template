@@ -22,6 +22,15 @@ class BanksController extends Controller
     }
 
     /**
+     * Get JSON bank
+     */
+    public function getBank()
+    {
+        $banks = Bank::with('manager','accounts')->get();
+        return $banks;
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

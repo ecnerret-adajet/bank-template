@@ -22,12 +22,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/forms','FormsController');
 Route::get('/forms/generate/{form}','FormsController@generatePDF');
 
-Route::resource('/banks','BanksController');
-
-
 Route::group(['middleware' => 'auth'], function() {
     Route::resource('/bank-transfers','BankTransfersController');
     Route::get('/bank-transfers/pdf/{x}','BankTransfersController@generatePDF');
+
+    //Signatories route
+    Route::get('/getSignatories','SignatoriesController@getSignatories');
+
+    // Reoute Setup for bank accounts 
+    Route::resource('/accounts','AccountsController');
+
+    //Route Setup for bank listing
+    Route::resource('/banks','BanksController');
+    Route::get('/getBanks','BanksController@getBank');
 
     // Route Setup for payees - managers check
     Route::get('/payees','ManagerChecksController@getPayee');
@@ -46,13 +53,16 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('/applicants/{applicant}','PayrollsController@destroyApplicant');
 
     // Company json
-    Route::get('/companies','PayrollsController@companies');
-    Route::get('/banks','PayrollsController@banks');
+    Route::get('/getCompanies','CompaniesController@getCompanies');
 
     // Payroll application resource
     Route::resource('/payrolls','PayrollsController');
     Route::get('/payrolls/pdf/{x}','PayrollsController@generatePDF');
 
-
+    // Get Report API
+    Route::get('/reports','ReportController@index');
+    Route::get('/getBankTransfer/{date}','ReportController@getBankTransfer');
+    Route::get('/getManagerCheck/{date}','ReportController@getManagerCheck');
+    Route::get('/getPayroll/{date}','ReportController@getManagerCheck');
 
 });

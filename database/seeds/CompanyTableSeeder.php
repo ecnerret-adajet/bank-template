@@ -12,11 +12,36 @@ class CompanyTableSeeder extends Seeder
     public function run()
     {
         DB::table('companies')->insert([
-            ['name' => 'Philippine Foremost Milling Corporation'],
-            ['name' => 'Lafilipina Uy Gongoco Corporation'],
-            ['name' => 'Amigo Logistics Corpotation'],
-            ['name' => 'Philippine Leading Infinite Logistics Corp'],
-            ['name' => 'Capiz Sugar Central Inc']
+            [
+                'name' => 'Philippine Foremost Milling Corporation',
+                'abbrv' => 'PFMCFL',
+                'department' => 'Flour'
+            ],
+            [
+                'name' => 'Philippine Foremost Milling Corporation',
+                'department' => 'Feed',
+                'abbrv' => 'PFMCFE'
+            ],
+            [
+                'name' => 'La Filipina Uy Gongco Corporation',
+                'department' => null,
+                'abbrv' => 'LFUG'
+            ],
+            [
+                'name' => 'Amigo Logistics Corpotation',
+                'department' => null,
+                'abbrv' => 'ALC'
+            ],
+            [
+                'name' => 'Philippine Leading Infinite Logistics Corp',
+                'department' => null,
+                'abbrv' => 'PLILI'
+            ],
+            [
+                'name' => 'Capiz Sugar Central Inc',
+                'department' => null,
+                'abbrv' => 'CSCI'
+            ],
         ]);
     }
 }

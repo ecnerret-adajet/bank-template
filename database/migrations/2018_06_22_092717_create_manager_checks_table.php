@@ -17,12 +17,12 @@ class CreateManagerChecksTable extends Migration
             $table->increments('id');
             $table->string('ref_num');
             $table->integer('user_id')->unsigned();
-            $table->integer('signatory_id')->unsigned();
             $table->integer('manager_id')->unsigned();
             $table->double('mc_cost')->unsigned();
             $table->double('grand_total')->unsigned();
             $table->string('account_number');
             $table->string('company');
+            $table->string('signatories');
             $table->timestamps();
         });
     }

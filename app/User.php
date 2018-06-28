@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasMany(Payroll::class);
     }
 
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
+
 
 
 }

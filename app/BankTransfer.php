@@ -14,8 +14,17 @@ class BankTransfer extends Model
         'to_company',
         'from_account',
         'to_account',
-        'amount'
+        'amount',
+        'signatories'
     ];
+
+    /**
+     * Convet array to string conversion
+     */
+    public function setSignatoriesAttribute($value)
+    {
+        $this->attributes['signatories'] = json_encode($value);
+    }
 
     // Model Relationships
 
@@ -26,12 +35,12 @@ class BankTransfer extends Model
 
     public function manager()
     {
-        return $this->belongsTo(manager::class);
+        return $this->belongsTo(Manager::class);
     }
 
-    public function signatory()
+    public function bank()
     {
-        return $this->belongsTo(Signatory::class);
+        return $this->manager->bank;
     }
 
 }

@@ -10,7 +10,6 @@ use App\Applicant;
 use App\Company;
 use App\Signatory;
 use App\Manager;
-use App\Bank;
 use PDF;
 
 class PayrollsController extends Controller
@@ -38,24 +37,6 @@ class PayrollsController extends Controller
         return view('payrolls.create',compact(
                     'managers',
                     'signatories'));
-    }
-
-    /**
-     * Get companies
-     */
-    public function companies()
-    {
-        $companies = Company::all();
-        return $companies;
-    }
-
-    /**
-     * Get Bank branches
-     */
-    public function banks()
-    {
-        $banks = Bank::all();
-        return $banks;
     }
 
     /**

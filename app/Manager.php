@@ -13,6 +13,10 @@ class Manager extends Model
         'last_name'
     ];
 
+    protected $hidden = [
+        'bank_id',
+    ];
+
     //Relationship Model
 
     public function bank()
@@ -30,6 +34,14 @@ class Manager extends Model
     public function getFullNameLocationAttribute()
     {
         return $this->full_name." - ".$this->bank->name;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'full_name' => $this->full_name,
+        ];
     }
 
 

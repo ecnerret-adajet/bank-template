@@ -23,6 +23,12 @@ class SignatoryTableSeeder extends Seeder
                 'first_name' => 'Ian Kenneth',
                 'middle_name' => 'O',
                 'last_name' => 'Uygongco'
+            ],
+            [
+                'user_id' => 1,
+                'first_name' => 'Donnable',
+                'middle_name' => 'P',
+                'last_name' => 'Pasquin'
             ]
         ]);
     }

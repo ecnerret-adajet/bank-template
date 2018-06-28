@@ -1,22 +1,9 @@
- <div class="row">
 
-        <div class="col">
-             <div class="form-group">
-                <label for="exampleSelect2">Branch Manager</label>
-                {!! Form::select('manager_list', $managers, null, ['placeholder' => 'Select Bank', 'class' => 'form-control'] ) !!}
-                @if ($errors->has('manager_list'))
-                    <div class="form-control-feedback">
-                    <small class="text-danger">
-                        {{ $errors->first('manager_list') }}
-                        </small>
-                    </div>
-                @endif
-            </div>
-        </div>
 
- </div>
 
- <div class="row">
+<bank-transfer-form></bank-transfer-form>
+
+ {{-- <div class="row">
 
     <div class="col">
             <div class="form-group">
@@ -36,7 +23,6 @@
         <div class="form-group">
             <label for="driverName">From Account Number</label>
             {!! Form::select('from_account', $accounts, null, ['placeholder' => 'Select Account Number', 'class' => 'form-control'] ) !!}
-            {{-- <small id="accoutNumber" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             @if ($errors->has('from_account'))
                     <div class="form-control-feedback">
                         <small class="text-danger">
@@ -48,10 +34,10 @@
     </div>
 
 
-</div>
+</div> --}}
 
 
-<div class="row">
+{{-- <div class="row">
 
     <div class="col">
             <div class="form-group">
@@ -71,7 +57,6 @@
         <div class="form-group">
             <label for="driverName">To Account Number</label>
             {!! Form::select('to_account', $accounts, null, ['placeholder' => 'Select Account Number', 'class' => 'form-control'] ) !!}
-            {{-- <small id="accoutNumber" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             @if ($errors->has('to_account'))
                     <div class="form-control-feedback">
                         <small class="text-danger">
@@ -83,9 +68,9 @@
     </div>
 
 
-</div>
+</div> --}}
 
- <div class="row">
+ {{-- <div class="row">
 
         <div class="col">
              <div class="form-group">
@@ -104,7 +89,7 @@
           <div class="col">
              <div class="form-group">
                 <label for="exampleSelect2">Authorized Signatory</label>
-                {!! Form::select('signatory_list', $signatories, null, ['placeholder' => 'Select Signatory', 'class' => 'form-control'] ) !!}
+                {!! Form::select('signatory_list', $signatories, null, ['placeholder' => 'Select Signatory', 'class' => 'form-control signatories', 'multiple'] ) !!}
                 @if ($errors->has('signatory_list'))
                     <div class="form-control-feedback">
                     <small class="text-danger">
@@ -115,7 +100,7 @@
             </div>
         </div>
 
- </div>
+ </div> --}}
 
 
 

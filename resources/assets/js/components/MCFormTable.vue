@@ -144,6 +144,7 @@ export default {
                 status: 0,
             })
             .then(response => {
+                console.log(response.data);
                 this.payees.push(response.data);
             })
             .catch((error) => {

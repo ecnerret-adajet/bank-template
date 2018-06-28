@@ -19,6 +19,15 @@ class CompaniesController extends Controller
     }
 
     /**
+     * Get companies
+     */
+    public function getCompanies()
+    {
+        $companies = Company::all();
+        return $companies;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

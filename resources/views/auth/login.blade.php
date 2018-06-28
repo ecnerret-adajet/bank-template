@@ -9,7 +9,7 @@
             <div class="jumbotron bg-dark">
 
                 <h1 class="text-center text-white">Bank Template</h1>
-                <p class="lead text-center">This is a simple hero unit.</p>
+                <p class="lead text-center">La Filipina Uy Gongco Group of Companies</p>
 
                 <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}

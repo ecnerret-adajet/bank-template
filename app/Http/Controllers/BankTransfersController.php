@@ -34,7 +34,7 @@ class BankTransfersController extends Controller
     {
         $companies = Company::pluck('name','name');
         $accounts = Account::pluck('account_number','account_number');
-        $managers = Manager::get()->pluck('full_name','id');
+        // $banks = Bank::pluck('branch',);
         $signatories = Signatory::get()->pluck('full_name','id');
         
         return view('bankTransfers.create',compact('accounts',

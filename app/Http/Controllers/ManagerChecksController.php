@@ -75,6 +75,7 @@ class ManagerChecksController extends Controller
         $payee->nature = $request->input('nature');
         $payee->ref_num = $request->input('ref_num');
         $payee->amount = $request->input('amount');
+        $payee->status = 0;
         $payee->save();
 
         return $payee;

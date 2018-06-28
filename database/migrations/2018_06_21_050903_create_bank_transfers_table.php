@@ -17,13 +17,14 @@ class CreateBankTransfersTable extends Migration
             $table->increments('id');
             $table->string('ref_num');
             $table->integer('user_id')->unsigned();
-            $table->integer('signatory_id')->unsigned();
             $table->integer('manager_id')->unsigned();
-            $table->double('amount')->unsigned();
+            $table->integer('bank_id')->unsigned();
             $table->string('from_company');
             $table->string('to_company');
             $table->string('from_account');
             $table->string('to_account');
+            $table->double('amount')->unsigned();
+            $table->string('signatories');
             $table->timestamps();
         });
     }

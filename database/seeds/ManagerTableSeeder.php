@@ -14,14 +14,14 @@ class ManagerTableSeeder extends Seeder
         DB::table('managers')->insert([
             [
                 'bank_id' => 1,
-                'title' => 'MS.',
+                'title' => 'Ms.',
                 'first_name' => 'Marie Jessica',
                 'middle_name' => 'P',
                 'last_name' => 'Calma'
             ],
             [
-                'bank_id' => 1,
-                'title' => 'MS.',
+                'bank_id' => 2,
+                'title' => 'Ms.',
                 'first_name' => 'Marissa',
                 'middle_name' => 'P',
                 'last_name' => 'Suegay'

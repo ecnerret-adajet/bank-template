@@ -25,4 +25,14 @@ class Signatory extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Json Array
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'full_name' => $this->full_name
+        ];
+    }
 }

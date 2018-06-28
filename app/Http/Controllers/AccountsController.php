@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Account;
+use App\Company;
 use App\Bank;
 
 class AccountsController extends Controller
@@ -25,8 +27,9 @@ class AccountsController extends Controller
      */
     public function create()
     {
-        $banks = Bank::pluck('name','id');
-        return view('accounts.create',compact('banks'));
+        $banks = Bank::pluck('branch','id');
+        $companies = Company::get()->pluck('full_company','id');
+        return view('accounts.create',compact('banks','companies'));
     }
 
     /**
@@ -38,12 +41,17 @@ class AccountsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'account_number',
-            'bank_list',
+            'account_number' => 'required|max:12|min:12',
+            'bank_list' => 'required',    
+            'company_list' => 'required'
         ]);
 
-        $account = Account::create($request->all());
+        $account = Auth::user()->accounts()->create([
+            'account_number' => $request->input('account_number')
+        ]);
         $account->bank()->associate($request->input('bank_list'));
+        $account->company()->associate($request->input('company_list'));
+        $account->save();
 
         return redirect('accounts');
     }

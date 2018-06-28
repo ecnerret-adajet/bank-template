@@ -8,6 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="shortcut icon" href="{{ asset('image/favicon.png') }}">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
@@ -34,8 +36,13 @@
                 <a class="nav-link" href="#">Banks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Report</a>
+            <a class="nav-link" href="{{ url('/reports') }}">Report</a>
             </li>
+            </ul>
+            <ul class="navbar-nav my-2 my-lg-0">
+                <li>
+                    <a class="nav-link text-right" href="#">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                </li>
             </ul>
         </div>
             </div>
@@ -50,5 +57,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/all.js') }}"></script>
+    @yield('script')
+    
 </body>
 </html>
