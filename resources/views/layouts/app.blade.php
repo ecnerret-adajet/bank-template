@@ -49,9 +49,15 @@
        
         </nav>
 
-        <div class="mb-4">
+        <div class="mb-5" style="margin-bottom: 100px;">
             @yield('content')
         </div>
+
+        <footer class="footer">
+        <div class="container">
+            <span class="text-muted">La Filipina Uy Gongco Group of Companies</span>
+        </div>
+        </footer>
 
     </div>
 

@@ -15,8 +15,26 @@ class ManagerCheck extends Model
         'grand_total',
         'account_number',
         'company',
-        'status'
+        'signatories'
     ];
+
+    /**
+     * Convet array to string conversion
+     */
+    public function setSignatoriesAttribute($value)
+    {
+        $this->attributes['signatories'] = json_encode($value);
+    }
+
+    public function setGrandTotalAttribute($value)
+    {
+        $this->attributes['grand_total'] = trim(str_replace(['PHP',',','.'],'',$value));
+    }
+
+    public function setMcCostAttribute($value)
+    {
+        $this->attributes['mc_cost'] = trim(str_replace(['PHP',',','.'],'',$value));
+    }
     
     // Model Relationships
 
@@ -28,11 +46,6 @@ class ManagerCheck extends Model
     public function manager()
     {
         return $this->belongsTo(manager::class);
-    }
-
-    public function signatory()
-    {
-        return $this->belongsTo(Signatory::class);
     }
 
     public function payees()

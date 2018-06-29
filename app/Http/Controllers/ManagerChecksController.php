@@ -11,6 +11,7 @@ use App\Manager;
 use App\Account;
 use App\Signatory;
 use App\Company;
+use App\Bank;
 use PDF;
 
 class ManagerChecksController extends Controller
@@ -90,23 +91,30 @@ class ManagerChecksController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'manager_list' => 'required',
-            'company_list' => 'required',
-            'account_number' => 'required',
-            'signatory_list' => 'required',
+            'bank_id' => 'required',
+            'account_id' => 'required',
+            'signatory1' => 'required',
+            'signatory2' => 'required',
+            'grand_total' => 'required',
+            'mc_cost' => 'required',
         ]);
 
         $last_count = !empty(ManagerCheck::first()) ? ManagerCheck::orderBy('id','DESC')->first()->id : 0;
+        $bank = Bank::whereId($request->input('bank_id'))->first();
+        $account = Account::where('id',$request->input('account_id'))->with('company')->first();
 
         $managercheck = Auth::user()->managerChecks()->create([
             'ref_num' => 'LFUG-MC-'.sprintf('%08d', $last_count),
             'mc_cost' => $request->input('mc_cost'),
             'grand_total' => $request->input('grand_total'),
-            'account_number' => $request->input('account_number'),
-            'company' => $request->input('company_list'),
+            'account_number' => $account->account_number,
+            'company' => $account->company->name,
+            'signatories' => json_encode([
+                $request->input('signatory1'),
+                $request->input('signatory2')
+            ])
         ]);
-        $managercheck->manager()->associate($request->input('manager_list'));
-        $managercheck->signatory()->associate($request->input('signatory_list'));
+        $managercheck->manager()->associate($bank->manager->id);
         $managercheck->save();
 
         $payee = Payee::where('user_id', Auth::user()->id)
@@ -114,7 +122,7 @@ class ManagerChecksController extends Controller
                         ->where('manager_check_id',0)
                         ->update(['manager_check_id' => $managercheck->id]);
         
-        return redirect('manager-checks/'.$managercheck->id);
+        return ['redirect' => route('manager-checks.show', $managercheck)];
 
     }
 

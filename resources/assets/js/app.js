@@ -15,7 +15,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('mc-form-table', require('./components/MCFormTable.vue'));
+Vue.component('manager-check-form', require('./components/ManagerCheckForm.vue'));
 Vue.component('payroll-form', require('./components/PayrollForm.vue'));
  
 // Report's component

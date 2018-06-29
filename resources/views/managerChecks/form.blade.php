@@ -1,4 +1,4 @@
- <div class="row">
+ {{-- <div class="row">
 
         <div class="col">
              <div class="form-group">
@@ -36,7 +36,6 @@
         <div class="form-group">
             <label for="driverName">Account Number</label>
             {!! Form::select('account_number', $accounts, null, ['placeholder' => 'Select Account Number', 'class' => 'form-control'] ) !!}
-            {{-- <small id="accoutNumber" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             @if ($errors->has('account_number'))
                     <div class="form-control-feedback">
                         <small class="text-danger">
@@ -48,19 +47,19 @@
     </div>
 
 
-</div>
+</div> --}}
 
 
     <!-- Table for payees -->
-
+{{-- 
     <div class="row">
-        <div class="col"> 
-                <mc-form-table user_id="{{ Auth::user()->id }}"></mc-form-table>
-        </div>
-    </div>
+        <div class="col">  --}}
+            <manager-check-form user_id="{{ Auth::user()->id }}"></manager-check-form>
+        {{-- </div>
+    </div> --}}
 
 
-
+{{-- 
  <div class="row">
 
           <div class="col">
@@ -86,4 +85,4 @@
         <div class="col">
             <button type="submit" class="btn btn-primary btn-block">Publish</button>
         </div>
-    </div>
+    </div> --}}

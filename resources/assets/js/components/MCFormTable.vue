@@ -27,7 +27,7 @@
                 <input v-else type="number" class="form-control" v-model="payee.ref_num" v-focus>
             </td>
             <td>
-                <div v-if="payee.status == 0" @dblclick="editItem(payee)">{{ payee.amount }}</div>
+                <div v-if="payee.status == 0" @dblclick="editItem(payee)">PHP {{ formatPrice(payee.amount) }}</div>
                 <input v-else type="number" class="form-control" v-model="payee.amount" v-focus>
             </td>
             <td>
@@ -54,7 +54,7 @@
             </td>
              <td>
                  <div class="form-group">
-                    <input type="number" class="form-control" id="amount" v-model="amount" placeholder="Enter Amount">
+                    <input type="number" class="form-control" id="amount" v-model="amount">
                 </div>
             </td>
             <td>
@@ -69,7 +69,7 @@
         <div class="col">
             <div class="form-group text-right">
             <label>MC Cost:</label>
-            <input type="number" class="form-control w-25 ml-auto" id="grand-total" name="mc_cost" v-model="mc_cost" placeholder="MC Cost">
+            <input type="number" class="form-control w-25 ml-auto" disabled id="grand-total" name="mc_cost" v-model="totalMcCost" placeholder="MC Cost">
             </div>
         </div>
     </div>
@@ -78,7 +78,7 @@
         <div class="col">
             <div class="form-group text-right">
             <label>Grand Total:</label>
-            <input type="number" class="form-control w-25 ml-auto" id="grand-total"  name="grand_total" v-model="grandTotal" placeholder="Grand Total">
+            <input type="number" class="form-control w-25 ml-auto" id="grand-total" disabled  name="grand_total" v-model="grandTotal" placeholder="Grand Total">
             </div>
         </div>
     </div>
@@ -87,7 +87,9 @@
     </div>
 </template>
 <script>
+import {VMoney} from 'v-money'
 export default {
+    directives: {VMoney},
     props: ['user_id'],
     data() {
         return {
@@ -103,6 +105,20 @@ export default {
                 ref_num: '',
                 amount: ''
             },
+            moneyConfig: {
+                // The character used to show the decimal place.
+                decimal: '.',
+                // The character used to separate numbers in groups of three.
+                thousands: ',',
+                // The currency name or symbol followed by a space.
+                prefix: 'PHP ',
+                // The suffix (If a suffix is used by the target currency.)
+                suffix: '',
+                // Level of decimal precision. REQUIRED
+                // precision: 2,
+                // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
+                masked: false
+            }
         }
     },
 
@@ -117,6 +133,15 @@ export default {
 
     created() {
         this.getPayee();
+    },
+
+    watch: {
+        totalMcCost() {
+            this.$emit('getMcCost',this.totalMcCost);
+        },
+        grandTotal() {
+            this.$emit('getGrandTotal',this.grandTotal);
+        }
     },
 
     methods: {
@@ -144,7 +169,6 @@ export default {
                 status: 0,
             })
             .then(response => {
-                console.log(response.data);
                 this.payees.push(response.data);
             })
             .catch((error) => {
@@ -198,6 +222,11 @@ export default {
                 console.log(error);
             });
 
+        },
+
+        formatPrice(value) {
+            let val = (value/1).toFixed(2).replace(',', '.')
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         } 
     },
 
@@ -214,6 +243,12 @@ export default {
             payeeTotal = this.payees.reduce((total ,payee) => total + Number(payee.amount), 0);
             finalTotal = payeeTotal + Number(this.mc_cost);
             return finalTotal;
+        },
+
+        totalMcCost() {
+            var total = 0;
+            total = Number(this.payees.length) * 50;
+            return total;
         }
     }
     

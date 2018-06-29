@@ -20,6 +20,11 @@ class Payee extends Model
         return $this->belongsTo(ManagerCheck::class);
     }
 
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = trim(str_replace(['PHP',',','.'],'',$value));
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
