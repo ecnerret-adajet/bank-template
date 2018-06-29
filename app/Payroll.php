@@ -11,14 +11,19 @@ class Payroll extends Model
         'signatories'
     ];
 
+    // cast to array
+    protected $casts = [
+        'signatories' => 'array',
+    ];
+
     // Model Relationships
     /**
      * Convet array to string conversion
      */
-    public function setSignatoriesAttribute($value)
-    {
-        $this->attributes['signatories'] = json_encode($value);
-    }
+    // public function setSignatoriesAttribute($value)
+    // {
+    //     $this->attributes['signatories'] = json_encode($value);
+    // }
 
     public function user()
     {

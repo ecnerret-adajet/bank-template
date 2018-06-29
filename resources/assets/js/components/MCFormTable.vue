@@ -54,7 +54,7 @@
             </td>
              <td>
                  <div class="form-group">
-                    <input type="number" class="form-control" id="amount" v-model="amount">
+                    <input type="text" class="form-control" id="amount" v-model.lazy="amount" v-money="moneyConfig">
                 </div>
             </td>
             <td>
@@ -107,7 +107,7 @@ export default {
             },
             moneyConfig: {
                 // The character used to show the decimal place.
-                decimal: '.',
+                // decimal: '.',
                 // The character used to separate numbers in groups of three.
                 thousands: ',',
                 // The currency name or symbol followed by a space.
@@ -115,7 +115,7 @@ export default {
                 // The suffix (If a suffix is used by the target currency.)
                 suffix: '',
                 // Level of decimal precision. REQUIRED
-                // precision: 2,
+                precision: 2,
                 // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
                 masked: false
             }

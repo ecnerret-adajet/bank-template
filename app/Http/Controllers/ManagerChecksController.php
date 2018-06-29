@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\CompanyTraits;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\ManagerCheck;
@@ -16,6 +17,9 @@ use PDF;
 
 class ManagerChecksController extends Controller
 {
+
+    use CompanyTraits;
+
     /**
      * Display a listing of the resource.
      *
@@ -109,10 +113,10 @@ class ManagerChecksController extends Controller
             'grand_total' => $request->input('grand_total'),
             'account_number' => $account->account_number,
             'company' => $account->company->name,
-            'signatories' => json_encode([
-                $request->input('signatory1'),
-                $request->input('signatory2')
-            ])
+            'signatories' => [
+                array('name' => $request->input('signatory1')),
+                array('name' => $request->input('signatory2'))                    
+            ]
         ]);
         $managercheck->manager()->associate($bank->manager->id);
         $managercheck->save();
@@ -134,8 +138,9 @@ class ManagerChecksController extends Controller
         // enable extension=php_intl.dll from PHP.INI to user NumberFormatter
 
         // $f = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
+        $img = $this->findCompanyAvatar($x->company);
 
-        $pdf = PDF::loadView('managerChecks.pdf', compact('x'));
+        $pdf = PDF::loadView('managerChecks.pdf', compact('x','img'));
         return $pdf->setPaper('letter')->stream('managerChecks.pdf');    
     }
 

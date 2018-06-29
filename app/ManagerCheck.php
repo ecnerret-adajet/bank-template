@@ -18,13 +18,18 @@ class ManagerCheck extends Model
         'signatories'
     ];
 
+    // cast to array
+    protected $casts = [
+        'signatories' => 'array',
+    ];
+
     /**
      * Convet array to string conversion
      */
-    public function setSignatoriesAttribute($value)
-    {
-        $this->attributes['signatories'] = json_encode($value);
-    }
+    // public function setSignatoriesAttribute($value)
+    // {
+    //     $this->attributes['signatories'] = json_encode($value);
+    // }
 
     public function setGrandTotalAttribute($value)
     {

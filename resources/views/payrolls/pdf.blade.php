@@ -38,6 +38,11 @@
 
     <table class="borderless" style="margin-top: 1em">
         <tr>
+            <td>
+                <img style="width: 100px; height: auto;" src="{{asset('/storage/'. $img)}}">
+            </td>
+        </tr>
+        <tr>
             <td width="50%">
                 <strong>
                 {{ date('F d, Y',strtotime($x->created_at)) }}
@@ -87,6 +92,11 @@
         <tr>
             <td>
                 <p>
+                    <strong>
+                       {{ strtoUpper($x->type->name) }}
+                    </strong>
+                </p>
+                <p>
                     Dear {{ $x->manager->title }} {{ $x->manager->last_name }},
                 </p>
 
@@ -103,7 +113,6 @@
         <thead>
             <tr class="pad">
                 <th class="pad">Employee Name</th>
-                <th class="pad">Company</th>
                 <th class="pad">BPI Branch</th>
             </tr>
         </thead>
@@ -111,7 +120,6 @@
             @foreach($x->applicants as $applicant)
                 <tr class="pad">
                     <td class="pad">{{ $applicant->name }}</td>
-                    <td class="pad">{{ $applicant->company }}</td>
                     <td class="pad">{{ $applicant->branch }}</td>
                 </tr>
             @endforeach
@@ -132,14 +140,18 @@
         </tr>
         <tr>
             <td>
-                <p style="margin-top: 2em">
-                    {{ strtoUpper($x->signatory->full_name) }}
+
+                <p class="margin-bottom: 1em; margin-top: 1em">
+                    {{ strtoUpper($x->company->name) }}
                 </p>
 
-                <p>
-                    <i>Authorized signatory</i><br/>
-                    {{ strtoUpper($x->from_company) }}
-                </p>
+                @foreach($x->signatories as $signatory)
+                    <p style="margin-top: 2em">
+                        {{ strtoUpper($signatory['name']) }} <br/>
+                        <i>Authorized signatory</i>
+                    </p>
+                @endforeach
+
             </td>
         </tr>
     </table>

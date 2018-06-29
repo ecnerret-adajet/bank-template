@@ -62846,7 +62846,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             },
             moneyConfig: {
                 // The character used to show the decimal place.
-                decimal: '.',
+                // decimal: '.',
                 // The character used to separate numbers in groups of three.
                 thousands: ',',
                 // The currency name or symbol followed by a space.
@@ -62854,7 +62854,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 // The suffix (If a suffix is used by the target currency.)
                 suffix: '',
                 // Level of decimal precision. REQUIRED
-                // precision: 2,
+                precision: 2,
                 // If mask is false, outputs the number to the model. Otherwise outputs the masked string.
                 masked: false
             }
@@ -63269,19 +63269,23 @@ var render = function() {
                   directives: [
                     {
                       name: "model",
-                      rawName: "v-model",
+                      rawName: "v-model.lazy",
                       value: _vm.amount,
-                      expression: "amount"
+                      expression: "amount",
+                      modifiers: { lazy: true }
+                    },
+                    {
+                      name: "money",
+                      rawName: "v-money",
+                      value: _vm.moneyConfig,
+                      expression: "moneyConfig"
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "number", id: "amount" },
+                  attrs: { type: "text", id: "amount" },
                   domProps: { value: _vm.amount },
                   on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
+                    change: function($event) {
                       _vm.amount = $event.target.value
                     }
                   }

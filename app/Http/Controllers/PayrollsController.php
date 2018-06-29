@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\CompanyTraits;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Payroll;
@@ -15,6 +16,9 @@ use PDF;
 
 class PayrollsController extends Controller
 {
+
+     use CompanyTraits;
+
     /**
      * Display a listing of the resource.
      *
@@ -102,10 +106,10 @@ class PayrollsController extends Controller
 
         $payroll = Auth::user()->payrolls()->create([
             'ref_num' => 'LFUGGOC-PA-'.sprintf('%08d', $last_count),
-            'signatories' => json_encode([
-                $request->input('signatory1'),
-                $request->input('signatory2')
-            ])
+            'signatories' => [
+                array('name' => $request->input('signatory1')),
+                array('name' => $request->input('signatory2'))                    
+            ]
         ]);
         $payroll->type()->associate($request->input('payroll_type'));
         $payroll->manager()->associate($request->input('manager_list'));
@@ -125,7 +129,8 @@ class PayrollsController extends Controller
      */
     public function generatePDF(Payroll $x)
     {
-        $pdf = PDF::loadView('payrolls.pdf', compact('x'));
+        $img = $this->findCompanyAvatar($x->company->name);
+        $pdf = PDF::loadView('payrolls.pdf', compact('x','img'));
         return $pdf->setPaper('letter')->stream('payrolls.pdf');
     }
 

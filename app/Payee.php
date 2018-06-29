@@ -22,7 +22,7 @@ class Payee extends Model
 
     public function setAmountAttribute($value)
     {
-        $this->attributes['amount'] = trim(str_replace(['PHP',',','.'],'',$value));
+        $this->attributes['amount'] = trim(str_replace(['PHP',',','.00'],'',$value));
     }
 
     public function user()

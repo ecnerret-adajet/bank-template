@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\CompanyTraits;
 use Illuminate\Support\Facades\Auth;
 use App\BankTransfer;
 use Carbon\Carbon;
@@ -15,6 +16,9 @@ use PDF;
 
 class BankTransfersController extends Controller
 {
+
+     use CompanyTraits;
+
     /**
      * Display a listing of the resource.
      *
@@ -33,15 +37,6 @@ class BankTransfersController extends Controller
     public function create()
     {        
         return view('bankTransfers.create');
-    }
-
-    /**
-     * find company image
-     */
-    public function findCompanyAvatar($company)
-    {
-        $img = Company::where('name',$company)->first()->avatar;
-        return $img;
     }
 
     /**
