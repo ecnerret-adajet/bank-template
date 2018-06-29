@@ -32,6 +32,11 @@
 
     <table class="borderless" style="margin-top: 5em">
         <tr>
+            <td>
+                <img style="width: 100px; height: auto;" src="{{asset('/storage/'. $img)}}">
+            </td>
+        </tr>
+        <tr>
             <td width="50%">
                 <strong>
                 {{ date('F d, Y',strtotime($x->created_at)) }}
@@ -100,15 +105,25 @@
                     Sincerely,
                 </p>
 
-
-                <p style="margin-top: 2em">
-                    {{ strtoUpper($x->signatory->full_name) }}
-                </p>
-
-                <p>
-                    <i>Authorized signatory</i><br/>
+                <p class="margin-bottom: 1em; margin-top: 1em">
                     {{ strtoUpper($x->from_company) }}
                 </p>
+
+                @foreach($x->signatories as $signatory)
+                    <p style="margin-top: 2em">
+                        {{ strtoUpper($signatory['name']) }} <br/>
+                        <i>Authorized signatory</i>
+                    </p>
+                @endforeach
+                
+            </td>
+        </tr>
+    </table>
+
+    <table class="borderless" style="margin-top: 5em">
+        <tr>
+            <td style="text-align: center">
+                <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
             </td>
         </tr>
     </table>

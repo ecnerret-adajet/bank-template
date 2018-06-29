@@ -36,6 +36,15 @@ class BankTransfersController extends Controller
     }
 
     /**
+     * find company image
+     */
+    public function findCompanyAvatar($company)
+    {
+        $img = Company::where('name',$company)->first()->avatar;
+        return $img;
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -65,10 +74,10 @@ class BankTransfersController extends Controller
             'to_company' => $to->company->name,
             'from_account' => $from->account_number,
             'to_account' => $to->account_number,
-            'signatories' => json_encode([
-                $request->input('signatory1'),
-                $request->input('signatory2')
-            ])
+            'signatories' => [
+                array('name' => $request->input('signatory1')),
+                array('name' => $request->input('signatory2'))                    
+            ]
         ]);
         $bankTransfer->manager()->associate($bank->manager->id);
         $bankTransfer->bank()->associate($bank->id);
@@ -85,8 +94,9 @@ class BankTransfersController extends Controller
         // enable extension=php_intl.dll from PHP.INI to user NumberFormatter
 
         $f = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
+        $img = $this->findCompanyAvatar($x->from_company);
 
-        $pdf = PDF::loadView('bankTransfers.pdf', compact('x','f'));
+        $pdf = PDF::loadView('bankTransfers.pdf', compact('x','f','img'));
         return $pdf->setPaper('letter')->stream('bankTransfers.pdf');    
     }
 

@@ -18,17 +18,23 @@ class BankTransfer extends Model
         'signatories',
     ];
 
+    // cast to array
+    protected $casts = [
+        'signatories' => 'array',
+    ];
+
+
     /**
      * Convet array to string conversion
      */
-    public function setSignatoriesAttribute($value)
-    {
-        $this->attributes['signatories'] = json_encode($value);
-    }
+    // public function setSignatoriesAttribute($value)
+    // {
+    //     $this->attributes['signatories'] = json_encode($value, JSON_UNESCAPED_SLASHES);
+    // }
 
     public function setAmountAttribute($value)
     {
-        $this->attributes['amount'] = trim(str_replace(['PHP',',','.'],'',$value));
+        $this->attributes['amount'] = trim(str_replace(['PHP',',','.00'],'',$value));
     }
 
     // Model Relationships

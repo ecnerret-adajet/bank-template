@@ -28,12 +28,12 @@ class ManagerCheck extends Model
 
     public function setGrandTotalAttribute($value)
     {
-        $this->attributes['grand_total'] = trim(str_replace(['PHP',',','.'],'',$value));
+        $this->attributes['grand_total'] = trim(str_replace(['PHP',',','.00'],'',$value));
     }
 
     public function setMcCostAttribute($value)
     {
-        $this->attributes['mc_cost'] = trim(str_replace(['PHP',',','.'],'',$value));
+        $this->attributes['mc_cost'] = trim(str_replace(['PHP',',','.00'],'',$value));
     }
     
     // Model Relationships

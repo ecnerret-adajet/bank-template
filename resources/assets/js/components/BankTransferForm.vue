@@ -137,7 +137,7 @@ export default {
             amount: '',
             moneyConfig: {
                 // The character used to show the decimal place.
-                decimal: '.',
+                // decimal: '.',
                 // The character used to separate numbers in groups of three.
                 thousands: ',',
                 // The currency name or symbol followed by a space.
