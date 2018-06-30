@@ -45,7 +45,9 @@ class ReportController extends Controller
     {
         $checkDate = !empty($date) ? Carbon::parse($date) : Carbon::today();
 
-        $payrolls = Payroll::whereDate('create_at')->get();
+        $payrolls = Payroll::whereDate('created_at',$checkDate)
+                        // ->with('applicants','manager','type','company','user')
+                        ->get();
 
         return $payrolls;
     }

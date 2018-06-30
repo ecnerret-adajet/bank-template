@@ -16,15 +16,6 @@ class Payroll extends Model
         'signatories' => 'array',
     ];
 
-    // Model Relationships
-    /**
-     * Convet array to string conversion
-     */
-    // public function setSignatoriesAttribute($value)
-    // {
-    //     $this->attributes['signatories'] = json_encode($value);
-    // }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -48,6 +39,23 @@ class Payroll extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    // Custom JSON Casting
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'ref_num' => $this->ref_num,
+            'manager' => $this->manager->full_name,
+            'type' => $this->type->name,
+            'company' => $this->company->full_company,
+            'applicants' => $this->applicants,
+            'signatories' => $this->signatories,
+            'user' => $this->user->name,
+            'created_at' => $this->created_at
+        ];
     }
 
 

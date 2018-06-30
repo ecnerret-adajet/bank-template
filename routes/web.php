@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/reports','ReportController@index');
     Route::get('/getBankTransfer/{date}','ReportController@getBankTransfer');
     Route::get('/getManagerCheck/{date}','ReportController@getManagerCheck');
-    Route::get('/getPayroll/{date}','ReportController@getManagerCheck');
+    Route::get('/getPayroll/{date}','ReportController@getPayroll');
 
 });
 

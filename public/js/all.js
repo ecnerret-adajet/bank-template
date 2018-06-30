@@ -64721,17 +64721,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(216)
+}
 var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(201)
 /* template */
-var __vue_template__ = __webpack_require__(202)
+var __vue_template__ = __webpack_require__(218)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-4d2f6cf6"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -64769,42 +64773,278 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_content_placeholders__ = __webpack_require__(191);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    components: {
+        VueContentPlaceholders: __WEBPACK_IMPORTED_MODULE_1_vue_content_placeholders__["default"]
+    },
+
+    data: function data() {
+        return {
+            loading: false,
+            payrolls: [],
+            companies: [],
+            date: __WEBPACK_IMPORTED_MODULE_0_moment___default()().format('YYYY-MM-DD'),
+            currentPage: 0,
+            itemsPerPage: 5,
+            companySearch: '',
+            typeSearch: '',
+            columns: [{
+                name: 'Reference #',
+                visibility: true
+            }, {
+                name: 'Payroll Type',
+                visibility: true
+            }, {
+                name: 'Company',
+                visibility: true
+            }, {
+                name: 'Manager',
+                visibility: true
+            }, {
+                name: 'Applicants',
+                visibility: true
+            }, {
+                name: 'Signatories',
+                visibility: false
+            }, {
+                name: 'Submitted By',
+                visibility: false
+            }]
+        };
+    },
+    mounted: function mounted() {
+        var options = [];
+        $('.dropdown-menu button').on('click', function (event) {
+            var $target = $(event.currentTarget),
+                val = $target.attr('data-value'),
+                $inp = $target.find('input'),
+                idx;
+            if ((idx = options.indexOf(val)) > -1) {
+                options.splice(idx, 1);
+                setTimeout(function () {
+                    $inp.prop('checked', false);
+                }, 0);
+            } else {
+                options.push(val);
+                setTimeout(function () {
+                    $inp.prop('checked', true);
+                }, 0);
+            }
+            $(event.target).blur();
+            return false;
+        });
+    },
+    created: function created() {
+        this.getPayrolls();
+        this.getCompanies();
+    },
+
+
+    methods: {
+        getPayrolls: function getPayrolls() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/getPayroll/' + this.date).then(function (response) {
+                _this.payrolls = response.data;
+                _this.loading = false;
+            });
+        },
+        setVisibility: function setVisibility(column) {
+            column.visibility = !column.visibility;
+        },
+        getCompanies: function getCompanies() {
+            var _this2 = this;
+
+            axios.get('/getCompanies').then(function (response) {
+                return _this2.companies = response.data;
+            });
+        },
+        money: function money(value) {
+            var val = (value / 1).toFixed(2).replace(',', '.');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
+        searchDate: function searchDate(date) {
+            return __WEBPACK_IMPORTED_MODULE_0_moment___default()(date).format('YYYY-MM-DD');
+        },
+        setPage: function setPage(pageNumber) {
+            this.currentPage = pageNumber;
+        },
+        resetStartRow: function resetStartRow() {
+            this.currentPage = 0;
+        },
+        showPreviousLink: function showPreviousLink() {
+            return this.currentPage == 0 ? false : true;
+        },
+        showNextLink: function showNextLink() {
+            return this.currentPage == this.totalPages - 1 ? false : true;
+        }
+    },
+
+    computed: {
+        filteredEntries: function filteredEntries() {
+            var _this3 = this;
+
+            return this.payrolls.filter(function (item) {
+                return item.company.toLowerCase().includes(_this3.companySearch.toLowerCase()) && item.type.toLowerCase().includes(_this3.typeSearch.toLowerCase());
+            });
+        },
+        currentDate: function currentDate() {
+            return __WEBPACK_IMPORTED_MODULE_0_moment___default()().format('YYYY-MM-DD');
+        },
+        totalPages: function totalPages() {
+            return Math.ceil(this.filteredEntries.length / this.itemsPerPage);
+        },
+        filteredQueues: function filteredQueues() {
+            var index = this.currentPage * this.itemsPerPage;
+            var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);
+
+            if (this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1;
+            }
+
+            if (this.currentPage == -1) {
+                this.currentPage = 0;
+            }
+
+            return queues_array;
+        }
+    },
+
+    watch: {
+        date: function date() {
+            return this.getPayrolls();
+        }
+    }
+
+});
 
 /***/ }),
-/* 202 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Payroll Application")])])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4d2f6cf6", module.exports)
-  }
-}
-
-/***/ }),
+/* 202 */,
 /* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -70490,6 +70730,585 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-21eef2b4", module.exports)
+  }
+}
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(217);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(16)("e4af452e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4d2f6cf6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PayrollApplicationReport.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4d2f6cf6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PayrollApplicationReport.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.dropdown-menu button[data-v-4d2f6cf6] {\n    cursor: pointer;\n}\n.column-items[data-v-4d2f6cf6] {\n    display: flex;\n    align-items: center;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row mb-2" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { staticClass: "text-muted text-uppercase" }, [
+            _vm._v("Filter by date")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.date,
+                expression: "date"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "date", max: _vm.currentDate },
+            domProps: { value: _vm.date },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.date = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-1" }, [
+        _c("label", [_vm._v(" ")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "btn-group" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "dropdown-menu dropdown-menu-right" },
+              _vm._l(_vm.columns, function(column, c) {
+                return _c(
+                  "button",
+                  {
+                    key: c,
+                    staticClass: "dropdown-item column-items",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.setVisibility(column)
+                      }
+                    }
+                  },
+                  [
+                    _c("label", { staticClass: "switch mt-2" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: column.visibility,
+                            expression: "column.visibility"
+                          }
+                        ],
+                        attrs: { type: "checkbox" },
+                        domProps: {
+                          checked: Array.isArray(column.visibility)
+                            ? _vm._i(column.visibility, null) > -1
+                            : column.visibility
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.setVisibility(column)
+                          },
+                          change: function($event) {
+                            var $$a = column.visibility,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    column,
+                                    "visibility",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    column,
+                                    "visibility",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(column, "visibility", $$c)
+                            }
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "slider round" })
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "ml-2" }, [
+                      _vm._v(_vm._s(column.name))
+                    ])
+                  ]
+                )
+              })
+            )
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row mb-2" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.typeSearch,
+                  expression: "typeSearch"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.typeSearch = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "", selected: "" } }, [
+                _vm._v("All Payroll type")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "ATM Application" } }, [
+                _vm._v("ATM Application")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "Delisting of Employee" } }, [
+                _vm._v("Delisting of Employee")
+              ])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.companySearch,
+                  expression: "companySearch"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.companySearch = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "", selected: "" } }, [
+                _vm._v("All Companies")
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.companies, function(company, i) {
+                return _c(
+                  "option",
+                  {
+                    key: i,
+                    attrs: { selected: "" },
+                    domProps: { value: company.name }
+                  },
+                  [_vm._v(_vm._s(company.name))]
+                )
+              })
+            ],
+            2
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table" }, [
+      _c(
+        "thead",
+        _vm._l(_vm.columns, function(column, c) {
+          return _c(
+            "th",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: column.visibility,
+                  expression: "column.visibility"
+                }
+              ],
+              key: c
+            },
+            [
+              _vm._v(
+                "\n                " +
+                  _vm._s(column.name) +
+                  "    \n            "
+              )
+            ]
+          )
+        })
+      ),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        [
+          _vm._l(_vm.filteredQueues, function(payroll, b) {
+            return !_vm.loading
+              ? _c("tr", { key: b }, [
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[0].visibility,
+                          expression: "columns[0].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.ref_num))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[1].visibility,
+                          expression: "columns[1].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.type))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[2].visibility,
+                          expression: "columns[2].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.company))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[3].visibility,
+                          expression: "columns[3].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.manager))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[4].visibility,
+                          expression: "columns[4].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.applicants.length))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[5].visibility,
+                          expression: "columns[5].visibility"
+                        }
+                      ]
+                    },
+                    _vm._l(payroll.signatories, function(signatory, s) {
+                      return _c("span", { key: s }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(signatory.name) +
+                            " "
+                        ),
+                        _c("br")
+                      ])
+                    })
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[6].visibility,
+                          expression: "columns[6].visibility"
+                        }
+                      ]
+                    },
+                    [_vm._v(_vm._s(payroll.user))]
+                  )
+                ])
+              : _vm._e()
+          }),
+          _vm._v(" "),
+          _vm.filteredQueues.length == 0 && !_vm.loading
+            ? _c("tr", [_vm._m(1)])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.loading
+            ? _c("tr", [
+                _c("td", { attrs: { colspan: "5" } }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col" },
+                      [
+                        _c(
+                          "content-placeholders",
+                          {
+                            staticStyle: { border: "0 ! important" },
+                            attrs: { rounded: true }
+                          },
+                          [
+                            _c("content-placeholders-heading", {
+                              attrs: { img: true }
+                            }),
+                            _vm._v(" "),
+                            _c("content-placeholders-text", {
+                              attrs: { lines: 1 }
+                            }),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("content-placeholders-heading", {
+                              attrs: { img: true }
+                            }),
+                            _vm._v(" "),
+                            _c("content-placeholders-text", {
+                              attrs: { lines: 1 }
+                            }),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("content-placeholders-heading", {
+                              attrs: { img: true }
+                            }),
+                            _vm._v(" "),
+                            _c("content-placeholders-text", {
+                              attrs: { lines: 1 }
+                            }),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("content-placeholders-heading", {
+                              attrs: { img: true }
+                            }),
+                            _vm._v(" "),
+                            _c("content-placeholders-text", {
+                              attrs: { lines: 1 }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            : _vm._e()
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row mt-3" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-default btn-sm",
+            attrs: { disabled: !_vm.showPreviousLink() },
+            on: {
+              click: function($event) {
+                _vm.setPage(_vm.currentPage - 1)
+              }
+            }
+          },
+          [_vm._v(" Previous ")]
+        ),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-dark" }, [
+          _vm._v(
+            "Page " +
+              _vm._s(_vm.currentPage + 1) +
+              " of " +
+              _vm._s(_vm.totalPages)
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-default btn-sm",
+            attrs: { disabled: !_vm.showNextLink() },
+            on: {
+              click: function($event) {
+                _vm.setPage(_vm.currentPage + 1)
+              }
+            }
+          },
+          [_vm._v(" Next ")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-6 text-right" }, [
+        _c("span", [_vm._v(_vm._s(_vm.payrolls.length) + " Manager Check(s)")])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-secondary",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fa fa-2x fa-filter",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "text-center", attrs: { colspan: "5" } }, [
+      _c("h3", [_vm._v("Nothing found")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4d2f6cf6", module.exports)
   }
 }
 
