@@ -23,14 +23,26 @@ class BankTransfer extends Model
         'signatories' => 'array',
     ];
 
+    // Custom json cast
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'ref_num' => $this->ref_num,
+            'from_company' => $this->from_company,
+            'to_company' => $this->to_company,
+            'from_account' => $this->from_account,
+            'to_account' => $this->to_account,
+            'amount' => $this->amount,
+            'signatories' => $this->signatories,
+            'manager' => $this->manager->full_name,
+            'bank' => $this->bank,
+            'user' => $this->user->name,
+            'created_at' => $this->created_at
+        ];
+    }
 
-    /**
-     * Convet array to string conversion
-     */
-    // public function setSignatoriesAttribute($value)
-    // {
-    //     $this->attributes['signatories'] = json_encode($value, JSON_UNESCAPED_SLASHES);
-    // }
+    // Attribute Mutator
 
     public function setAmountAttribute($value)
     {

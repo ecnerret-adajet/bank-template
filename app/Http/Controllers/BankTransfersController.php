@@ -65,8 +65,8 @@ class BankTransfersController extends Controller
             'ref_num' => 'PFMC-BT-'.sprintf('%08d', $last_count),
             'amount' => $request->input('amount'),
             'manager_id' => $bank->manager->id,
-            'from_company' => $from->company->name,
-            'to_company' => $to->company->name,
+            'from_company' => $from->company->full_company,
+            'to_company' => $to->company->full_company,
             'from_account' => $from->account_number,
             'to_account' => $to->account_number,
             'signatories' => [

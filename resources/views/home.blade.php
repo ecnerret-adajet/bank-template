@@ -79,6 +79,12 @@
         </div><!-- /.row -->
     </div>
 
+    <div class="row">
+        <div class="col">
+            {{-- {{ $recentSubmitted }} --}}
+        </div>
+    </div>
+
 
 </div>
 @endsection

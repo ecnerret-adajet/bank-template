@@ -71,3 +71,11 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/getPayroll/{date}','ReportController@getManagerCheck');
 
 });
+
+Route::any('{any?}', function ($any = null) {
+    if (Auth::check()) {
+        return redirect('/home');
+    } else {
+        return redirect('/');
+    }
+});

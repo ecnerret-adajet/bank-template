@@ -24,7 +24,7 @@ class ReportController extends Controller
         $checkDate = !empty($date) ? Carbon::parse($date) : Carbon::today();
 
         $bankTransfer = BankTransfer::whereDate('created_at',$checkDate)
-                        ->with('manager','manager.bank','signatory')
+                        ->with('manager','bank','user')
                         ->get();
 
         return $bankTransfer;

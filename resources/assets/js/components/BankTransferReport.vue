@@ -63,10 +63,19 @@
             <tbody>
                 <tr v-for="(btransfer, b) in filteredQueues" :key="b" v-if="!loading">
                     <td v-show="columns[0].visibility">{{ btransfer.ref_num }}</td>
-                    <td v-show="columns[1].visibility">{{ btransfer.from_account }}</td>
-                    <td v-show="columns[2].visibility">{{ btransfer.to_account }}</td>
-                    <td v-show="columns[3].visibility">{{ btransfer.manager.bank.branch }}</td>
-                    <td v-show="columns[4].visibility">PHP {{ money(btransfer.amount) }}</td>
+                    <td v-show="columns[1].visibility">{{ btransfer.from_company }}</td>
+                    <td v-show="columns[2].visibility">{{ btransfer.from_account }}</td>
+                    <td v-show="columns[3].visibility">{{ btransfer.to_company }}</td>
+                    <td v-show="columns[4].visibility">{{ btransfer.to_account }}</td>
+                    <td v-show="columns[5].visibility">PHP {{ money(btransfer.amount) }}</td>
+                    <td v-show="columns[6].visibility">{{ btransfer.bank.branch }}</td>
+                    <td v-show="columns[7].visibility">{{ btransfer.manager }}</td>
+                    <td v-show="columns[8].visibility">{{ btransfer.user }}</td>
+                    <td v-show="columns[9].visibility">
+                        <span v-for="(signatory, s) in btransfer.signatories" :key="s">
+                            {{ signatory.name }} <br>
+                        </span>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="5" class="text-center" >
@@ -139,11 +148,23 @@ export default {
                     visibility: true
                 },
                 {
+                    name: 'From Company',
+                    visibility: false
+                },
+                {
                     name: 'From Account',
                     visibility: true
                 },
                 {
+                    name: 'To Company',
+                    visibility: false
+                },
+                {
                     name: 'To Account',
+                    visibility: true
+                },
+                {
+                    name: 'Amount',
                     visibility: true
                 },
                 {
@@ -151,8 +172,16 @@ export default {
                     visibility: true
                 },
                 {
-                    name: 'Amount',
-                    visibility: true
+                    name: 'Manager',
+                    visibility: false
+                },
+                {
+                    name: 'Submitted By',
+                    visibility: false
+                },
+                {
+                    name: 'Signatories',
+                    visibility: false
                 },
             ],
         }
@@ -236,8 +265,8 @@ export default {
     computed: {
         filteredEntries() {
             return this.bank_transfer.filter(item => {
-                return item.manager.bank.branch.toLowerCase().includes(this.bankSearch.toLowerCase()) &&
-                       item.from_company.toLowerCase().includes(this.companySearch.toLowerCase()) ||
+                return item.bank.branch.toLowerCase().includes(this.bankSearch.toLowerCase()) &&
+                       item.from_company.toLowerCase().includes(this.companySearch.toLowerCase())
                        item.to_company.toLowerCase().includes(this.companySearch.toLowerCase());
             })
         },
