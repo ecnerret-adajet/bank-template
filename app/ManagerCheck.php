@@ -23,14 +23,6 @@ class ManagerCheck extends Model
         'signatories' => 'array',
     ];
 
-    /**
-     * Convet array to string conversion
-     */
-    // public function setSignatoriesAttribute($value)
-    // {
-    //     $this->attributes['signatories'] = json_encode($value);
-    // }
-
     public function setGrandTotalAttribute($value)
     {
         $this->attributes['grand_total'] = trim(str_replace(['PHP',',','.00'],'',$value));
@@ -50,11 +42,29 @@ class ManagerCheck extends Model
 
     public function manager()
     {
-        return $this->belongsTo(manager::class);
+        return $this->belongsTo(Manager::class);
     }
 
     public function payees()
     {
         return $this->hasMany(Payee::class);
+    }
+
+    // Custom JSON casting
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'ref_num' => $this->ref_num,
+            'mc_cost' => $this->mc_cost,
+            'grand_total' => $this->grand_total,
+            'account_number' => $this->account_number,
+            'company' => $this->company,
+            'manager' => $this->manager->full_name,
+            'payees' => $this->payees,
+            'signatories' => $this->signatories,
+            'user' => $this->user->name,
+            'created_at' => $this->created_at
+        ];
     }
 }

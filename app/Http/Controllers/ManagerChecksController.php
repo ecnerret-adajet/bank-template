@@ -112,7 +112,7 @@ class ManagerChecksController extends Controller
             'mc_cost' => $request->input('mc_cost'),
             'grand_total' => $request->input('grand_total'),
             'account_number' => $account->account_number,
-            'company' => $account->company->name,
+            'company' => $account->company->full_company,
             'signatories' => [
                 array('name' => $request->input('signatory1')),
                 array('name' => $request->input('signatory2'))                    

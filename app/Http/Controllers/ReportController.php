@@ -34,7 +34,9 @@ class ReportController extends Controller
     {
         $checkDate = !empty($date) ? Carbon::parse($date) : Carbon::today();
 
-        $managerCheck = ManagerCheck::whereDate('create_at')->get();
+        $managerCheck = ManagerCheck::whereDate('created_at',$checkDate)
+                        ->with('manager','payees','user')
+                        ->get();
 
         return $managerCheck;
     }

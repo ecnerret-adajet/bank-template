@@ -13,6 +13,8 @@ class Company extends Model
         'avatar'
     ];
 
+    protected $appends = ['full_company'];
+
     public function getFullCompanyAttribute()
     {
         return !empty($this->department) ? $this->name." - ".$this->department : $this->name;

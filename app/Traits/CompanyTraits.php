@@ -9,7 +9,9 @@ trait CompanyTraits {
 
     public function findCompanyAvatar($company) {
 
-        $img = Company::where('name',$company)->first()->avatar;
+        $contains = str_contains($company, '- ') ? substr($company, 0, strrpos($company, '-')) : $company;
+
+        $img = Company::where('name',$contains)->first()->avatar;
         return $img;   
     
     }
