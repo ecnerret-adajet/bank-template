@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\facades\Auth;
 use App\User;
 
 class PagesController extends Controller
@@ -24,9 +25,19 @@ class PagesController extends Controller
      */
     public function index()
     {
-        $recentSubmitted = User::with('bankTransfers','managerChecks','payrolls')->get();
+        return view('home');
+    }
 
-        return view('home',compact('recentSubmitted'));
+    /**
+     * Get recent submitted
+     */
+    public function recentSubmitted()
+    {
+        $recentSubmitted = User::where('id',Auth::user()->id)
+                ->with('recentBanktransfer','recentManagerChecks','recentPayrolls')
+                ->first();
+
+        return $recentSubmitted;
     }
 
     public function masterData()

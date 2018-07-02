@@ -30767,6 +30767,7 @@ Vue.component('bankTransferForm', __webpack_require__(208));
 
 // Master data components
 Vue.component('masterData', __webpack_require__(235));
+Vue.component('recent', __webpack_require__(241));
 
 var app = new Vue({
   el: '#app'
@@ -62859,6 +62860,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -62901,7 +62905,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 visibility: true
             }, {
                 name: 'Bank',
-                visibility: true
+                visibility: false
             }, {
                 name: 'Manager',
                 visibility: false
@@ -62911,6 +62915,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }, {
                 name: 'Signatories',
                 visibility: false
+            }, {
+                name: 'PDF',
+                visibility: true
             }]
         };
     },
@@ -64221,6 +64228,33 @@ var render = function() {
                         _c("br")
                       ])
                     })
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[10].visibility,
+                          expression: "columns[10].visibility"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/bank-transfers/pdf/" + btransfer.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ]
                   )
                 ])
               : _vm._e()
@@ -64600,6 +64634,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -64647,6 +64684,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }, {
                 name: 'Submitted By',
                 visibility: false
+            }, {
+                name: 'PDF',
+                visibility: true
             }]
         };
     },
@@ -65115,6 +65155,33 @@ var render = function() {
                       ]
                     },
                     [_vm._v(_vm._s(mcheckc.user))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[9].visibility,
+                          expression: "columns[9].visibility"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/manager-checks/pdf/" + mcheckc.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ]
                   )
                 ])
               : _vm._e()
@@ -65496,6 +65563,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -65538,6 +65608,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }, {
                 name: 'Submitted By',
                 visibility: false
+            }, {
+                name: 'PDF',
+                visibility: true
             }]
         };
     },
@@ -66023,6 +66096,33 @@ var render = function() {
                       ]
                     },
                     [_vm._v(_vm._s(payroll.user))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.columns[7].visibility,
+                          expression: "columns[7].visibility"
+                        }
+                      ]
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/payrolls/pdf/" + payroll.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ]
                   )
                 ])
               : _vm._e()
@@ -75251,6 +75351,372 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-0ce47c3a", module.exports)
+  }
+}
+
+/***/ }),
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(242)
+/* template */
+var __vue_template__ = __webpack_require__(243)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Recent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8a8199dc", Component.options)
+  } else {
+    hotAPI.reload("data-v-8a8199dc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 242 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_toasted__ = __webpack_require__(215);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_toasted___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_toasted__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_content_placeholders__ = __webpack_require__(7);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_toasted___default.a);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            loading: false,
+            recents: []
+        };
+    },
+    created: function created() {
+        this.getRecentSubmitted();
+    },
+
+
+    methods: {
+        getRecentSubmitted: function getRecentSubmitted() {
+            var _this = this;
+
+            this.loading = true;
+            axios.get('/recentSubmitted').then(function (response) {
+                _this.recents = response.data;
+                _this.loading = false;
+            });
+        },
+        date: function date(_date) {
+            return __WEBPACK_IMPORTED_MODULE_1_moment___default()(_date).format('YYYY-MM-DD');
+        }
+    }
+
+});
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _vm.recents.recent_banktransfer != 0
+        ? _c("div", { staticClass: "col" }, [
+            _c("span", { staticClass: "h4 text-muted" }, [
+              _vm._v("\r\n                Bank Transfer\r\n            ")
+            ]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table mt-3" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.recents.recent_banktransfer, function(bt, b) {
+                  return _c("tr", { key: b }, [
+                    _c("td", [_vm._v(_vm._s(bt.ref_num))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(_vm.date(bt.created_at.date)))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/bank-transfers/pdf/" + bt.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ])
+                  ])
+                })
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.recents.recent_manager_checks != 0
+        ? _c("div", { staticClass: "col" }, [
+            _c("span", { staticClass: "h4 text-muted" }, [
+              _vm._v("\r\n                Manager's Check\r\n            ")
+            ]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table mt-3" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.recents.recent_manager_checks, function(mc, b) {
+                  return _c("tr", { key: b }, [
+                    _c("td", [_vm._v(_vm._s(mc.ref_num))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(_vm.date(mc.created_at.date)))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/manager-checks/pdf/" + mc.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ])
+                  ])
+                })
+              )
+            ])
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm.recents.recent_payrolls != 0
+        ? _c("div", { staticClass: "col" }, [
+            _c("span", { staticClass: "h4 text-muted" }, [
+              _vm._v("\r\n                Manager's Check\r\n            ")
+            ]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table mt-3" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.recents.recent_payrolls, function(payroll, b) {
+                  return _c("tr", { key: b }, [
+                    _c("td", [_vm._v(_vm._s(payroll.ref_num))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(payroll.type))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(_vm._s(_vm.date(payroll.created_at.date)))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            href: "/payrolls/pdf/" + payroll.id,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("View")]
+                      )
+                    ])
+                  ])
+                })
+              )
+            ])
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Ref Number")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("View")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Ref Number")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("View")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Ref Number")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Application Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("View")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8a8199dc", module.exports)
   }
 }
 

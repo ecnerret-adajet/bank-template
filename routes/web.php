@@ -25,7 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
     // Route Setup for PagesController
     Route::get('/home', 'PagesController@index')->name('home');
     Route::get('/master-data', 'PagesController@masterData')->name('master-data');
-
+    Route::get('/recentSubmitted', 'PagesController@recentSubmitted');
 
     // Route Setup of Bank Transfer
     Route::resource('/bank-transfers','BankTransfersController');

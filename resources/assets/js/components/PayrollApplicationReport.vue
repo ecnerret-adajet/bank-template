@@ -68,6 +68,9 @@
                         </span>
                     </td>
                     <td v-show="columns[6].visibility">{{ payroll.user }}</td>
+                    <td v-show="columns[7].visibility">
+                        <a :href="'/payrolls/pdf/' + payroll.id" target="_blank" class="btn btn-primary btn-sm" >View</a>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="5" class="text-center" >
@@ -162,6 +165,10 @@ export default {
                 {
                     name: 'Submitted By',
                     visibility: false
+                },
+                {
+                    name: 'PDF',
+                    visibility: true
                 }
             ],
         }

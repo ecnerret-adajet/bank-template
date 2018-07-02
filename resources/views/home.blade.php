@@ -79,11 +79,7 @@
         </div><!-- /.row -->
     </div>
 
-    <div class="row">
-        <div class="col">
-            {{-- {{ $recentSubmitted }} --}}
-        </div>
-    </div>
+    <recent></recent>
 
 
 </div>

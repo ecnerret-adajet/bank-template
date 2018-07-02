@@ -76,6 +76,9 @@
                             {{ signatory.name }} <br>
                         </span>
                     </td>
+                    <td v-show="columns[10].visibility">
+                        <a :href="'/bank-transfers/pdf/' + btransfer.id" target="_blank" class="btn btn-primary btn-sm" >View</a>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="5" class="text-center" >
@@ -169,7 +172,7 @@ export default {
                 },
                 {
                     name: 'Bank',
-                    visibility: true
+                    visibility: false
                 },
                 {
                     name: 'Manager',
@@ -182,6 +185,10 @@ export default {
                 {
                     name: 'Signatories',
                     visibility: false
+                },
+                {
+                    name: 'PDF',
+                    visibility: true
                 },
             ],
         }

@@ -69,6 +69,30 @@ class User extends Authenticatable
         return $this->hasMany(Account::class);
     }
 
+    // Custom query
+
+    public function recentBankTransfer()
+    {
+        return $this->hasMany(BankTransfer::class)
+                ->orderBy('id','desc')
+                ->take(5);
+    }
+
+    public function recentManagerChecks()
+    {
+        return $this->hasMany(ManagerCheck::class)
+                ->orderBy('id','desc')
+                ->take(5);
+    }
+
+    public function recentPayrolls()
+    {
+        return $this->hasMany(Payroll::class)
+                ->orderBy('id','desc')
+                ->take(5);
+    }
+
+
 
 
 }

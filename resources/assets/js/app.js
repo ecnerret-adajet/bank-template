@@ -24,6 +24,7 @@ Vue.component('bankTransferForm', require('./components/BankTransferForm.vue'));
 
 // Master data components
 Vue.component('masterData', require('./components/MasterData.vue'));
+Vue.component('recent', require('./components/Recent.vue'));
 
 
 

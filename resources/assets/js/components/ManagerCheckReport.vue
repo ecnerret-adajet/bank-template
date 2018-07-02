@@ -67,6 +67,9 @@
                         </span>
                     </td>
                     <td v-show="columns[8].visibility">{{ mcheckc.user }}</td>
+                    <td v-show="columns[9].visibility">
+                        <a :href="'/manager-checks/pdf/' + mcheckc.id" target="_blank" class="btn btn-primary btn-sm" >View</a>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="5" class="text-center" >
@@ -167,6 +170,10 @@ export default {
                 {
                     name: 'Submitted By',
                     visibility: false
+                },
+                {
+                    name: 'PDF',
+                    visibility: true
                 },
             ],
         }
