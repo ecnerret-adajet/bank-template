@@ -25,7 +25,7 @@ class AccountsController extends Controller
      */
     public function getAccounts()
     {
-        $accounts = Account::all();
+        $accounts = Account::orderBy('id','desc')->get();
 
         return $accounts;
     }
@@ -63,7 +63,7 @@ class AccountsController extends Controller
         $account->company()->associate($request->input('company_list'));
         $account->save();
 
-        return redirect('accounts');
+        return $account;
     }
 
     /**

@@ -18,9 +18,13 @@ window.Vue = require('vue');
 Vue.component('manager-check-form', require('./components/ManagerCheckForm.vue'));
 Vue.component('payroll-form', require('./components/PayrollForm.vue'));
  
-// Report's component
+// Report's components
 Vue.component('reportParent', require('./components/ReportParent.vue'));
 Vue.component('bankTransferForm', require('./components/BankTransferForm.vue'));
+
+// Master data components
+Vue.component('masterData', require('./components/MasterData.vue'));
+
 
 
 const app = new Vue({

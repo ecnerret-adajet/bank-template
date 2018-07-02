@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 
-class HomeController extends Controller
+class PagesController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,5 +27,10 @@ class HomeController extends Controller
         $recentSubmitted = User::with('bankTransfers','managerChecks','payrolls')->get();
 
         return view('home',compact('recentSubmitted'));
+    }
+
+    public function masterData()
+    {
+        return view('master-data');
     }
 }

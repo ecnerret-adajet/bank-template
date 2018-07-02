@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Manager;
-use App\Bank;
 
-class ManagersController extends Controller
+class UsersCcontroller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,17 +23,7 @@ class ManagersController extends Controller
      */
     public function create()
     {
-        $banks = Bank::pluck('name','id');
-        return view('managers.create', compact('banks'));
-    }
-
-    /**
-     * Display managers JSON
-     */
-    public function getManagers()
-    {
-        $managers = Manager::orderBy('id','desc')->get();
-        return $managers;
+        //
     }
 
     /**
@@ -47,19 +34,7 @@ class ManagersController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'title' => 'required',
-            'first_name' => 'required',
-            'middle_name' => 'required',
-            'last_name' => 'required',
-            'bank_list' => 'required'
-        ]);
-
-        $manager = Manager::create($request->all());
-        $manager->bank()->associate($request->input('bank_list'));
-        $manager->save();
-
-        return $manager;
+        //
     }
 
     /**

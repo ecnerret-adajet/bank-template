@@ -25,6 +25,7 @@ class Company extends Model
         return [
             'id' => $this->id,
             'name' => $this->full_company,
+            'avatar' => $this->avatar,
         ];
     }
 

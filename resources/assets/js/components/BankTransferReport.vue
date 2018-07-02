@@ -266,7 +266,7 @@ export default {
         filteredEntries() {
             return this.bank_transfer.filter(item => {
                 return item.bank.branch.toLowerCase().includes(this.bankSearch.toLowerCase()) &&
-                       item.from_company.toLowerCase().includes(this.companySearch.toLowerCase())
+                       item.from_company.toLowerCase().includes(this.companySearch.toLowerCase()) ||
                        item.to_company.toLowerCase().includes(this.companySearch.toLowerCase());
             })
         },

@@ -17,17 +17,23 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::resource('/forms','FormsController');
 Route::get('/forms/generate/{form}','FormsController@generatePDF');
 
 Route::group(['middleware' => 'auth'], function() {
+
+    // Route Setup for PagesController
+    Route::get('/home', 'PagesController@index')->name('home');
+    Route::get('/master-data', 'PagesController@masterData')->name('master-data');
+
+
+    // Route Setup of Bank Transfer
     Route::resource('/bank-transfers','BankTransfersController');
     Route::get('/bank-transfers/pdf/{x}','BankTransfersController@generatePDF');
 
     //Signatories route
     Route::get('/getSignatories','SignatoriesController@getSignatories');
+    Route::post('/signatories','SignatoriesController@store');
 
     // Reoute Setup for bank accounts 
     Route::resource('/accounts','AccountsController');
@@ -48,6 +54,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/manager-checks/pdf/{x}','ManagerChecksController@generatePDF');
 
     // Route setup for Branch Manager
+    Route::resource('/managers','ManagersController');
     Route::get('/getManagers','ManagersController@getManagers');
 
     // Route setup for applicant - payroll
@@ -58,6 +65,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('/applicants/{applicant}','PayrollsController@destroyApplicant');
 
     // Company json
+    Route::resource('/companies','CompaniesController');
     Route::get('/getCompanies','CompaniesController@getCompanies');
 
     // Payroll application resource

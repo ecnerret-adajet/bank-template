@@ -23,7 +23,7 @@ class CompaniesController extends Controller
      */
     public function getCompanies()
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('id','desc')->get();
         return $companies;
     }
 
@@ -56,14 +56,15 @@ class CompaniesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'department' => 'required',
+            'abbrv' => 'required',
+            'avatar' => 'required'
         ]);
 
-        $company = new Company;
-        $company->name = $request->input('name');
-        $company->save();
+        $company = Company::create($request->all());
 
-        return Response::json(array('success' => true), 200);
+        return $company;
 
     }
 

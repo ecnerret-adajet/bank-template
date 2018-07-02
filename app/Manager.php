@@ -41,6 +41,7 @@ class Manager extends Model
         return [
             'id' => $this->id,
             'full_name' => $this->full_name,
+            'bank' => $this->bank->name,
         ];
     }
 

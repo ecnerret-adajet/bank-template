@@ -30,18 +30,18 @@
         <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Companies <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{ url('/master-data') }}">Master Data <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Banks</a>
+            <a class="nav-link" href="#">Users</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="{{ url('/reports') }}">Report</a>
+            <a class="nav-link" href="{{ url('/reports') }}">Reports</a>
             </li>
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li>
-                    <a class="nav-link text-right" href="javascript::void(0);" data-toggle="modal" data-target="#logoutModal">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                    <a class="nav-link text-right" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></a>
                 </li>
             </ul>
         </div>

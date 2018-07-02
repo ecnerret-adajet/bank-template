@@ -55,9 +55,7 @@ class BanksController extends Controller
         ]);
 
         $bank = Auth::user()->banks()->create($request->all());
-
-        return redirect('banks');
-
+        return $bank;
     }
 
     /**
