@@ -46,12 +46,6 @@
                                     <hr/>
                                     <content-placeholders-heading :img="true" />
                                     <content-placeholders-text :lines="1" />
-                                    <hr/>
-                                    <content-placeholders-heading :img="true" />
-                                    <content-placeholders-text :lines="1" />
-                                    <hr/>
-                                    <content-placeholders-heading :img="true" />
-                                    <content-placeholders-text :lines="1" />
                                     <!-- <content-placeholders-text :lines="3" /> -->
                                 </content-placeholders>
                              </div>

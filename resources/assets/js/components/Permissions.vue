@@ -1,22 +1,22 @@
 <template>
     <div>
 
+
         <div class="content-header mb-3">
             <div class="row">
             <div class="col">
-                <span class="h3 text-dark">All Accounts</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newAccount">
-                    Add Account
+                <span class="h3 text-dark">All Permissions</span>
+                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newPermission">
+                    Add Permission
                 </button>
             </div><!-- /.col -->
             </div><!-- /.row -->
         </div>
 
-
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="search" placeholder="Search Account Number">
+                    <input type="text" class="form-control" v-model="search" placeholder="Search Permission">
                 </div>
             </div>
         </div>
@@ -24,16 +24,26 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                <th scope="col" class="text-dark" >Account Number</th>
-                <th scope="col" class="text-dark" >Company</th>
-                <th scope="col" class="text-dark" >Bank</th>
+                <th scope="col" class="text-dark" >Name</th>
+                <th scope="col" class="text-dark" >Description</th>
+                <th scope="col" class="text-dark" >Role</th>
+                <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(account, a) in filteredQueues" :key="a" v-if="!loading">
-                    <td>{{ account.account_number }}</td>
-                    <td>{{ account.bank }}</td>
-                    <td>{{ account.company.name }}</td>
+                <tr v-for="(permission, b) in filteredQueues" :key="b" v-if="!loading">
+                    <td>{{ permission.name }}</td>
+                    <td>{{ permission.description }}</td>
+                    <td>
+                        <span v-for="(role,r) in permission.roles" :key="r">
+                            {{ role.name }} <br/>
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="#">
+                            Update
+                        </a>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="3" class="text-center" >
@@ -66,17 +76,17 @@
                 <button :disabled="!showNextLink()" class="btn btn-default btn-sm" v-on:click="setPage(currentPage + 1)"> Next </button>
             </div>
             <div class="col-6 text-right">
-                <span>{{ accounts.length }} Manager(s)</span>
+                <span>{{ permissions.length }} Bank(s)</span>
             </div>
         </div>
 
 
         <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
+        <div class="modal fade" id="newPermission" tabindex="-1" role="dialog" aria-labelledby="newPermissionLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newAccountLabel">Add New Account</h5>
+                <h5 class="modal-title" id="newPermissionLabel">Add New Permission</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -84,31 +94,25 @@
             <div class="modal-body">
                 
                 <div class="form-group">
-                    <label>Bank Name</label>
-                    <select class="form-control" v-model="selectedBank">
-                        <option value=""  selected>All Banks</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
-                    </select>
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="name" v-model="name" placeholder="Enter Name">
                 </div>
 
                 <div class="form-group">
-                    <label>Company</label>
-                    <select class="form-control" v-model="selectedCompany">
-                        <option value=""  selected>All Companies</option>
-                        <option v-for="(company,c) in companies" :key="c" selected :value="company.id">{{ company.name }}</option>
-                    </select>
+                    <label>Slug</label>
+                    <input type="text" class="form-control" id="slug" v-model="slug" placeholder="Enter Email">
                 </div>
 
                 <div class="form-group">
-                    <label>Account Number</label>
-                    <input type="text" class="form-control acc_format" id="name" v-model="account_number" placeholder="Enter Account Number">
+                    <label>Description</label>
+                    <textarea rows="3" class="form-control" id="description" v-model="description" placeholder="Enter Description">
+                    </textarea>
                 </div>
-
             
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeAccount" data-dismiss="modal">Submit</button>            
+                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeBank" data-dismiss="modal">Submit</button>            
             </div>
             </div>
         </div>
@@ -127,75 +131,32 @@ Vue.use(Toasted)
 
 export default {
 
-    components: {
-        VueContentPlaceholders,
-    },
-
     data() {
         return {
             loading: false,
-            accounts: [],
-            banks: [],
-            companies: [],
-            account_number: '',
-            selectedBank: '',
-            selectedCompany: '',
+            permissions: [],
+            name: '',
+            slug: '',
+            description: '',
+            model: 'Permission',
             search: '',
             currentPage: 0,
             itemsPerPage: 5,
         }
     },
 
-    mounted() {
-        $(document).ready(function(){
-            $('.acc_format').inputmask("9999 9999 99",{ placeholder: "" });
-        });
-    },
-
     created() {
-        this.getAccounts()
-        this.getBanks()
-        this.getCompanies()
+        this.getPermissions()
     },
 
     methods: {
-        resetFields() {
-            this.account_number = '';
-            this.selectedBank = '';
-            this.selectedCompany = '';
-        },
-
-        getAccounts() {
-            axios.get('/getAccounts')
-            .then(response => this.accounts = response.data)
-        },
-
-        getBanks() {
-            axios.get('/getBanks')
-            .then(response => this.banks = response.data)
-        },
-
-        getCompanies() {
-            axios.get('/getCompanies')
-            .then(response => this.companies = response.data)
-        },
-
-        storeAccount() {
-            axios.post('/accounts', {
-                account_number : this.account_number,
-                bank_list : this.selectedBank,
-                company_list : this.selectedCompany
-            })
+        getPermissions() { 
+            this.loading = true
+            axios.get('/getPermissions')
             .then(response => {
-                this.accounts.unshift(response.data)
-                console.log(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
-                    duration : 5000
-                });
-            })
-            this.resetFields()
+                this.permissions = response.data
+                this.loading = false
+            });
         },
 
         setPage(pageNumber) {
@@ -213,19 +174,18 @@ export default {
         showNextLink() {
             return this.currentPage == (this.totalPages - 1) ? false : true;
         }
-
     },
 
     computed: {
         validateFields() {
-            return this.selectedBank == '' ||
-                    this.selectedCompany == '' ||
-                    this.account_number == '';
+            return this.name == '' ||
+                    this.slug == '' ||
+                    this.description == '';
         },
 
         filteredEntries() {
-            return this.accounts.filter(item => {
-                return item.account_number.toLowerCase().includes(this.search.toLowerCase());
+            return this.permissions.filter(item => {
+                return item.name.toLowerCase().includes(this.search.toLowerCase());
             })
         },
 
@@ -252,5 +212,6 @@ export default {
             return queues_array;
         }
     }
+
 }
 </script>
