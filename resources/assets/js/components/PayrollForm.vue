@@ -1,6 +1,21 @@
 <template>
     <div>
 
+        <div class="jumbotron">
+            <div class="row mb-2">
+                <div class="col">
+                    <span class="text-muted text-uppercase small">Bank Name:</span> <br/>
+                    <span class="h4 text-dark" v-if="selectedManager"> {{ getSelectedBank.bank }} </span>
+                    <span class="h4 text-dark" v-else> N/A </span>
+                </div>
+                <div class="col">
+                    <span class="text-muted text-uppercase small">Branch:</span> <br/>
+                    <span class="h4 text-dark" v-if="selectedManager"> {{ getSelectedBank.branch }} </span>
+                    <span class="h4 text-dark" v-else> N/A </span>
+                </div>
+            </div>       
+        </div>
+
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -164,6 +179,12 @@ export default {
                 return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
             }
         },
+
+        getSelectedBank() {
+            if(this.selectedManager) {
+                return this.managers.filter(manager => manager.id == this.selectedManager)[0];
+            }
+        }
 
     }
 

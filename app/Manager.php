@@ -42,6 +42,7 @@ class Manager extends Model
             'id' => $this->id,
             'full_name' => $this->full_name,
             'bank' => $this->bank->name,
+            'branch' => $this->bank->branch
         ];
     }
 

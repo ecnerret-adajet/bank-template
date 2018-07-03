@@ -241,7 +241,7 @@ export default {
         grandTotal() {
             var finalTotal = 0, payeeTotal;
             payeeTotal = this.payees.reduce((total ,payee) => total + Number(payee.amount), 0);
-            finalTotal = payeeTotal + Number(this.mc_cost);
+            finalTotal = payeeTotal + Number(this.totalMcCost);
             return finalTotal;
         },
 
