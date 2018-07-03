@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ManagerCheck extends Model
 {
@@ -49,6 +50,14 @@ class ManagerCheck extends Model
     {
         return $this->hasMany(Payee::class);
     }
+
+    //Queue Scope
+
+    public function scopeCurrentUser($query) 
+    {
+        return $query->where('user_id',Auth::user()->id)->get();
+    } 
+
 
     // Custom JSON casting
     public function toArray()

@@ -26,6 +26,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/home', 'PagesController@index')->name('home');
     Route::get('/master-data', 'PagesController@masterData')->name('master-data');
     Route::get('/recentSubmitted', 'PagesController@recentSubmitted');
+    Route::get('/submittedForms', 'PagesController@submittedForms');
+    Route::get('/submittedBankTransfer/{date}', 'PagesController@submittedBankTransfer');
+    Route::get('/submittedManagerCheck/{date}', 'PagesController@submittedManagerCheck');
+    Route::get('/submittedPayroll/{date}', 'PagesController@submittedPayroll');
 
     // Route Setup of Bank Transfer
     Route::resource('/bank-transfers','BankTransfersController');
@@ -77,6 +81,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/getBankTransfer/{date}','ReportController@getBankTransfer');
     Route::get('/getManagerCheck/{date}','ReportController@getManagerCheck');
     Route::get('/getPayroll/{date}','ReportController@getPayroll');
+
+    //Route Setup for User
+    Route::resource('/users','UsersController');
+    Route::get('/getUsers','UsersController@getUsers');
+    Route::get('/getRoles','UsersController@getRoles');
+    Route::get('/getPermissions','UsersController@getPermissions');
 
 });
 

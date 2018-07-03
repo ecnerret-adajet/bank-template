@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Payroll extends Model
 {
@@ -40,6 +41,13 @@ class Payroll extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    //Queue Scope
+
+    public function scopeCurrentUser($query) 
+    {
+        return $query->where('user_id',Auth::user()->id)->get();
+    } 
 
     // Custom JSON Casting
 

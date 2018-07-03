@@ -169,6 +169,7 @@ return [
          */
          Barryvdh\DomPDF\ServiceProvider::class,
          Collective\Html\HtmlServiceProvider::class,
+         jeremykenedy\LaravelRoles\RolesServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col" v-if="recents.recent_payrolls != 0">
             <span class="h4 text-muted">
-                Manager's Check
+                Payroll Application
             </span>
 
             <table class="table mt-3">

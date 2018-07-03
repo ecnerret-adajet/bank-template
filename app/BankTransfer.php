@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BankTransfer extends Model
 {
@@ -65,5 +66,12 @@ class BankTransfer extends Model
     {
         return $this->belongsTo(Bank::class);
     }
+
+    //Queue Scope
+
+    public function scopeCurrentUser($query) 
+    {
+        return $query->where('user_id',Auth::user()->id)->get();
+    } 
 
 }

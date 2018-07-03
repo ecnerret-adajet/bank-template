@@ -30,13 +30,18 @@
         <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url('/home') }}">All Templates <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ url('/home') }}">All Forms <span class="sr-only">(current)</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('/submittedForms') }}">Submitted Forms</a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/master-data') }}">Master Data</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Users</a>
+                <a class="nav-link" href="{{ url('/users') }}">Users</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/reports') }}">Reports</a>

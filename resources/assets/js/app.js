@@ -24,9 +24,11 @@ Vue.component('bankTransferForm', require('./components/BankTransferForm.vue'));
 
 // Master data components
 Vue.component('masterData', require('./components/MasterData.vue'));
+Vue.component('usersMaster', require('./components/UsersMaster.vue'));
 Vue.component('recent', require('./components/Recent.vue'));
 
-
+// Submitted Forms components
+Vue.component('submittedParent', require('./components/SubmittedParent.vue'));
 
 const app = new Vue({
     el: '#app'
