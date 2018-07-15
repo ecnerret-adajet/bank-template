@@ -44,7 +44,7 @@ class UsersController extends Controller
      */
     public function getRoles()
     {
-        $roles = Role::with('permissions')->get();
+        $roles = Role::orderBy('id','desc')->with('permissions')->get();
         return $roles;
     }
 
@@ -53,8 +53,75 @@ class UsersController extends Controller
      */
     public function getPermissions()
     {
-        $permissions = Permission::with('roles')->get();
+        $permissions = Permission::orderBy('id','desc')->get();
         return $permissions;
+    }
+
+    /**
+     * Store Permissions
+     * 
+     */
+    public function storePermission(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'slug' => 'required',
+        ]);
+
+        $permission = Permission::create([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'description' => $request->input('description')
+        ]);
+
+        return $permission;
+    }
+
+    /**
+     * Store Roles
+     */
+    public function storeRoles(Request $request) 
+    {
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $role = Role::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'level' => $request->input('level'),
+        ]);
+
+        return $role;
+    }
+
+    /**
+     * Update Roles
+     */
+    public function updateRoles(Request $request, Role $role) 
+    {
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $role->name = $request->input('name');
+        $role->description = $request->input('description');
+        $role->level = $request->input('level');
+
+        if(!empty($request->input('attach_list'))) {
+            $role->syncPermissions($request->input('attach_list'));
+        }
+        
+        if(!empty($request->input('detach_list'))) {
+            $detaches = $request->input('detach_list');
+            foreach($detaches as $d) {
+                $role->detachPermission($d);
+            }        
+        }
+        
+        $role->save();
+
+        return $role->with('permissions')->get();
     }
 
     /**
@@ -76,7 +143,7 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        return $user->with('roles')->first();
+        return $user->with('roles','userPermissions')->first();
     }
 
     /**
@@ -111,9 +178,18 @@ class UsersController extends Controller
         if(!empty($request->input('password'))) {
             $user->password = bcrypt($request->input('password'));
         }
-        if(!empty($request->input('permission_list'))) {
-            $user->attachPermission($request->input('permission_list'));
+        
+        if(!empty($request->input('attach_perm'))) {
+            $user->syncPermissions($request->input('attach_perm'));
         }
+        
+        if(!empty($request->input('detach_perm'))) {
+            $detaches = $request->input('detach_perm');
+            foreach($detaches as $d) {
+                $user->detachPermission($d);
+            }        
+        }
+
         $user->attachRole($request->input('role_list'));
         $user->save();
 

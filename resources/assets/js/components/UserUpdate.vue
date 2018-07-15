@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label>Role</label>
-                    <select class="form-control" v-model="userRole">
+                    <select class="form-control" v-model="selectedRole">
                         <option value="" selected>All Roles</option>
                         <option v-for="(role,i) in roles" :key="i" :value="role.id">{{ role.name }}</option>
                     </select>
@@ -42,7 +42,7 @@
         </div>
 
 
-        <!-- <div class="row">
+        <div class="row mt-3 mb-3">
             <div class="col">
 
                 <div class="accordion" id="accordionExample">
@@ -57,14 +57,40 @@
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        <div class="row">
+                            <div class="col">
+                                <span class="h4">Role's Permission</span>
+                                <span v-for="(permission, p) in userDefaultPermissions" :key="p">
+                                    <div class="column-items">
+                                    <label class="switch mt-2">
+                                        <input type="checkbox" checked disabled>
+                                        <span class="slider round"></span>
+                                    </label> 
+                                    <span class="ml-3">{{ permission.name }}</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <span class="h4">All Permissions</span>
+                                <span v-for="(permission, index) in filterPermissions" :key="index">
+                                    <div class="column-items">
+                                    <label class="switch mt-2">
+                                        <input type="checkbox" :checked="userPermissions(permission.id)" @click="syncOrDetach(permission.id)">
+                                        <span class="slider round"></span>
+                                    </label> 
+                                    <span class="ml-3">{{ permission.name }}</span>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
                     </div>
                 </div>
                 </div>
 
             </div>
-        </div> -->
+        </div>
 
         <div class="row mt-3">
             <div class="col">
@@ -93,7 +119,8 @@ export default {
             user: [],
             roles: [],
             edit: true,
-            permissions: [],   
+            permissions: [],
+            detachPermissions: [],   
             name: '',
             email: '',
             password: '',
@@ -102,6 +129,12 @@ export default {
         }
     },
 
+    watch: {
+        selectedPermissions() {
+            console.log(this.selectedPermissions)
+        }
+    },
+    
     created() {
         this.getUser()
         this.getRoles()
@@ -125,7 +158,9 @@ export default {
                 name : this.user.name,
                 email: this.user.email,
                 password: this.password,
-                role_list: this.userRole
+                role_list: this.selectedRole,
+                attach_perm : this.getCurrentPerm,
+                detach_perm : this.detachPermissions,
             })
             .then(response => {
                 window.location = response.data.redirect;
@@ -149,7 +184,39 @@ export default {
         getRoles() {
             axios.get('/getRoles')
             .then(response => this.roles = response.data);
-        }
+        },
+
+        // updatePermissions(permission) {
+        //     var final;
+        //     let getperm = this.selectedPermissions.indexOf(permission)
+        //     if(getperm > -1) {
+        //         final = this.selectedPermissions.splice(this.selectedPermissions.indexOf(permission), 1)
+        //     } else {
+        //          final = this.selectedPermissions.push(permission); 
+        //     }
+        //     return final;
+        // },
+
+        userPermissions(perm) {
+            return this.user.user_permissions.some(x => x.id == perm);
+        },
+
+        syncOrDetach(perm) {
+
+            var checkPerm = this.userPermissions(perm);
+            var final;
+
+            let detachPerm = this.detachPermissions.indexOf(perm);
+            let attachPerm = this.getCurrentPerm.indexOf(perm);
+
+            if(checkPerm) {
+                final = detachPerm > -1 ? this.detachPermissions.splice(this.detachPermissions.indexOf(perm), 1) : this.detachPermissions.push(perm);
+            } else {
+                final = attachPerm > -1 ? this.getCurrentPerm.splice(this.getCurrentPerm.indexOf(perm), 1) : this.getCurrentPerm.push(perm);
+            }
+            return final;
+
+        },
 
     },
 
@@ -159,9 +226,31 @@ export default {
                     this.user.email == '';
         },
 
-        userRole() {
+        roleId() {
             if(this.user.roles) {
-                return this.user.roles.map(x => x.id)[0];
+                var pass = this.user.roles.map(x => x.id)[0];
+                return this.selectedRole = pass;
+            }
+        },
+
+        userDefaultPermissions() {
+            try {
+               return this.roles.find(role => role.id == this.roleId).permissions;
+            } catch (e) {
+                console.log(e)
+            }
+        },
+
+        filterPermissions() {
+            return this.permissions.filter((x,index) => {
+                return !this.userDefaultPermissions.find(y => y.id == x.id);
+            });
+
+        },
+
+        getCurrentPerm() {
+            if(this.user.user_permissions) {
+                return this.user.user_permissions.map(x => x.id);
             }
         }
     }
@@ -169,3 +258,9 @@ export default {
 
 }
 </script>
+<style scoped>
+    .column-items {
+        display: flex;
+        align-items: center;
+    }
+</style>

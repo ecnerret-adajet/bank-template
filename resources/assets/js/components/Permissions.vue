@@ -112,7 +112,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeBank" data-dismiss="modal">Submit</button>            
+                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storePermission" data-dismiss="modal">Submit</button>            
             </div>
             </div>
         </div>
@@ -131,10 +131,15 @@ Vue.use(Toasted)
 
 export default {
 
+    components: {
+        VueContentPlaceholders,
+    },
+
     data() {
         return {
             loading: false,
             permissions: [],
+            roles: [],
             name: '',
             slug: '',
             description: '',
@@ -147,9 +152,22 @@ export default {
 
     created() {
         this.getPermissions()
+        this.getRoles()
     },
 
     methods: {
+
+        resetFields() {
+            this.name = '';
+            this.slug = '',
+            this.description = '';
+        },
+
+        getRoles() {
+            axios.get('/getRoles')
+            .then(response => this.roles = response.data)
+        },
+
         getPermissions() { 
             this.loading = true
             axios.get('/getPermissions')
@@ -157,6 +175,23 @@ export default {
                 this.permissions = response.data
                 this.loading = false
             });
+        },
+
+        storePermission() {
+            axios.post('/permissions', {
+                name: this.name,
+                slug: this.slug,
+                description: this.description
+            })
+            .then(response => {
+                this.permissions.unshift(response.data)
+                Vue.toasted.show("Added Successfully!", { 
+                    theme: "primary", 
+                    position: "bottom-right", 
+                    duration : 5000
+                });
+            })
+            this.resetFields()
         },
 
         setPage(pageNumber) {

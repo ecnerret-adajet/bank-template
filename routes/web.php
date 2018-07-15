@@ -86,7 +86,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('/users','UsersController');
     Route::get('/getUsers','UsersController@getUsers');
     Route::get('/getRoles','UsersController@getRoles');
+    Route::post('/storeRoles','UsersController@storeRoles');
+    Route::patch('/updateRoles/{role}','UsersController@updateRoles');
     Route::get('/getPermissions','UsersController@getPermissions');
+    Route::post('/permissions','UsersController@storePermission');
 
 });
 
