@@ -29,6 +29,15 @@ class ManagerTableSeeder extends Seeder
                 'last_name' => 'Suegay',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
+            ],
+            [
+                'bank_id' => 3,
+                'title' => 'Mr.',
+                'first_name' => 'Mervin',
+                'middle_name' => '',
+                'last_name' => 'Dizon',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now(),
             ]
         ]);
     }
