@@ -28,7 +28,8 @@ class Manager extends Model
 
     public function getFullNameAttribute()
     {
-        return "{$this->title} {$this->first_name} ".strtoUpper(substr($this->middle_name, 0, 1)).", {$this->last_name}";
+        $middleInitial = $this->middle_name ? strtoUpper(substr($this->middle_name, 0, 1))."." : '';
+        return "{$this->title} {$this->first_name} ".$middleInitial." {$this->last_name}";
     }
 
     public function getFullNameLocationAttribute()
