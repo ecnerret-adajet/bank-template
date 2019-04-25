@@ -36,6 +36,22 @@ class BankTableSeeder extends Seeder
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],
+            [
+                'user_id' => 1,
+                'name' => 'Bank of the Philippine Islands',
+                'branch' => 'Binondo Rosario',
+                'location' => 'Manila',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'name' => 'Metropolitan Bank and Trust Company',
+                'branch' => 'Makati Head Office',
+                'location' => 'Makati',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
         ]);
     }
 }

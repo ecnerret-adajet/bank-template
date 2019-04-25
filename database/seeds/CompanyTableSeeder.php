@@ -111,6 +111,15 @@ class CompanyTableSeeder extends Seeder
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],
+            [
+                'id' => 12,
+                'name' => 'Mariveles Grains Corporation',
+                'department' => null,
+                'abbrv' => 'MGC',
+                'avatar' => 'companies/lfug.png',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
         ]);
     }
 }

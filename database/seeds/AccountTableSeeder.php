@@ -132,6 +132,71 @@ class AccountTableSeeder extends Seeder
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],
+            // added
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 5,
+                'account_number' => '0053 4116 73',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 5,
+                'account_number' => '0553 4116 57',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 1,
+                'account_number' => '0051 0550 98',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 2,
+                'account_number' => '0051 0555 78',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 4,
+                'company_id' => 2,
+                'account_number' => '4763 0457 28',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 3,
+                'account_number' => '0051 0540 08',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 1,
+                'company_id' => 6,
+                'account_number' => '0051 0539 82',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
+            [
+                'user_id' => 1,
+                'bank_id' => 5,
+                'company_id' => 12,
+                'account_number' => '066 7 06637743 8',
+                'created_at' => Carbon\Carbon::now(),
+                'updated_at' => Carbon\Carbon::now()
+            ],
         ]);
     }
 }
