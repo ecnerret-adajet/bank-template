@@ -51,6 +51,32 @@ class UsersTableSeeder extends Seeder
 	        $newUser;
 	        $newUser->attachRole($userRole);
 
+		}
+
+        if (User::where('email', '=', 'maryjean.dizon@lafilgroup.com')->first() === null) {
+
+	        $newUser = User::create([
+	            'name' => 'Mary Jean Dizon',
+	            'email' => 'maryjean.dizon@lafilgroup.com',
+	            'password' => bcrypt('maryjean.dizon'),
+	        ]);
+
+	        $newUser;
+	        $newUser->attachRole($userRole);
+
+		}
+
+        if (User::where('email', '=', 'donalyn.acaso@philippineforemost.com')->first() === null) {
+
+	        $newUser = User::create([
+	            'name' => 'Donalyn Acaso',
+	            'email' => 'donalyn.acaso@philippineforemost.com',
+	            'password' => bcrypt('donalyn.acaso'),
+	        ]);
+
+	        $newUser;
+	        $newUser->attachRole($userRole);
+
         }
 
     }
