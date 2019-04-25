@@ -50,13 +50,13 @@ class ManagerTableSeeder extends Seeder
             ],
             [
                 'bank_id' => 4,
-                'title' => 'Mr.',
-                'first_name' => 'Mei Ling',
-                'middle_name' => 'L',
-                'last_name' => 'Chan',
+                'title' => 'Ms.',
+                'first_name' => 'Marie Jessica',
+                'middle_name' => 'P',
+                'last_name' => 'Calma',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
-            ]
+            ],
         ]);
     }
 }
