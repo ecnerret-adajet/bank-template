@@ -35,7 +35,7 @@ class BankTransfersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {        
+    {
         return view('bankTransfers.create');
     }
 
@@ -60,7 +60,7 @@ class BankTransfersController extends Controller
         $bank = Bank::whereId($request->input('bank_list'))->first();
         $from = Account::where('id',$request->input('from_account'))->with('company')->first();
         $to = Account::where('id',$request->input('to_account'))->with('company')->first();
-        
+
         $bankTransfer = Auth::user()->bankTransfers()->create([
             'ref_num' => 'PFMC-BT-'.sprintf('%08d', $last_count),
             'amount' => $request->input('amount'),
@@ -71,7 +71,7 @@ class BankTransfersController extends Controller
             'to_account' => $to->account_number,
             'signatories' => [
                 array('name' => $request->input('signatory1')),
-                array('name' => $request->input('signatory2'))                    
+                array('name' => $request->input('signatory2'))
             ]
         ]);
         $bankTransfer->manager()->associate($bank->manager->id);
@@ -86,13 +86,14 @@ class BankTransfersController extends Controller
      */
     public function generatePDF(BankTransfer $x)
     {
-        // enable extension=php_intl.dll from PHP.INI to user NumberFormatter
+        // enable extension=php_intl.dll from PHP.INI to user NumberFormatter -> windows
+        // Delete all content form /storage/fonts directory -> linux
 
         $f = new \NumberFormatter("en", \NumberFormatter::SPELLOUT);
         $img = $this->findCompanyAvatar($x->from_company);
 
         $pdf = PDF::loadView('bankTransfers.pdf', compact('x','f','img'));
-        return $pdf->setPaper('letter')->stream('bankTransfers.pdf');    
+        return $pdf->setPaper('letter')->stream('bankTransfers.pdf');
     }
 
     /**
