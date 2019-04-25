@@ -40,12 +40,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/master-data') }}">Master Data</a>
             </li>
+            @role('admin')
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/users') }}">Users</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/reports') }}">Reports</a>
             </li>
+            @endrole
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li>
@@ -54,7 +56,7 @@
             </ul>
         </div>
             </div>
-       
+
         </nav>
 
         <div class="mb-5" style="margin-bottom: 100px;">
@@ -89,7 +91,7 @@
               <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
             </form>
-          
+
           </div>
         </div>
       </div>
@@ -101,6 +103,6 @@
     <!-- Scripts -->
     <script src="{{ asset('js/all.js') }}"></script>
     @yield('script')
-    
+
 </body>
 </html>
