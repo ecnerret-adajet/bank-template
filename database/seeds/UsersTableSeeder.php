@@ -38,6 +38,21 @@ class UsersTableSeeder extends Seeder
 				$newUser->attachPermission($permission);
 			}
 
+		}
+
+        if (User::where('email', '=', 'etheljoy.valencia@lafilgroup.com')->first() === null) {
+
+	        $newUser = User::create([
+	            'name' => 'Ethel Joy Valencia',
+	            'email' => 'etheljoy.valencia@lafilgroup.com',
+	            'password' => bcrypt('etheljoy.valencia'),
+	        ]);
+
+	        $newUser->attachRole($adminRole);
+			foreach ($permissions as $permission) {
+				$newUser->attachPermission($permission);
+			}
+
         }
 
         if (User::where('email', '=', 'user@user.com')->first() === null) {
