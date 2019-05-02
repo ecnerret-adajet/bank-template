@@ -20,7 +20,8 @@ class Account extends Model
             'id' => $this->id,
             'account_number' => $this->account_number,
             'bank' => $this->bank->branch,
-            'company' => $this->company
+            'company' => $this->company,
+            'account_company' =>  $this->account_number." - ".$this->company->abbrv
         ];
     }
 

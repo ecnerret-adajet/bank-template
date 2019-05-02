@@ -17,7 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('manager-check-form', require('./components/ManagerCheckForm.vue'));
 Vue.component('payroll-form', require('./components/PayrollForm.vue'));
- 
+
 // Report's components
 Vue.component('reportParent', require('./components/ReportParent.vue'));
 Vue.component('bankTransferForm', require('./components/BankTransferForm.vue'));
@@ -26,6 +26,9 @@ Vue.component('bankTransferForm', require('./components/BankTransferForm.vue'));
 Vue.component('masterData', require('./components/MasterData.vue'));
 Vue.component('usersMaster', require('./components/UsersMaster.vue'));
 Vue.component('recent', require('./components/Recent.vue'));
+
+// Company components
+Vue.component('companyEdit', require('./components/companies/Edit.vue'));
 
 // Submitted Forms components
 Vue.component('submittedParent', require('./components/SubmittedParent.vue'));

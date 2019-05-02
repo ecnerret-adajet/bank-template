@@ -1,7 +1,7 @@
 <template>
     <div>
 
-       
+
 
         <div class="jumbotron">
             <div class="row mb-2" v-if="selectedBank" v-for="(selected, s) in getSelectedBank" :key="s">
@@ -47,7 +47,7 @@
                     <label>Bank Branch</label>
                     <select class="form-control" name="bank_list" v-model="selectedBank">
                         <option value="" disabled selected>Select Bank Branch</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
+                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{  bank.name + ' - ' + bank.branch }}</option>
                     </select>
 
                 </div>
@@ -61,17 +61,17 @@
                     <label>From Account</label>
                     <select class="form-control" name="from_account" v-model="selectedFromAccount">
                         <option value="" disabled selected>Select Account Number</option>
-                        <option v-for="(account,a) in fromAccount" :key="a" selected :value="account.id">{{ account.account_number }}</option>
+                        <option v-for="(account,a) in fromAccount" :key="a" selected :value="account.id">{{ account.account_company }}</option>
                     </select>
                 </div>
             </div>
- 
+
             <div class="col">
                 <div class="form-group">
                     <label>To Account</label>
                     <select class="form-control" name="to_account" v-model="selectedToAccount">
                         <option value="" disabled selected>Select Account Number</option>
-                        <option v-for="(account,a) in toAccount" :key="a" selected :value="account.id">{{ account.account_number }}</option>
+                        <option v-for="(account,a) in toAccount" :key="a" selected :value="account.id">{{ account.account_company }}</option>
                     </select>
                 </div>
             </div>
@@ -98,13 +98,13 @@
                     </select>
                 </div>
             </div>
- 
-            <div class="col">
+
+            <div v-show="signatories2.length > 0" class="col">
                 <div class="form-group">
                     <label>Signatory #2</label>
                     <select class="form-control" name="signatory2" v-model="signatory2">
                         <option value="" disabled selected>Select Signatory</option>
-                        <option v-for="(signatory,s) in secondSignatory" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
+                        <option v-for="(signatory,s) in signatories2" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
                     </select>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 <button type="submit" class="btn btn-primary btn-block" :disabled="allowToSubmit" @click.prevent="postBankTransfer">Publish</button>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -129,6 +129,7 @@ export default {
         return {
             banks: [],
             signatories: [],
+            signatories2: [],
             selectedBank: '',
             selectedToAccount: '',
             selectedFromAccount: '',
@@ -162,6 +163,9 @@ export default {
             this.selectedToAccount = '';
             this.selectedFromAccount = '';
         },
+        selectedFromAccount() {
+            this.getSignatories()
+        }
     },
 
 
@@ -172,13 +176,19 @@ export default {
         },
 
         getSignatories() {
-            axios.get('/getSignatories')
-            .then(response  => this.signatories = response.data);
+            if(this.selectedFromAccount != '') {
+                 axios.get(`/api/assigned-signatories/${this.fromCompany.company.id}`)
+                .then(response  => {
+                    let resultCopy = [...response.data]
+                    this.signatories = response.data.filter(item => item.policy_type === 1);
+                    this.signatories2 = resultCopy.filter(item => item.policy_type === 2);
+                })
+            }
         },
 
         postBankTransfer() {
             axios.post('/bank-transfers', {
-                amount: this.amount, 
+                amount: this.amount,
                 from_account: this.selectedFromAccount,
                 to_account: this.selectedToAccount,
                 signatory1: this.signatory1,
@@ -216,7 +226,7 @@ export default {
                 return this.getSelectedBank.map(x => x.accounts.map(account => account))[0];
             }
         },
-        
+
         toAccount() {
             if(this.selectedFromAccount) {
                 return this.getSelectedBank.map(x => x.accounts.filter(account => account.id != this.selectedFromAccount))[0];
@@ -235,12 +245,12 @@ export default {
             }
         },
 
-        secondSignatory() {
-            if(this.signatory1) {
-                return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
-            }
-        },
-        
+        // secondSignatory() {
+        //     if(this.signatory1) {
+        //         return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
+        //     }
+        // },
+
     }
 }
 </script>

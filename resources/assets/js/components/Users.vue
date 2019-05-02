@@ -67,7 +67,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
 
         <div class="row mt-3">
             <div class="col-6">
@@ -92,7 +92,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+
                 <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" id="name" v-model="name" placeholder="Enter Name">
@@ -107,11 +107,11 @@
                     <label>Password</label>
                     <input type="password" class="form-control" id="password" v-model="password" placeholder="Enter Password">
                 </div>
-            
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeBank" data-dismiss="modal">Submit</button>            
+                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeUser" data-dismiss="modal">Submit</button>
             </div>
             </div>
         </div>
@@ -159,7 +159,7 @@ export default {
     },
 
     methods: {
-        
+
         resetFields() {
             this.name = '';
             this.email = '';
@@ -171,7 +171,7 @@ export default {
             this.selectedUser = user.id;
         },
 
-        getUsers() { 
+        getUsers() {
             this.loading = true
             axios.get('/getUsers')
             .then(response => {
@@ -188,11 +188,15 @@ export default {
             })
             .then(response => {
                 this.users.unshift(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
+                console.log('check response user: ', reponse.data)
+                Vue.toasted.show("Added Successfully!", {
+                    theme: "primary",
+                    position: "bottom-right",
                     duration : 5000
                 });
+            })
+            .catch(error => {
+                console.log('error console: ', error)
             })
             this.resetFields()
         },
@@ -234,7 +238,7 @@ export default {
         totalPages() {
             return Math.ceil(this.filteredEntries.length / this.itemsPerPage)
         },
-        
+
         filteredQueues() {
             var index = this.currentPage * this.itemsPerPage;
             var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);

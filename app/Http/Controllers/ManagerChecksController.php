@@ -41,7 +41,7 @@ class ManagerChecksController extends Controller
         $accounts = Account::pluck('account_number','account_number');
         $managers = Manager::get()->pluck('full_name','id');
         $signatories = Signatory::get()->pluck('full_name','id');
-        
+
         return view('managerChecks.create',compact('accounts',
                     'managers',
                     'companies',
@@ -63,7 +63,7 @@ class ManagerChecksController extends Controller
 
 
     /**
-     * Store payees 
+     * Store payees
      */
     public function storePayee(Request $request, $user_id)
     {
@@ -108,14 +108,14 @@ class ManagerChecksController extends Controller
         $account = Account::where('id',$request->input('account_id'))->with('company')->first();
 
         $managercheck = Auth::user()->managerChecks()->create([
-            'ref_num' => 'LFUG-MC-'.sprintf('%08d', $last_count),
+            'ref_num' => $account->company->abbrv.'-MC-'.sprintf('%08d', $last_count),
             'mc_cost' => $request->input('mc_cost'),
             'grand_total' => $request->input('grand_total'),
             'account_number' => $account->account_number,
             'company' => $account->company->full_company,
             'signatories' => [
                 array('name' => $request->input('signatory1')),
-                array('name' => $request->input('signatory2'))                    
+                array('name' => $request->input('signatory2'))
             ]
         ]);
         $managercheck->manager()->associate($bank->manager->id);
@@ -125,7 +125,7 @@ class ManagerChecksController extends Controller
                         ->where('status',0)
                         ->where('manager_check_id',0)
                         ->update(['manager_check_id' => $managercheck->id]);
-        
+
         return ['redirect' => route('manager-checks.show', $managercheck)];
 
     }
@@ -141,7 +141,7 @@ class ManagerChecksController extends Controller
         $img = $this->findCompanyAvatar($x->company);
 
         $pdf = PDF::loadView('managerChecks.pdf', compact('x','img'));
-        return $pdf->setPaper('letter')->stream('managerChecks.pdf');    
+        return $pdf->setPaper('letter')->stream('managerChecks.pdf');
     }
 
     /**

@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/getSignatories','SignatoriesController@getSignatories');
     Route::post('/signatories','SignatoriesController@store');
 
-    // Reoute Setup for bank accounts 
+    // Reoute Setup for bank accounts
     Route::resource('/accounts','AccountsController');
     Route::get('/getAccounts','AccountsController@getAccounts');
 

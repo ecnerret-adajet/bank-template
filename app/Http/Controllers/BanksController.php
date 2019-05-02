@@ -87,9 +87,16 @@ class BanksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bank $bank)
     {
-        //
+         $this->validate($request, [
+            'name' => 'required',
+            'branch' => 'required',
+            'location' => 'required'
+        ]);
+
+        $bank->update($request->all());
+        return $bank;
     }
 
     /**

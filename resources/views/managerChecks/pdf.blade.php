@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>PDF Download</title>
-    
+
     <style>
         body {
         font-family: 'Miriam Libre', sans-serif;
@@ -68,7 +68,7 @@
                 <span>
 
                 </span>
-                
+
             </td>
         </tr>
     </table>
@@ -107,7 +107,7 @@
                 <p>
                     Please issue Manager's Check in favor of the following payees:
                 </p>
-             
+
             </td>
         </tr>
     </table>
@@ -174,9 +174,22 @@
                         <i>Authorized signatory</i>
                     </p>
                 @endforeach
-                
 
 
+
+            </td>
+        </tr>
+    </table>
+
+     <table class="borderless" style="margin-top: 5em">
+        <tr>
+            <td style="text-align: center">
+                <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <span style="font-size: 80%; color: #8795A1">Created By: {{ $x->user->name }}</span>
             </td>
         </tr>
     </table>

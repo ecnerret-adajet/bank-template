@@ -13,17 +13,23 @@ class Signatory extends Model
     ];
 
     // Mutator
-    
+
     public function getFullNameAttribute()
     {
-        return "{$this->first_name} ".strtoUpper(substr($this->middle_name, 0, 1)).", {$this->last_name}";
+        $middleInitial = $this->middle_name ? strtoUpper(substr($this->middle_name, 0, 1))."." : '';
+        return "{$this->title} {$this->first_name} ".$middleInitial." {$this->last_name}";
     }
-    
+
     // Relationship Model
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class)->withPivot('policy_type');
     }
 
     // Json Array
@@ -32,7 +38,8 @@ class Signatory extends Model
     {
         return [
             'id' => $this->id,
-            'full_name' => $this->full_name
+            'full_name' => $this->full_name,
+            'policy_type' => $this->pivot->policy_type
         ];
     }
 }

@@ -24,8 +24,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                <th scope="col" class="text-dark" >Avatar</th>
-                <th scope="col" class="text-dark" >Company</th>
+                    <th scope="col" class="text-dark" >Avatar</th>
+                    <th scope="col" class="text-dark" >Company</th>
+                    <th scope="col" class="text-dark" >Division</th>
+                    <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +36,19 @@
                         <img :src="avatar_link + company.avatar" class="rounded-circle" style="height: 60px; width: auto;"  align="middle">
                     </td>
                     <td>{{ company.name }}</td>
+                    <td>{{ company.department }}</td>
+                    <td>
+                          <!-- Default dropleft button -->
+                        <div class="btn-group dropleft">
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" :href="`/companies/${company.id}/edit`">Edit</a>
+                                <a class="dropdown-item text-danger" href="#">Delete</a>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
                     <td colspan="3" class="text-center" >
@@ -57,7 +72,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
 
         <div class="row mt-3">
             <div class="col-6">
@@ -82,7 +97,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+
                 <div class="form-group">
                     <label>Company Name</label>
                     <input type="text" class="form-control"  v-model="name" placeholder="Enter Company Name">
@@ -98,11 +113,11 @@
                     <input type="text" class="form-control"  v-model="abbrv" placeholder="Enter Abbreviation">
                 </div>
 
-            
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeCompany" data-dismiss="modal">Submit</button>            
+                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeCompany" data-dismiss="modal">Submit</button>
             </div>
             </div>
         </div>
@@ -120,7 +135,7 @@ import VueContentPlaceholders from 'vue-content-placeholders';
 Vue.use(Toasted)
 
 export default {
-    
+
     components: {
         VueContentPlaceholders,
     },
@@ -165,9 +180,9 @@ export default {
             })
             .then(response => {
                 this.companies.unshift(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
+                Vue.toasted.show("Added Successfully!", {
+                    theme: "primary",
+                    position: "bottom-right",
                     duration : 5000
                 });
             })
@@ -211,7 +226,7 @@ export default {
         totalPages() {
             return Math.ceil(this.filteredEntries.length / this.itemsPerPage)
         },
-        
+
         filteredQueues() {
             var index = this.currentPage * this.itemsPerPage;
             var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);

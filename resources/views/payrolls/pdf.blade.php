@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>PDF Download</title>
-    
+
     <style>
         body {
         font-family: 'Miriam Libre', sans-serif;
@@ -68,7 +68,7 @@
                 <span>
 
                 </span>
-                
+
             </td>
         </tr>
     </table>
@@ -101,10 +101,10 @@
                 </p>
 
                 <p>
-                    This is to request to your good office to endorse our new employee to corresponding BPI Branch for 
+                    This is to request to your good office to endorse our new employee to corresponding BPI Branch for
                     his/her application for payroll ATM account.
                 </p>
-             
+
             </td>
         </tr>
     </table>
@@ -129,7 +129,7 @@
     <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
-                Furthermore this is to certify that the above-mentioned employee is an active employee of respective company 
+                Furthermore this is to certify that the above-mentioned employee is an active employee of respective company
                 under the umbrella of the La Filipina Uy Gongco Group of Companies (LFUG-GOC).
             </td>
         </tr>
@@ -152,6 +152,19 @@
                     </p>
                 @endforeach
 
+            </td>
+        </tr>
+    </table>
+
+     <table class="borderless" style="margin-top: 5em">
+        <tr>
+            <td style="text-align: center">
+                <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <span style="font-size: 80%; color: #8795A1">Created By: {{ $x->user->name }}</span>
             </td>
         </tr>
     </table>

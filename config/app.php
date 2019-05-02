@@ -163,13 +163,14 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-       
+
         /*
          * Package Service Providers...
          */
          Barryvdh\DomPDF\ServiceProvider::class,
          Collective\Html\HtmlServiceProvider::class,
          jeremykenedy\LaravelRoles\RolesServiceProvider::class,
+         Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

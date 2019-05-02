@@ -13,6 +13,7 @@ use App\Signatory;
 use App\Manager;
 use App\PayrollType;
 use PDF;
+use App\Account;
 
 class PayrollsController extends Controller
 {
@@ -48,7 +49,7 @@ class PayrollsController extends Controller
     {
         $managers = Manager::get()->pluck('full_name','id');
         $signatories = Signatory::get()->pluck('full_name','id');
-        
+
         return view('payrolls.create',compact(
                     'managers',
                     'signatories'));
@@ -100,15 +101,16 @@ class PayrollsController extends Controller
             'company_list' => 'required',
             'signatory1' => 'required',
             'signatory2' => 'required',
-        ]); 
+        ]);
 
         $last_count = !empty(Payroll::first()) ? Payroll::orderBy('id','DESC')->first()->id : 0;
+        $reference = Account::where('id',$request->input('company_list'))->with('company')->first();
 
         $payroll = Auth::user()->payrolls()->create([
-            'ref_num' => 'LFUGGOC-PA-'.sprintf('%08d', $last_count),
+            'ref_num' => $reference->company->abbrv.'-PA-'.sprintf('%08d', $last_count),
             'signatories' => [
                 array('name' => $request->input('signatory1')),
-                array('name' => $request->input('signatory2'))                    
+                array('name' => $request->input('signatory2'))
             ]
         ]);
         $payroll->type()->associate($request->input('payroll_type'));

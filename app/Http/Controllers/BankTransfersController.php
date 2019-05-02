@@ -62,7 +62,7 @@ class BankTransfersController extends Controller
         $to = Account::where('id',$request->input('to_account'))->with('company')->first();
 
         $bankTransfer = Auth::user()->bankTransfers()->create([
-            'ref_num' => 'PFMC-BT-'.sprintf('%08d', $last_count),
+            'ref_num' => $from->company->abbrv.'-BT-'.sprintf('%08d', $last_count),
             'amount' => $request->input('amount'),
             'manager_id' => $bank->manager->id,
             'from_company' => $from->company->full_company,

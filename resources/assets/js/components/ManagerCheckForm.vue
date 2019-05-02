@@ -29,7 +29,7 @@
                     <label>Bank Branch</label>
                     <select class="form-control" name="bank_list" v-model="selectedBank">
                         <option value="" disabled selected>Select Bank Branch</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
+                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.name + ' - ' + bank.branch }}</option>
                     </select>
 
                 </div>
@@ -42,14 +42,14 @@
                     <label>Account Number</label>
                     <select class="form-control" v-model="selectedAccount">
                         <option value="" disabled selected>Select Account Number</option>
-                        <option v-for="(account, a) in getAccountNumber" :key="a" :value="account.id">{{ account.account_number }}</option>
+                        <option v-for="(account, a) in getAccountNumber" :key="a" :value="account.id">{{ account.account_company }}</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col"> 
+            <div class="col">
                     <app-m-c-form-table :user_id="user_id"
                                         @getMcCost="mc_cost = $event"
                                         @getGrandTotal="grand_total = $event">
@@ -69,13 +69,13 @@
                     </select>
                 </div>
             </div>
- 
-            <div class="col">
+
+            <div v-show="signatories2.length > 0" class="col">
                 <div class="form-group">
                     <label>Signatory #2</label>
                     <select class="form-control" name="signatory2" v-model="signatory2">
                         <option value="" disabled selected>Select Signatory</option>
-                        <option v-for="(signatory,s) in secondSignatory" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
+                        <option v-for="(signatory,s) in signatories2" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
                     </select>
                 </div>
             </div>
@@ -97,7 +97,7 @@ import MCFormTable from './MCFormTable.vue';
 export default {
 
     props: ['user_id'],
-    
+
     components: {
         appMCFormTable : MCFormTable
     },
@@ -106,6 +106,7 @@ export default {
         return {
             banks: [],
             signatories: [],
+            signatories2: [],
             selectedBank: '',
             selectedAccount: '',
             mc_cost: '',
@@ -127,8 +128,14 @@ export default {
         },
 
         getSignatories() {
-            axios.get('/getSignatories')
-            .then(response  => this.signatories = response.data);
+            if(this.selectedAccount != '') {
+                axios.get(`/api/assigned-signatories/${this.companyFromAccount.company.id}`)
+                .then(response  => {
+                    let resultCopy = [...response.data]
+                    this.signatories = response.data.filter(item => item.policy_type === 1);
+                    this.signatories2 = resultCopy.filter(item => item.policy_type === 2);
+                })
+            }
         },
 
         postManagerCheck() {
@@ -177,17 +184,20 @@ export default {
             }
         },
 
-        secondSignatory() {
-            if(this.signatory1) {
-                return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
-            }
-        },
+        // secondSignatory() {
+        //     if(this.signatory1) {
+        //         return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
+        //     }
+        // },
     },
 
     watch: {
         selectedBank() {
             this.selectedAccount = '';
         },
+        selectedAccount() {
+            this.getSignatories()
+        }
     }
 
 

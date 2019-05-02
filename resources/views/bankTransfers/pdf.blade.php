@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>PDF Download</title>
-    
+
     <style>
         body {
         font-family: 'Miriam Libre', sans-serif;
@@ -62,7 +62,7 @@
                 <span>
 
                 </span>
-                
+
             </td>
         </tr>
     </table>
@@ -93,7 +93,7 @@
                 </p>
 
                 <p>
-                    This is to authorize your bank to transfer from <strong>{{ strtoUpper($x->from_company) }}</strong> ACCT NO. <strong>{{ strtoUpper($x->from_account) }}</strong> the 
+                    This is to authorize your bank to transfer from <strong>{{ strtoUpper($x->from_company) }}</strong> ACCT NO. <strong>{{ strtoUpper($x->from_account) }}</strong> the
                     amount of  <strong>PHILIPPINE PESOS {{ strtoUpper($f->format($x->amount)) }} ONLY. (PHP {{ number_format($x->amount, 2, '.', ',') }})</strong> to <strong>{{ strtoUpper($x->to_company) }}</strong> ACCT NO. <strong>{{ $x->to_account }}</strong>.
                 </p>
 
@@ -115,7 +115,7 @@
                         <i>Authorized signatory</i>
                     </p>
                 @endforeach
-                
+
             </td>
         </tr>
     </table>
@@ -124,6 +124,11 @@
         <tr>
             <td style="text-align: center">
                 <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <span style="font-size: 80%; color: #8795A1">Created By: {{ $x->user->name }}</span>
             </td>
         </tr>
     </table>

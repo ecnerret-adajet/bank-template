@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SignatoryResource;
 use Illuminate\Http\Request;
 use App\Signatory;
 
@@ -10,7 +11,7 @@ class SignatoriesController extends Controller
     public function getSignatories()
     {
        $signatories = Signatory::all();
-       return $signatories;
+        return SignatoryResource::collection($signatories);
     }
 
     /**
@@ -29,7 +30,7 @@ class SignatoriesController extends Controller
 
         $signatory = Signatory::create($request->all());
 
-        return $signatory;
+        return new SignatoryResource($signatory);
 
     }
 

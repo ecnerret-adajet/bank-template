@@ -13,7 +13,7 @@
                     <span class="h4 text-dark" v-if="selectedManager"> {{ getSelectedBank.branch }} </span>
                     <span class="h4 text-dark" v-else> N/A </span>
                 </div>
-            </div>       
+            </div>
         </div>
 
         <div class="row">
@@ -35,7 +35,7 @@
                     <label>Company</label>
                     <select class="form-control" name="payroll_type" v-model="selectedCompany">
                         <option value="" disabled selected>Select Company</option>
-                        <option v-for="(company,c) in companies" :key="c" selected :value="company.id">{{ company.name }}</option>
+                        <option v-for="(company,c) in companies" :key="c" selected :value="company.id">{{ company.department ? company.department + ' - ' + company.name : company.name }}</option>
                     </select>
 
                 </div>
@@ -45,10 +45,10 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>Managers</label>
+                    <label>Bank Branch</label>
                     <select class="form-control" name="payroll_type" v-model="selectedManager">
                         <option value="" disabled selected>Select Branch Manager</option>
-                        <option v-for="(manager,m) in managers" :key="m" selected :value="manager.id">{{ manager.full_name }}</option>
+                        <option v-for="(manager,m) in managers" :key="m" selected :value="manager.id">{{ manager.bank + ' - ' + manager.branch }}</option>
                     </select>
 
                 </div>
@@ -72,13 +72,13 @@
                     </select>
                 </div>
             </div>
- 
-            <div class="col">
+
+             <div v-show="signatories2.length > 0" class="col">
                 <div class="form-group">
                     <label>Signatory #2</label>
                     <select class="form-control" name="signatory2" v-model="signatory2">
                         <option value="" disabled selected>Select Signatory</option>
-                        <option v-for="(signatory,s) in secondSignatory" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
+                        <option v-for="(signatory,s) in signatories2" :key="s" selected :value="signatory.full_name">{{ signatory.full_name }}</option>
                     </select>
                 </div>
             </div>
@@ -106,12 +106,13 @@ export default {
     data() {
         return {
             types: [],
-            managers: [], 
+            managers: [],
             companies: [],
             signatories: [],
+            signatories2: [],
             selectedCompany: '',
             selectedManager: '',
-            selectedType: '',    
+            selectedType: '',
             signatory1: '',
             signatory2: '',
         }
@@ -122,6 +123,12 @@ export default {
         this.getCompanies()
         this.getSignatories()
         this.getManagers()
+    },
+
+    watch: {
+        selectedCompany() {
+            this.getSignatories()
+        }
     },
 
     methods: {
@@ -137,8 +144,14 @@ export default {
         },
 
         getSignatories() {
-            axios.get('/getSignatories')
-            .then(response  => this.signatories = response.data);
+            if(this.selectedCompany != '') {
+                axios.get(`/api/assigned-signatories/${this.selectedCompany}`)
+                .then(response  => {
+                    let resultCopy = [...response.data]
+                    this.signatories = response.data.filter(item => item.policy_type === 1);
+                    this.signatories2 = resultCopy.filter(item => item.policy_type === 2);
+                })
+            }
         },
 
         getManagers() {
@@ -148,7 +161,7 @@ export default {
 
         postPayroll() {
             axios.post('/payrolls', {
-                manager_list: this.selectedManager, 
+                manager_list: this.selectedManager,
                 payroll_type: this.selectedType,
                 company_list: this.selectedCompany,
                 signatory1: this.signatory1,
@@ -165,7 +178,7 @@ export default {
     },
 
     computed: {
-        
+
         allowToSubmit() {
             return this.selectedType == '' ||
                 this.selectedCompany == '' ||
@@ -174,11 +187,11 @@ export default {
                 this.signatory2 == '';
         },
 
-        secondSignatory() {
-            if(this.signatory1) {
-                return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
-            }
-        },
+        // secondSignatory() {
+        //     if(this.signatory1) {
+        //         return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
+        //     }
+        // },
 
         getSelectedBank() {
             if(this.selectedManager) {

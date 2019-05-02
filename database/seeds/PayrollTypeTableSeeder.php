@@ -13,7 +13,7 @@ class PayrollTypeTableSeeder extends Seeder
     {
         DB::table('payroll_types')->insert([
             [
-                'name' => 'ATM Application',
+                'name' => 'Account Opening',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],

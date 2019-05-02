@@ -21,7 +21,7 @@
                     Signatories
                 </a>
             </div>
-            
+
         </div>
 
         <div class="col">
@@ -46,6 +46,13 @@ import Signatory from './Signatory.vue';
 
 export default {
 
+    props: {
+        selectedreturn: {
+            type: Number,
+            default: 1
+        }
+    },
+
     components: {
         Bank,
         Manager,
@@ -54,16 +61,12 @@ export default {
         Signatory
     },
 
-    // created() {
-    //     this.getBanks()
-    //     this.getManagers()
-    // }, 
-
     data() {
         return {
             selected: 1
         }
     }
+
 }
 </script>
 
