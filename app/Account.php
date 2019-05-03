@@ -10,9 +10,9 @@ class Account extends Model
         'account_number'
     ];
 
-    protected $hidden = [
-        'bank_id',
-    ];
+    // protected $hidden = [
+    //     'bank_id',
+    // ];
 
     public function toArray()
     {

@@ -5,7 +5,7 @@
             <div class="row">
             <div class="col">
                 <span class="h3 text-dark">All Accounts</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newAccount">
+                <button type="button" class="float-right btn btn-primary" @click="openCreateModal()">
                     Add Account
                 </button>
             </div><!-- /.col -->
@@ -24,24 +24,37 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                <th scope="col" class="text-dark" >Account Number</th>
-                <th scope="col" class="text-dark" >Company</th>
+                <th scope="col" width="30%" class="text-dark" >Account Number</th>
                 <th scope="col" class="text-dark" >Bank</th>
+                <th scope="col" class="text-dark" >Company</th>
+                <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(account, a) in filteredQueues" :key="a" v-if="!loading">
                     <td>{{ account.account_number }}</td>
-                    <td>{{ account.bank }}</td>
+                    <td>{{ account.bank.name }}</td>
                     <td>{{ account.company.name }}</td>
+                    <td>
+                        <!-- Default dropleft button -->
+                        <div class="btn-group dropleft">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" @click="openEditModal(account)">Edit</a>
+                            <a class="dropdown-item text-danger" @click="openDeleteModal(account)">Delete</a>
+                        </div>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
-                    <td colspan="3" class="text-center" >
+                    <td colspan="4" class="text-center" >
                         <h3>Nothing found</h3>
                     </td>
                 </tr>
                 <tr v-if="loading">
-                    <td colspan="5">
+                    <td colspan="4">
                          <div class="row">
                             <div class="col">
                                 <content-placeholders style="border: 0 ! important;" :rounded="true">
@@ -57,7 +70,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
 
         <div class="row mt-3">
             <div class="col-6">
@@ -66,53 +79,26 @@
                 <button :disabled="!showNextLink()" class="btn btn-default btn-sm" v-on:click="setPage(currentPage + 1)"> Next </button>
             </div>
             <div class="col-6 text-right">
-                <span>{{ accounts.length }} Manager(s)</span>
+                <span>{{ accounts.length }} Account Number(s)</span>
             </div>
         </div>
 
 
-        <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newAccountLabel">Add New Account</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group">
-                    <label>Bank Name</label>
-                    <select class="form-control" v-model="selectedBank">
-                        <option value=""  selected>All Banks</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
-                    </select>
-                </div>
+        <!-- Add New Account Modal -->
+        <account-form :showModal="showModal"
+                    :is-create="isCreate"
+                    :to-edit="toEdit"
+                    @editResponse="editResponse"
+                    @returnToEdit="toEdit = $event"
+                    @returnShowModal="showModal = $event"
+                    @storeResponse="storeResponse">
+        </account-form>
 
-                <div class="form-group">
-                    <label>Company</label>
-                    <select class="form-control" v-model="selectedCompany">
-                        <option value=""  selected>All Companies</option>
-                        <option v-for="(company,c) in companies" :key="c" selected :value="company.id">{{ company.name }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Account Number</label>
-                    <input type="text" class="form-control acc_format" id="name" v-model="account_number" placeholder="Enter Account Number">
-                </div>
-
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeAccount" data-dismiss="modal">Submit</button>            
-            </div>
-            </div>
-        </div>
-        </div>
+        <!-- Delete Module -->
+        <account-delete :showModalDelete="showModalDelete"
+                    :to-delete="toDelete"
+                    @returnShowModalDelete="showModalDelete = $event"
+                    @deleteResponse="deleteResponse"></account-delete>
 
 
     </div>
@@ -122,6 +108,8 @@
 import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
+import Form from './accounts/Form.vue';
+import Delete from './accounts/Delete.vue';
 
 Vue.use(Toasted)
 
@@ -129,77 +117,94 @@ export default {
 
     components: {
         VueContentPlaceholders,
+        accountForm: Form,
+        accountDelete: Delete
     },
 
     data() {
         return {
             loading: false,
             accounts: [],
-            banks: [],
-            companies: [],
-            account_number: '',
-            selectedBank: '',
-            selectedCompany: '',
+            toEdit: {},
+            toDelete: {},
+            showModalDelete: false,
+            isCreate: false,
+            showModal: false,
             search: '',
             currentPage: 0,
             itemsPerPage: 5,
         }
     },
 
-    mounted() {
-        $(document).ready(function(){
-            $('.acc_format').inputmask("9999 9999 99",{ placeholder: "" });
-        });
-    },
 
     created() {
         this.getAccounts()
-        this.getBanks()
-        this.getCompanies()
     },
 
     methods: {
-        resetFields() {
-            this.account_number = '';
-            this.selectedBank = '';
-            this.selectedCompany = '';
+
+        editResponse(event) {
+            this.getAccounts()
+            // console.log('edit response: ', event)
+            // let findIndex = this.accounts.findIndex(item => item.id === event.id);
+            // console.log('edit response index: ', findIndex)
+            // return this.accounts[findIndex] = event;
+        },
+
+        deleteResponse(event) {
+             let findIndex = this.accounts.findIndex(item => item.id === event.id);
+             return Promise.resolve(findIndex)
+             .then(result => {
+                  this.accounts.splice(result, 1);
+                  this.resetRow()
+             })
+        },
+
+        storeResponse(event) {
+            return this.accounts.unshift(event)
+        },
+
+        openCreateModal() {
+            this.showModal = true;
+            this.isCreate = true;
+        },
+
+        openEditModal(object) {
+            this.showModal = !this.showModal;
+            this.isCreate = false;
+            if(this.showModal) {
+                this.toEdit = object
+            }
+        },
+
+        openDeleteModal(object) {
+            this.showModalDelete = !this.showModalDelete
+            if(this.showModalDelete) {
+                this.toDelete = object
+            }
         },
 
         getAccounts() {
-            axios.get('/getAccounts')
-            .then(response => this.accounts = response.data)
-        },
-
-        getBanks() {
-            axios.get('/getBanks')
-            .then(response => this.banks = response.data)
-        },
-
-        getCompanies() {
-            axios.get('/getCompanies')
-            .then(response => this.companies = response.data)
-        },
-
-        storeAccount() {
-            axios.post('/accounts', {
-                account_number : this.account_number,
-                bank_list : this.selectedBank,
-                company_list : this.selectedCompany
-            })
+            this.loading = true
+            axios.get('/accounts')
             .then(response => {
-                this.accounts.unshift(response.data)
-                console.log(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
-                    duration : 5000
-                });
+                this.accounts = response.data
+                this.loading = false
             })
-            this.resetFields()
         },
 
         setPage(pageNumber) {
             this.currentPage = pageNumber;
+        },
+
+        resetRow() {
+            if(this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1
+            }
+
+            if(this.currentPage == -1) {
+                this.currentPage = 0;
+            }
         },
 
         resetStartRow() {
@@ -217,12 +222,6 @@ export default {
     },
 
     computed: {
-        validateFields() {
-            return this.selectedBank == '' ||
-                    this.selectedCompany == '' ||
-                    this.account_number == '';
-        },
-
         filteredEntries() {
             return this.accounts.filter(item => {
                 return item.account_number.toLowerCase().includes(this.search.toLowerCase());
@@ -236,7 +235,7 @@ export default {
         totalPages() {
             return Math.ceil(this.filteredEntries.length / this.itemsPerPage)
         },
-        
+
         filteredQueues() {
             var index = this.currentPage * this.itemsPerPage;
             var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);
@@ -254,3 +253,26 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .dropdown-menu button {
+        cursor: pointer;
+    }
+
+    .column-items {
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+</style>

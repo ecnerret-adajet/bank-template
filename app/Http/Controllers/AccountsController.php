@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\AccountResource;
 use Illuminate\Support\Facades\Auth;
 use App\Account;
 use App\Company;
@@ -17,7 +18,8 @@ class AccountsController extends Controller
      */
     public function index()
     {
-        //
+        $accounts = Account::orderBy('id','desc')->get();
+        return AccountResource::collection($accounts);
     }
 
     /**
@@ -52,7 +54,7 @@ class AccountsController extends Controller
     {
         $this->validate($request, [
             'account_number' => 'required|max:12|min:12',
-            'bank_list' => 'required',    
+            'bank_list' => 'required',
             'company_list' => 'required'
         ]);
 
@@ -63,7 +65,7 @@ class AccountsController extends Controller
         $account->company()->associate($request->input('company_list'));
         $account->save();
 
-        return $account;
+        return new AccountResource($account);
     }
 
     /**
@@ -95,9 +97,20 @@ class AccountsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Account $account)
     {
-        //
+        $this->validate($request, [
+            'account_number' => 'required|max:12|min:12',
+            'bank_list' => 'required',
+            'company_list' => 'required'
+        ]);
+
+        $account->account_number = $request->input('account_number');
+        $account->bank()->associate($request->input('bank_list'));
+        $account->company()->associate($request->input('company_list'));
+        $account->save();
+
+        return new AccountResource($account);
     }
 
     /**
@@ -106,8 +119,9 @@ class AccountsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Account $account)
     {
-        //
+        $account->delete();
+        return response()->json($account, 200);
     }
 }
