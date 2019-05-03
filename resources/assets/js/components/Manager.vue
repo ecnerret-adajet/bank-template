@@ -6,7 +6,7 @@
             <div class="row">
             <div class="col">
                 <span class="h3 text-dark">All Managers</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newManager">
+                <button type="button" class="float-right btn btn-primary" @click="openCreateModal()">
                     Add New Manager
                 </button>
             </div><!-- /.col -->
@@ -27,20 +27,33 @@
                 <tr>
                 <th scope="col" class="text-dark" >Full Name</th>
                 <th scope="col" class="text-dark" >Bank</th>
+                <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(manager, m) in filteredQueues" :key="m" v-if="!loading">
                     <td>{{ manager.full_name }}</td>
-                    <td>{{ manager.bank }}</td>
+                    <td>{{ manager.bank.name }}</td>
+                    <td>
+                        <!-- Default dropleft button -->
+                        <div class="btn-group dropleft">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" @click="openEditModal(manager)">Edit</a>
+                            <a class="dropdown-item text-danger" @click="openDeleteModal(manager)">Delete</a>
+                        </div>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
-                    <td colspan="3" class="text-center" >
+                    <td colspan="4" class="text-center" >
                         <h3>Nothing found</h3>
                     </td>
                 </tr>
                 <tr v-if="loading">
-                    <td colspan="5">
+                    <td colspan="4">
                          <div class="row">
                             <div class="col">
                                 <content-placeholders style="border: 0 ! important;" :rounded="true">
@@ -56,7 +69,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
 
         <div class="row mt-3">
             <div class="col-6">
@@ -70,59 +83,21 @@
         </div>
 
 
-        <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newManager" tabindex="-1" role="dialog" aria-labelledby="newManagerLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newManagerLabel">Add New Manager</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group">
-                    <label>Bank Name</label>
-                    <select class="form-control" v-model="selectedBank">
-                        <option value=""  selected>All Banks</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
-                    </select>
-                </div>
+        <!-- Create and Edit Module -->
+        <manager-form :showModal="showModal"
+                    :is-create="isCreate"
+                    :to-edit="toEdit"
+                    @editResponse="editResponse"
+                    @returnToEdit="toEdit = $event"
+                    @returnShowModal="showModal = $event"
+                    @storeResponse="storeResponse">
+        </manager-form>
 
-                <div class="form-group">
-                    <label>Title</label>
-                    <select class="form-control" v-model="title">
-                        <option value=""  selected>Select Title</option>
-                        <option value="Ms.">Ms.</option>
-                        <option value="Mr.">Mr.</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" class="form-control" id="name" v-model="first_name" placeholder="Enter First Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Middle Name</label>
-                    <input type="text" class="form-control" id="name" v-model="middle_name" placeholder="Enter Middle Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" class="form-control" id="name" v-model="last_name" placeholder="Enter Last Name">
-                </div>
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeManager" data-dismiss="modal">Submit</button>            
-            </div>
-            </div>
-        </div>
-        </div>
-
+        <!-- Delete Module -->
+        <manager-delete :showModalDelete="showModalDelete"
+                    :to-delete="toDelete"
+                    @returnShowModalDelete="showModalDelete = $event"
+                    @deleteResponse="deleteResponse"></manager-delete>
 
     </div>
 </template>
@@ -131,6 +106,8 @@
 import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
+import Form from './managers/Form.vue';
+import Delete from './managers/Delete.vue';
 
 Vue.use(Toasted)
 
@@ -138,6 +115,8 @@ export default {
 
     components: {
         VueContentPlaceholders,
+        managerForm: Form,
+        managerDelete: Delete
     },
 
 
@@ -145,12 +124,11 @@ export default {
         return {
             loading: false,
             managers: [],
-            banks: [],
-            selectedBank: '',
-            title: '',
-            first_name: '',
-            middle_name: '',
-            last_name: '',
+            toEdit: {},
+            toDelete: {},
+            showModalDelete: false,
+            isCreate: false,
+            showModal: false,
             search: '',
             currentPage: 0,
             itemsPerPage: 5,
@@ -159,53 +137,69 @@ export default {
 
     created() {
         this.getManagers()
-        this.getBanks()
     },
 
     methods: {
 
-        resetFields() {
-            this.title = '';
-            this.first_name = '';
-            this.middle_name = '';
-            this.last_name = '';
+        editResponse(event) {
+            let findIndex = this.managers.findIndex(item => item.id === event.id);
+            return this.managers[findIndex] = event;
         },
 
-        getBanks() {
-            axios.get('/getBanks')
-            .then(response => this.banks = response.data);
+        deleteResponse(event) {
+             let findIndex = this.managers.findIndex(item => item.id === event.id);
+             return Promise.resolve(findIndex)
+             .then(result => {
+                  this.managers.splice(result, 1);
+                  this.resetRow()
+             })
+        },
+
+        storeResponse(event) {
+            return this.managers.unshift(event)
+        },
+
+        openCreateModal() {
+            this.showModal = true;
+            this.isCreate = true;
+        },
+
+        openEditModal(object) {
+            this.showModal = !this.showModal;
+            this.isCreate = false;
+            if(this.showModal) {
+                this.toEdit = object
+            }
+        },
+
+        openDeleteModal(object) {
+            this.showModalDelete = !this.showModalDelete
+            if(this.showModalDelete) {
+                this.toDelete = object
+            }
         },
 
         getManagers() {
             this.loading = true
-            axios.get('/getManagers')
+            axios.get('/managers')
             .then(response => {
                 this.managers = response.data
                 this.loading = false
             });
         },
 
-        storeManager() {
-            axios.post('/managers', {
-                bank_list: this.selectedBank,
-                title : this.title,
-                first_name : this.first_name,
-                middle_name: this.middle_name,
-                last_name: this.last_name
-            })
-            .then(response => {
-                this.managers.unshift(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
-                    duration : 5000
-                });
-            })
-            this.resetFields()
-        },
-
         setPage(pageNumber) {
             this.currentPage = pageNumber;
+        },
+
+         resetRow() {
+            if(this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1
+            }
+
+            if(this.currentPage == -1) {
+                this.currentPage = 0;
+            }
         },
 
         resetStartRow() {
@@ -219,19 +213,11 @@ export default {
         showNextLink() {
             return this.currentPage == (this.totalPages - 1) ? false : true;
         }
-    
+
 
     },
 
     computed: {
-        validateFields() {
-            return this.selectedBank == '' ||
-                    this.title == '' ||
-                    this.first_name == '' ||
-                    this.middle_name == '' ||
-                    this.last_name == '';
-        },
-
         filteredEntries() {
             return this.managers.filter(item => {
                 return item.full_name.toLowerCase().includes(this.search.toLowerCase());
@@ -245,7 +231,7 @@ export default {
         totalPages() {
             return Math.ceil(this.filteredEntries.length / this.itemsPerPage)
         },
-        
+
         filteredQueues() {
             var index = this.currentPage * this.itemsPerPage;
             var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);
@@ -263,3 +249,26 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .dropdown-menu button {
+        cursor: pointer;
+    }
+
+    .column-items {
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+</style>

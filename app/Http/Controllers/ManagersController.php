@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\ManagerResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Manager;
 use App\Bank;
 
 class ManagersController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. for manager.vue component [safe]
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+         $managers = Manager::orderBy('id','desc')->get();
+         return ManagerResource::collection($managers);
     }
 
     /**
@@ -36,6 +38,7 @@ class ManagersController extends Controller
     public function getManagers()
     {
         $managers = Manager::orderBy('id','desc')->get();
+        // return ManagerResource::collection($managers);
         return $managers;
     }
 
