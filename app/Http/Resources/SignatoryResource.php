@@ -17,6 +17,9 @@ class SignatoryResource extends Resource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
+            'first_name' => $this->first_name,
+            'middle_name' => $this->middle_name,
+            'last_name' => $this->last_name,
             'full_name' => $this->full_name,
             // 'policy_type' => $this->pivot->policy_type
         ];

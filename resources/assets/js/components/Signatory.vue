@@ -5,7 +5,7 @@
             <div class="row">
             <div class="col">
                 <span class="h3 text-dark">All Signatories</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newSignatory">
+                <button type="button" class="float-right btn btn-primary" @click="openCreateModal()">
                     Add Signatories
                 </button>
             </div><!-- /.col -->
@@ -25,19 +25,32 @@
             <thead>
                 <tr>
                 <th scope="col" class="text-dark" >Name</th>
+                <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(signatory,s) in filteredQueues" :key="s" v-if="!loading">
                     <td>{{ signatory.full_name }}</td>
+                    <td>
+                        <!-- Default dropleft button -->
+                        <div class="btn-group dropleft">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" @click="openEditModal(signatory)">Edit</a>
+                            <a class="dropdown-item text-danger" @click="openDeleteModal(signatory)">Delete</a>
+                        </div>
+                        </div>
+                    </td>
                 </tr>
                 <tr v-if="filteredQueues.length == 0 && !loading">
-                    <td colspan="3" class="text-center" >
+                    <td colspan="2" class="text-center" >
                         <h3>Nothing found</h3>
                     </td>
                 </tr>
                 <tr v-if="loading">
-                    <td colspan="5">
+                    <td colspan="2">
                          <div class="row">
                             <div class="col">
                                 <content-placeholders style="border: 0 ! important;" :rounded="true">
@@ -53,7 +66,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
 
         <div class="row mt-3">
             <div class="col-6">
@@ -68,41 +81,21 @@
 
 
         <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newSignatory" tabindex="-1" role="dialog" aria-labelledby="newSignatoryLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newSignatoryLabel">Add New Signatory</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" class="form-control"  v-model="first_name" placeholder="Enter First Name">
-                </div>
+        <signatory-form :showModal="showModal"
+                    :is-create="isCreate"
+                    :to-edit="toEdit"
+                    @editResponse="editResponse"
+                    @returnToEdit="toEdit = $event"
+                    @returnShowModal="showModal = $event"
+                    @storeResponse="storeResponse">
+        </signatory-form>
 
-                <div class="form-group">
-                    <label>Middle Name</label>
-                    <input type="text" class="form-control"  v-model="middle_name" placeholder="Enter Middle Name">
-                </div>
+        <!-- Delete Module -->
+        <signatory-delete :showModalDelete="showModalDelete"
+                    :to-delete="toDelete"
+                    @returnShowModalDelete="showModalDelete = $event"
+                    @deleteResponse="deleteResponse"></signatory-delete>
 
-                <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" class="form-control"  v-model="last_name" placeholder="Enter Last Name">
-                </div>
-
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeSignatory" data-dismiss="modal">Submit</button>            
-            </div>
-            </div>
-        </div>
-        </div>
 
     </div>
 </template>
@@ -111,6 +104,8 @@
 import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
+import Form from './signatories/Form.vue';
+import Delete from './signatories/Delete.vue';
 
 Vue.use(Toasted)
 
@@ -118,15 +113,19 @@ export default {
 
     components: {
         VueContentPlaceholders,
+        signatoryForm: Form,
+        signatoryDelete: Delete
     },
 
     data() {
         return {
             loading: false,
             signatories: [],
-            first_name: '',
-            middle_name: '',
-            last_name: '',
+            toEdit: {},
+            toDelete: {},
+            showModalDelete: false,
+            isCreate: false,
+            showModal: false,
             search: '',
             currentPage: 0,
             itemsPerPage: 5,
@@ -138,36 +137,67 @@ export default {
     },
 
     methods: {
-        resetFields() {
-            this.first_name = '';
-            this.middle_name = '';
-            this.last_name = '';
+
+        editResponse(event) {
+            // let findIndex = this.signatories.findIndex(item => item.id === event.id);
+            // return this.signatories[findIndex] = event;
+            this.getSignatories()
+        },
+
+        deleteResponse(event) {
+             let findIndex = this.signatories.findIndex(item => item.id === event.id);
+             return Promise.resolve(findIndex)
+             .then(result => {
+                  this.signatories.splice(result, 1);
+                  this.resetRow()
+             })
+        },
+
+        storeResponse(event) {
+            return this.signatories.unshift(event)
+        },
+
+        openCreateModal() {
+            this.showModal = true;
+            this.isCreate = true;
+        },
+
+        openEditModal(object) {
+            this.showModal = !this.showModal;
+            this.isCreate = false;
+            if(this.showModal) {
+                this.toEdit = object
+            }
+        },
+
+        openDeleteModal(object) {
+            this.showModalDelete = !this.showModalDelete
+            if(this.showModalDelete) {
+                this.toDelete = object
+            }
         },
 
         getSignatories() {
+            this.loading = true
             axios.get('/getSignatories')
-            .then(response => this.signatories = response.data)
-        },
-
-        storeSignatory() {
-            axios.post('/signatories', {
-                first_name: this.first_name,
-                middle_name: this.middle_name,
-                last_name: this.last_name
-            })
             .then(response => {
-                this.signatories.unshift(response.data)
-                Vue.toasted.show("Added Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
-                    duration : 5000
-                });
+                this.signatories = response.data
+                this.loading = false
             })
-            this.resetFields()
         },
 
         setPage(pageNumber) {
             this.currentPage = pageNumber;
+        },
+
+        resetRow() {
+            if(this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1
+            }
+
+            if(this.currentPage == -1) {
+                this.currentPage = 0;
+            }
         },
 
         resetStartRow() {
@@ -184,12 +214,6 @@ export default {
     },
 
     computed: {
-        validateFields() {
-            return this.first_name == '' ||
-                    this.middle_name == '' ||
-                    this.last_name == '';
-        },
-
         filteredEntries() {
             return this.signatories.filter(item => {
                 return item.full_name.toLowerCase().includes(this.search.toLowerCase());
@@ -203,7 +227,7 @@ export default {
         totalPages() {
             return Math.ceil(this.filteredEntries.length / this.itemsPerPage)
         },
-        
+
         filteredQueues() {
             var index = this.currentPage * this.itemsPerPage;
             var queues_array = this.filteredEntries.slice(index, index + this.itemsPerPage);
@@ -222,3 +246,26 @@ export default {
 
 }
 </script>
+<style scoped>
+    .dropdown-menu button {
+        cursor: pointer;
+    }
+
+    .column-items {
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+</style>
