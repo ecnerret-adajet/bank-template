@@ -105,8 +105,9 @@ class BanksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Bank $bank)
     {
-        //
+        $bank->delete();
+        return response()->json($bank, 200);
     }
 }

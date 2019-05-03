@@ -43,7 +43,7 @@
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" @click="openEditModal(bank)">Edit</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                            <a class="dropdown-item text-danger" @click="openDeleteModal(bank)">Delete</a>
                         </div>
                         </div>
                     </td>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-
+        <!-- Create and Edit Module -->
         <bank-form :showModal="showModal"
                     :is-create="isCreate"
                     :to-edit="toEdit"
@@ -93,46 +93,13 @@
                     @storeResponse="storeResponse">
         </bank-form>
 
+        <!-- Delete Module -->
+        <bank-delete :showModalDelete="showModalDelete"
+                    :to-delete="toDelete"
+                    @returnShowModalDelete="showModalDelete = $event"
+                    @deleteResponse="deleteResponse"></bank-delete>
 
 
-        <!-- Add New Bank Modal -->
-        <!-- <div class="modal fade" id="newBank" tabindex="-1" role="dialog" aria-labelledby="newBankLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newBankLabel">Add New Bank</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <div class="form-group" :class="{ ' has-danger' : errors.name }">
-                    <label>Bank Name</label>
-                    <input type="text" class="form-control" id="name" v-model="name" :class="{ 'is-invalid' : errors.name }" placeholder="Enter Name">
-                    <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
-                </div>
-
-                 <div class="form-group" :class="{ ' has-danger' : errors.branch }">
-                    <label>Branch</label>
-                    <input type="text" class="form-control" id="name" :class="{ 'is-invalid' : errors.branch }" v-model="branch" placeholder="Enter Branch">
-                    <div v-if="errors.branch" class="invalid-feedback">{{ errors.branch[0] }}</div>
-                </div>
-
-                <div class="form-group" :class="{ ' has-danger' : errors.location }">
-                    <label>Location</label>
-                    <input type="text" class="form-control" id="name" :class="{ 'is-invalid' : errors.location }" v-model="location" placeholder="Enter Location">
-                    <div v-if="errors.location" class="invalid-feedback">{{ errors.location[0] }}</div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeBank" data-dismiss="modal">Submit</button>
-            </div>
-            </div>
-        </div>
-        </div> -->
 
     </div>
 </template>
@@ -142,6 +109,7 @@ import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
 import Form from './banks/Form.vue';
+import Delete from './banks/Delete.vue';
 
 Vue.use(Toasted)
 
@@ -150,6 +118,7 @@ export default {
     components: {
         VueContentPlaceholders,
         bankForm: Form,
+        bankDelete: Delete
     },
 
     data() {
@@ -157,6 +126,8 @@ export default {
             loading: false,
             banks: [],
             toEdit: {},
+            toDelete: {},
+            showModalDelete: false,
             isCreate: false,
             showModal: false,
             search: '',
@@ -176,6 +147,15 @@ export default {
             return this.banks[findIndex] = event;
         },
 
+        deleteResponse(event) {
+             let findIndex = this.banks.findIndex(item => item.id === event.id);
+             return Promise.resolve(findIndex)
+             .then(result => {
+                  this.banks.splice(result, 1);
+                  this.resetRow()
+             })
+        },
+
         storeResponse(event) {
             return this.banks.unshift(event)
         },
@@ -193,10 +173,11 @@ export default {
             }
         },
 
-        resetFields() {
-            this.name = '';
-            this.branch = '';
-            this.location = '';
+        openDeleteModal(object) {
+            this.showModalDelete = !this.showModalDelete
+            if(this.showModalDelete) {
+                this.toDelete = object
+            }
         },
 
         getBanks() {
@@ -208,36 +189,18 @@ export default {
             });
         },
 
-        returnMessage(message) {
-            Vue.toasted.show(message, {
-                theme: "primary",
-                position: "bottom-right",
-                duration : 5000
-            });
-        },
-
-        storeBank() {
-            axios.post('/banks', {
-                name : this.name,
-                branch : this.branch,
-                location: this.location
-            })
-            .then(response => {
-                if(response.status === 200) {
-                    this.banks.unshift(response.data)
-                    this.returnMessage("Added successfully!")
-                    this.resetFields()
-                }
-            })
-            .catch(error => {
-                if(error.response.status == 422) {
-                    this.errors = error.response.data.errors
-                }
-            });
-        },
-
         setPage(pageNumber) {
             this.currentPage = pageNumber;
+        },
+
+        resetRow() {
+            if(this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1
+            }
+
+            if(this.currentPage == -1) {
+                this.currentPage = 0;
+            }
         },
 
         resetStartRow() {
@@ -254,12 +217,6 @@ export default {
     },
 
     computed: {
-        validateFields() {
-            return this.name == '' ||
-                    this.branch == '' ||
-                    this.location == '';
-        },
-
         filteredEntries() {
             return this.banks.filter(item => {
                 return item.name.toLowerCase().includes(this.search.toLowerCase()) ||

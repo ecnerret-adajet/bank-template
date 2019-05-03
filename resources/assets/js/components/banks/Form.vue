@@ -44,9 +44,6 @@
 </template>
 <script>
 import Toasted from 'vue-toasted';
-import VueContentPlaceholders from 'vue-content-placeholders';
-
-Vue.use(Toasted)
 
 export default {
 
