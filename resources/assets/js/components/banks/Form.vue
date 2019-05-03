@@ -6,7 +6,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="newBankLabel">Add New Bank</h5>
-                <button type="button" class="close"  @click="closeForm" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close"  @click="closeForm" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>

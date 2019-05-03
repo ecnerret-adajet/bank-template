@@ -1,7 +1,7 @@
 <template>
 
 <div class="modal fade" id="newManager" tabindex="-1" role="dialog" aria-labelledby="newManagerLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="newManagerLabel">Add New Manager</h5>
@@ -15,7 +15,7 @@
                     <label>Bank Name</label>
                     <select class="form-control" v-model="toSubmit.selectedBank" :class="{ 'is-invalid' : errors.bank_list }">
                         <option value=""  selected>All Banks</option>
-                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.branch }}</option>
+                        <option v-for="(bank,i) in banks" :key="i" selected :value="bank.id">{{ bank.name + " - " + bank.branch }}</option>
                     </select>
                     <div v-if="errors.bank_list" class="invalid-feedback">{{ errors.bank_list[0] }}</div>
                 </div>
@@ -97,7 +97,9 @@ export default {
         toEdit() {
             if (this.isCreate === false || Object.keys(this.toEdit).length != 0) {
                 this.toSubmit = this.toEdit
-                this.toSubmit.selectedBank = this.toEdit.bank.id
+                if(Object.keys(this.toEdit).length != 0) {
+                    this.toSubmit.selectedBank = this.toEdit.bank.id
+                }
             }
         }
     },
@@ -131,7 +133,7 @@ export default {
                 last_name: this.toSubmit.last_name,
             })
             .then(response => {
-                if(response.status === 200) {
+                if(response.status === 201) {
                     // this.banks.unshift(response.data)
                     this.$emit('storeResponse', response.data)
                     return response.data

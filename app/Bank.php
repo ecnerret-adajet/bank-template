@@ -12,6 +12,10 @@ class Bank extends Model
         'location'
     ];
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     // Model Relationship
 
     public function user()

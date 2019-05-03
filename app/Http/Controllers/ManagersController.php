@@ -62,7 +62,7 @@ class ManagersController extends Controller
         $manager->bank()->associate($request->input('bank_list'));
         $manager->save();
 
-        return $manager;
+        return new ManagerResource($manager);
     }
 
     /**
@@ -94,9 +94,21 @@ class ManagersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Manager $manager)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'first_name' => 'required',
+            'middle_name' => 'required',
+            'last_name' => 'required',
+            'bank_list' => 'required'
+        ]);
+
+        $manager->update($request->all());
+        $manager->bank()->associate($request->input('bank_list'));
+        $manager->save();
+
+        return new ManagerResource($manager);
     }
 
     /**
@@ -105,8 +117,9 @@ class ManagersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Manager $manager)
     {
-        //
+        $manager->delete();
+        return response()->json($manager, 200);
     }
 }

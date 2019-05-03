@@ -36,8 +36,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/bank-transfers/pdf/{x}','BankTransfersController@generatePDF');
 
     //Signatories route
+    Route::resource('/signatories','SignatoriesController');
     Route::get('/getSignatories','SignatoriesController@getSignatories');
-    Route::post('/signatories','SignatoriesController@store');
 
     // Reoute Setup for bank accounts
     Route::resource('/accounts','AccountsController');

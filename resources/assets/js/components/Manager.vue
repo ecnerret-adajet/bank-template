@@ -142,8 +142,9 @@ export default {
     methods: {
 
         editResponse(event) {
-            let findIndex = this.managers.findIndex(item => item.id === event.id);
-            return this.managers[findIndex] = event;
+            this.getManagers()
+            // let findIndex = this.managers.findIndex(item => item.id === event.id);
+            // return this.managers[findIndex] = event;
         },
 
         deleteResponse(event) {
