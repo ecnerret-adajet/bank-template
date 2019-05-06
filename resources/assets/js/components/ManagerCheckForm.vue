@@ -162,8 +162,7 @@ export default {
                 this.selectedAccount == '' ||
                 this.mc_cost == '' ||
                 this.grand_total == '' ||
-                this.signatory1 == '' ||
-                this.signatory2 == '';
+                this.signatory1 == '';
         },
 
         getSelectedBank() {

@@ -211,7 +211,6 @@ export default {
                 this.selectedFromAccount == '' ||
                 this.selectedToAccount == '' ||
                 this.signatory1 == '' ||
-                this.signatory2 == '' ||
                 this.amount == 'PHP 0.00';
         },
 

@@ -183,8 +183,7 @@ export default {
             return this.selectedType == '' ||
                 this.selectedCompany == '' ||
                 this.selectedManager == '' ||
-                this.signatory1 == '' ||
-                this.signatory2 == '';
+                this.signatory1 == '';
         },
 
         // secondSignatory() {
