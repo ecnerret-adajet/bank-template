@@ -98,7 +98,7 @@ class ManagerChecksController extends Controller
             'bank_id' => 'required',
             'account_id' => 'required',
             'signatory1' => 'required',
-            'signatory2' => 'required',
+            // 'signatory2' => 'required',
             'grand_total' => 'required',
             'mc_cost' => 'required',
         ]);

@@ -100,7 +100,7 @@ class PayrollsController extends Controller
             'payroll_type' => 'required',
             'company_list' => 'required',
             'signatory1' => 'required',
-            'signatory2' => 'required',
+            // 'signatory2' => 'required',
         ]);
 
         $last_count = !empty(Payroll::first()) ? Payroll::orderBy('id','DESC')->first()->id : 0;

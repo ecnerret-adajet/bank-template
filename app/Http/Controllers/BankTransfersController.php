@@ -53,7 +53,7 @@ class BankTransfersController extends Controller
             'to_account' => 'required',
             'bank_list' => 'required',
             'signatory1' => 'required',
-            'signatory2' => 'required',
+            // 'signatory2' => 'required',
         ]);
 
         $last_count = !empty(BankTransfer::first()) ? BankTransfer::orderBy('id','DESC')->first()->id : 0;

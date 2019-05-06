@@ -60659,7 +60659,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     computed: {
         allowToSubmit: function allowToSubmit() {
-            return this.selectedBank == '' || this.selectedAccount == '' || this.mc_cost == '' || this.grand_total == '' || this.signatory1 == '' || this.signatory2 == '';
+            return this.selectedBank == '' || this.selectedAccount == '' || this.mc_cost == '' || this.grand_total == '' || this.signatory1 == '';
         },
         getSelectedBank: function getSelectedBank() {
             var _this3 = this;
@@ -62111,7 +62111,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     computed: {
         allowToSubmit: function allowToSubmit() {
-            return this.selectedType == '' || this.selectedCompany == '' || this.selectedManager == '' || this.signatory1 == '' || this.signatory2 == '';
+            return this.selectedType == '' || this.selectedCompany == '' || this.selectedManager == '' || this.signatory1 == '';
         },
 
 
@@ -66771,7 +66771,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     computed: {
         allowToSubmit: function allowToSubmit() {
-            return this.selectedBank == '' || this.selectedFromAccount == '' || this.selectedToAccount == '' || this.signatory1 == '' || this.signatory2 == '' || this.amount == 'PHP 0.00';
+            return this.selectedBank == '' || this.selectedFromAccount == '' || this.selectedToAccount == '' || this.signatory1 == '' || this.amount == 'PHP 0.00';
         },
         getSelectedBank: function getSelectedBank() {
             var _this3 = this;
