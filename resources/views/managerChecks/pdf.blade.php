@@ -169,10 +169,12 @@
 
 
                 @foreach($x->signatories as $signatory)
+                    @if($signatory['name'])
                     <p style="margin-top: 2em">
                         {{ strtoUpper($signatory['name']) }} <br/>
                         <i>Authorized signatory</i>
                     </p>
+                    @endif
                 @endforeach
 
 
