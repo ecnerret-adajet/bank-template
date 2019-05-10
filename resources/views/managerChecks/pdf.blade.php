@@ -4,7 +4,15 @@
     <title>PDF Download</title>
 
     <style>
+
+        @page { margin-bottom: 100px 25px; }
+        header { position: fixed; top: -60px; left: 0px; right: 0px; background-color: lightblue; height: 50px; }
+        footer { position: fixed; bottom: -60px; left: 0px; right: 0px; height: 100px; }
+        /* p { page-break-after: always; } */
+        /* p:last-child { page-break-after: never; } */
+
         body {
+        font-size: 80%;
         font-family: 'Miriam Libre', sans-serif;
         }
 
@@ -36,7 +44,21 @@
 </head>
 <body>
 
-    <table class="borderless" style="margin-top: 1em">
+  <footer>
+      <table class="borderless" style="margin-top: 5em">
+        <tr>
+            <td style="text-align: center">
+                <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center">
+                <span style="font-size: 80%; color: #8795A1">Created By: {{ $x->user->name }}</span>
+            </td>
+        </tr>
+    </table>
+  </footer>
+        <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
                 <img style="width: 100px; height: auto;" src="{{asset('/storage/'. $img)}}">
@@ -183,18 +205,7 @@
         </tr>
     </table>
 
-     <table class="borderless" style="margin-top: 5em">
-        <tr>
-            <td style="text-align: center">
-                <span>This form is only for bank use and is valid only if signed by the authorized signatories.</span>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center">
-                <span style="font-size: 80%; color: #8795A1">Created By: {{ $x->user->name }}</span>
-            </td>
-        </tr>
-    </table>
+
 
 </body>
 </html>
