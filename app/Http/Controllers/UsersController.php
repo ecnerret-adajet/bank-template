@@ -59,7 +59,7 @@ class UsersController extends Controller
 
     /**
      * Store Permissions
-     * 
+     *
      */
     public function storePermission(Request $request)
     {
@@ -80,7 +80,7 @@ class UsersController extends Controller
     /**
      * Store Roles
      */
-    public function storeRoles(Request $request) 
+    public function storeRoles(Request $request)
     {
         $this->validate($request, [
             'name' => 'required'
@@ -98,7 +98,7 @@ class UsersController extends Controller
     /**
      * Update Roles
      */
-    public function updateRoles(Request $request, Role $role) 
+    public function updateRoles(Request $request, Role $role)
     {
         $this->validate($request, [
             'name' => 'required'
@@ -111,14 +111,14 @@ class UsersController extends Controller
         if(!empty($request->input('attach_list'))) {
             $role->syncPermissions($request->input('attach_list'));
         }
-        
+
         if(!empty($request->input('detach_list'))) {
             $detaches = $request->input('detach_list');
             foreach($detaches as $d) {
                 $role->detachPermission($d);
-            }        
+            }
         }
-        
+
         $role->save();
 
         return $role->with('permissions')->get();
@@ -132,7 +132,23 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $userRole = Role::where('name', '=', 'User')->first();
+
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+        $user->attachRole($userRole);
+
+        return $user;
     }
 
     /**
@@ -172,22 +188,22 @@ class UsersController extends Controller
             'email' => 'required|email|unique:users,email,'.$user->id,
             'role_list' => 'required',
         ]);
-        
+
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         if(!empty($request->input('password'))) {
             $user->password = bcrypt($request->input('password'));
         }
-        
+
         if(!empty($request->input('attach_perm'))) {
             $user->syncPermissions($request->input('attach_perm'));
         }
-        
+
         if(!empty($request->input('detach_perm'))) {
             $detaches = $request->input('detach_perm');
             foreach($detaches as $d) {
                 $user->detachPermission($d);
-            }        
+            }
         }
 
         $user->attachRole($request->input('role_list'));
@@ -197,7 +213,7 @@ class UsersController extends Controller
             'redirect' => route('users.index')
         ];
 
-  
+
     }
 
     /**

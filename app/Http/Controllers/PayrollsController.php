@@ -103,11 +103,11 @@ class PayrollsController extends Controller
             // 'signatory2' => 'required',
         ]);
 
-        $last_count = !empty(Payroll::first()) ? Payroll::orderBy('id','DESC')->first()->id : 0;
-        $reference = Account::where('id',$request->input('company_list'))->with('company')->first();
+        $last_count = !empty(Payroll::first()) ? Payroll::orderBy('id','DESC')->first()->id + 1 : 1;
+        $ref = Company::where('id',$request->input('company_list'))->first();
 
         $payroll = Auth::user()->payrolls()->create([
-            'ref_num' => $reference->company->abbrv.'-PA-'.sprintf('%08d', $last_count),
+            'ref_num' => $ref->abbrv.'-PA-'.sprintf('%08d', $last_count),
             'signatories' => [
                 array('name' => $request->input('signatory1')),
                 array('name' => $request->input('signatory2'))

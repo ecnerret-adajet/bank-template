@@ -70,7 +70,7 @@ class SignatoryTableSeeder extends Seeder
             ],
             [
                 'user_id' => 1,
-                'first_name' => 'Supeng',
+                'first_name' => 'Su Peng',
                 'middle_name' => '',
                 'last_name' => 'Uy',
                 'created_at' => Carbon\Carbon::now(),

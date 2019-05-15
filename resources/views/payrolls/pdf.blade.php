@@ -122,7 +122,7 @@
                 </p>
 
                 <p>
-                    This is to request to your good office to endorse our new employee to corresponding BPI Branch for
+                    This is to request from your good office to endorse our new employee with your corresponding BPI Branch for
                     his/her application for payroll ATM account.
                 </p>
 
@@ -150,13 +150,13 @@
     <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
-                Furthermore this is to certify that the above-mentioned employee is an active employee of respective company
+                Furthermore, this is to certify that the above-mentioned employee is an active employee of respective company
                 under the umbrella of the La Filipina Uy Gongco Group of Companies (LFUG-GOC).
             </td>
         </tr>
         <tr>
             <td>
-                Hope you could assist us on this. Thank you
+                Hope for your kind assistance. Thank you
             </td>
         </tr>
         <tr>

@@ -103,7 +103,7 @@ class ManagerChecksController extends Controller
             'mc_cost' => 'required',
         ]);
 
-        $last_count = !empty(ManagerCheck::first()) ? ManagerCheck::orderBy('id','DESC')->first()->id : 0;
+        $last_count = !empty(ManagerCheck::first()) ? ManagerCheck::orderBy('id','DESC')->first()->id + 1 : 1;
         $bank = Bank::whereId($request->input('bank_id'))->first();
         $account = Account::where('id',$request->input('account_id'))->with('company')->first();
 
@@ -112,7 +112,7 @@ class ManagerChecksController extends Controller
             'mc_cost' => $request->input('mc_cost'),
             'grand_total' => $request->input('grand_total'),
             'account_number' => $account->account_number,
-            'company' => $account->company->full_company,
+            'company' => $account->company->name,
             'signatories' => [
                 array('name' => $request->input('signatory1')),
                 array('name' => $request->input('signatory2'))

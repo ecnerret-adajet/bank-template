@@ -116,7 +116,7 @@ class CompanyTableSeeder extends Seeder
                 'name' => 'Mariveles Grains Corporation',
                 'department' => null,
                 'abbrv' => 'MGC',
-                'avatar' => 'companies/lfug.png',
+                'avatar' => 'companies/mgc.png',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],

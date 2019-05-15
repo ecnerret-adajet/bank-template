@@ -56,7 +56,7 @@ class BankTransfersController extends Controller
             // 'signatory2' => 'required',
         ]);
 
-        $last_count = !empty(BankTransfer::first()) ? BankTransfer::orderBy('id','DESC')->first()->id : 0;
+        $last_count = !empty(BankTransfer::first()) ? BankTransfer::orderBy('id','DESC')->first()->id + 1 : 1;
         $bank = Bank::whereId($request->input('bank_list'))->first();
         $from = Account::where('id',$request->input('from_account'))->with('company')->first();
         $to = Account::where('id',$request->input('to_account'))->with('company')->first();
@@ -65,8 +65,8 @@ class BankTransfersController extends Controller
             'ref_num' => $from->company->abbrv.'-BT-'.sprintf('%08d', $last_count),
             'amount' => $request->input('amount'),
             'manager_id' => $bank->manager->id,
-            'from_company' => $from->company->full_company,
-            'to_company' => $to->company->full_company,
+            'from_company' => $from->company->name,
+            'to_company' => $to->company->name,
             'from_account' => $from->account_number,
             'to_account' => $to->account_number,
             'signatories' => [
