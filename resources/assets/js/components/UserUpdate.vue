@@ -17,12 +17,12 @@
 
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" class="form-control" id="name" v-model="user.name" placeholder="Enter Name">
+                    <input type="text" class="form-control" id="name" v-model="toEdit.name" placeholder="Enter Name">
                 </div>
 
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" class="form-control" id="email" v-model="user.email" placeholder="Enter Email">
+                    <input type="email" class="form-control" id="email" v-model="toEdit.email" placeholder="Enter Email">
                 </div>
 
                 <div class="form-group">
@@ -65,7 +65,7 @@
                                     <label class="switch mt-2">
                                         <input type="checkbox" checked disabled>
                                         <span class="slider round"></span>
-                                    </label> 
+                                    </label>
                                     <span class="ml-3">{{ permission.name }}</span>
                                     </div>
                                 </span>
@@ -77,7 +77,7 @@
                                     <label class="switch mt-2">
                                         <input type="checkbox" :checked="userPermissions(permission.id)" @click="syncOrDetach(permission.id)">
                                         <span class="slider round"></span>
-                                    </label> 
+                                    </label>
                                     <span class="ml-3">{{ permission.name }}</span>
                                     </div>
                                 </span>
@@ -112,7 +112,10 @@ Vue.use(Toasted)
 
 export default {
 
-    props: ['user_id'],
+    props: {
+        user_id: Number,
+        toEdit: Object
+    },
 
     data() {
         return {
@@ -120,7 +123,7 @@ export default {
             roles: [],
             edit: true,
             permissions: [],
-            detachPermissions: [],   
+            detachPermissions: [],
             name: '',
             email: '',
             password: '',
@@ -134,7 +137,7 @@ export default {
             console.log(this.selectedPermissions)
         }
     },
-    
+
     created() {
         this.getUser()
         this.getRoles()
@@ -147,7 +150,7 @@ export default {
             this.edit = false;
             this.$emit('backToUser', this.edit);
         },
-        
+
         getUser() {
             axios.get('/users/' + this.user_id)
             .then(response => this.user = response.data);
@@ -164,16 +167,16 @@ export default {
             })
             .then(response => {
                 window.location = response.data.redirect;
-                Vue.toasted.show("Updated Successfully!", { 
-                    theme: "primary", 
-                    position: "bottom-right", 
+                Vue.toasted.show("Updated Successfully!", {
+                    theme: "primary",
+                    position: "bottom-right",
                     duration : 5000
                 });
             })
             .catch((error) => {
                 console.log(error);
             });
-            
+
         },
 
         getPermissions() {
@@ -192,7 +195,7 @@ export default {
         //     if(getperm > -1) {
         //         final = this.selectedPermissions.splice(this.selectedPermissions.indexOf(permission), 1)
         //     } else {
-        //          final = this.selectedPermissions.push(permission); 
+        //          final = this.selectedPermissions.push(permission);
         //     }
         //     return final;
         // },

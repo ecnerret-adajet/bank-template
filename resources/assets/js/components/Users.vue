@@ -6,7 +6,7 @@
             <div class="row">
             <div class="col">
                 <span class="h3 text-dark">All Users</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newUser">
+                <button type="button" class="float-right btn btn-primary"  @click="openCreateModal()">
                     Add User
                 </button>
             </div><!-- /.col -->
@@ -82,44 +82,23 @@
 
 
         <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newUser" tabindex="-1" role="dialog" aria-labelledby="newUserLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newUserLabel">Add New User</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+        <user-form :showModal="showModal"
+                    :is-create="isCreate"
+                    :to-edit="toEdit"
+                    @editResponse="editResponse"
+                    @returnToEdit="toEdit = $event"
+                    @returnShowModal="showModal = $event"
+                    @storeResponse="storeResponse">
+        </user-form>
 
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" id="name" v-model="name" placeholder="Enter Name">
-                </div>
 
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" class="form-control" id="email" v-model="email" placeholder="Enter Email">
-                </div>
 
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" id="password" v-model="password" placeholder="Enter Password">
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeUser" data-dismiss="modal">Submit</button>
-            </div>
-            </div>
-        </div>
-        </div>
     </div><!-- end users list -->
 
 
-    <user-update :user_id="selectedUser" @backToUser="edit = $event" v-else></user-update>
+    <user-update :to-edit="toEdit"
+                :user_id="selectedUser"
+                @backToUser="edit = $event" v-else></user-update>
 
 
     </div><!-- end template -->
@@ -130,24 +109,29 @@ import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
 import UserUpdate from './UserUpdate.vue';
+import Form from './users/Form.vue';
 
 Vue.use(Toasted)
 
 export default {
 
     components: {
-        UserUpdate
+        VueContentPlaceholders,
+        UserUpdate,
+        userForm: Form
     },
 
     data() {
         return {
             loading: false,
             users: [],
+            toEdit: {},
+            toDelete: {},
             edit: false,
+            showModalDelete: false,
+            isCreate: false,
+            showModal: false,
             selectedUser: '',
-            name: '',
-            email: '',
-            password: '',
             search: '',
             currentPage: 0,
             itemsPerPage: 5,
@@ -160,15 +144,32 @@ export default {
 
     methods: {
 
-        resetFields() {
-            this.name = '';
-            this.email = '';
-            this.password = '';
+        editResponse(event) {
+            let findIndex = this.users.findIndex(item => item.id === event.id);
+            return this.users[findIndex] = event;
         },
 
         editUser(user) {
             this.edit = true;
             this.selectedUser = user.id;
+            this.toEdit = user;
+        },
+
+        storeResponse(event) {
+            return this.users.unshift(event)
+        },
+
+        openCreateModal() {
+            this.showModal = true;
+            this.isCreate = true;
+        },
+
+        openEditModal(object) {
+            this.showModal = !this.showModal;
+            this.isCreate = false;
+            if(this.showModal) {
+                this.toEdit = object
+            }
         },
 
         getUsers() {
@@ -180,29 +181,18 @@ export default {
             });
         },
 
-        storeUser() {
-            axios.post('/users', {
-                name : this.name,
-                email : this.email,
-                password: this.password
-            })
-            .then(response => {
-                this.users.unshift(response.data)
-                console.log('check response user: ', reponse.data)
-                Vue.toasted.show("Added Successfully!", {
-                    theme: "primary",
-                    position: "bottom-right",
-                    duration : 5000
-                });
-            })
-            .catch(error => {
-                console.log('error console: ', error)
-            })
-            this.resetFields()
-        },
-
         setPage(pageNumber) {
             this.currentPage = pageNumber;
+        },
+
+        resetRow() {
+            if(this.currentPage >= this.totalPages) {
+                this.currentPage = this.totalPages - 1
+            }
+
+            if(this.currentPage == -1) {
+                this.currentPage = 0;
+            }
         },
 
         resetStartRow() {
@@ -219,11 +209,6 @@ export default {
     },
 
     computed: {
-        validateFields() {
-            return this.name == '' ||
-                    this.email == '' ||
-                    this.password == '';
-        },
 
         filteredEntries() {
             return this.users.filter(item => {
@@ -257,4 +242,27 @@ export default {
 
 }
 </script>
+<style scoped>
+    .dropdown-menu button {
+        cursor: pointer;
+    }
+
+    .column-items {
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+</style>
 
