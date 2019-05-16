@@ -72060,7 +72060,7 @@ var render = function() {
               ? _c("tr", { key: c }, [
                   _c("td", [
                     _c("img", {
-                      staticClass: "rounded-circle",
+                      staticClass: "img-responsive",
                       staticStyle: { height: "60px", width: "auto" },
                       attrs: {
                         src: _vm.avatar_link + company.avatar,

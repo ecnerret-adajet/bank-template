@@ -33,7 +33,7 @@
             <tbody>
                 <tr v-for="(company,c) in filteredQueues" :key="c" v-if="!loading">
                     <td>
-                        <img :src="avatar_link + company.avatar" class="rounded-circle" style="height: 60px; width: auto;"  align="middle">
+                        <img :src="avatar_link + company.avatar" class="img-responsive" style="height: 60px; width: auto;"  align="middle">
                     </td>
                     <td>{{ company.name }}</td>
                     <td>{{ company.department }}</td>

@@ -41,7 +41,7 @@ class CompanyTableSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'name' => 'Amigo Logistics Corpotation',
+                'name' => 'Amigo Logistics Corporation',
                 'department' => null,
                 'abbrv' => 'ALC',
                 'avatar' => 'companies/alc.png',
@@ -71,7 +71,7 @@ class CompanyTableSeeder extends Seeder
                 'name' => 'La Filipina Meats',
                 'department' => null,
                 'abbrv' => 'LAFIL MEATS',
-                'avatar' => 'companies/lfug.png',
+                'avatar' => 'companies/lafilmeats.png',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],
@@ -80,7 +80,7 @@ class CompanyTableSeeder extends Seeder
                 'name' => 'Mama Tina Pasta Inc.',
                 'department' => null,
                 'abbrv' => 'MAMATINA',
-                'avatar' => 'companies/lfug.png',
+                'avatar' => 'companies/mamatina.png',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now()
             ],

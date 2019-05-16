@@ -24,7 +24,6 @@ class SignatoriesController extends Controller
     {
         $this->validate($request, [
             'first_name' => 'required',
-            'middle_name' => 'required',
             'last_name' => 'required',
         ]);
 
@@ -45,7 +44,6 @@ class SignatoriesController extends Controller
     {
         $this->validate($request, [
             'first_name' => 'required',
-            'middle_name' => 'required',
             'last_name' => 'required',
         ]);
 

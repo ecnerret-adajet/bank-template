@@ -104,6 +104,15 @@
         </tr>
     </table>
 
+    @php
+        $tempNum = explode( '.' , $x->amount);
+
+        $convertedNumber = count($tempNum) > 1 ?
+                           strtoUpper($f->format($tempNum[0])) . ' AND ' . strtoUpper($f->format($tempNum[1]) . ' CENTAVOS ') :
+                           strtoUpper($f->format($tempNum[0]))
+
+    @endphp
+
     <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
@@ -113,7 +122,7 @@
 
                 <p>
                     This is to authorize your bank to transfer from <strong>{{ strtoUpper($x->from_company) }}</strong> ACCT NO. <strong>{{ strtoUpper($x->from_account) }}</strong> the
-                    amount of  <strong>PHILIPPINE PESOS {{ strtoUpper($f->format($x->amount)) }} ONLY. (PHP {{ number_format($x->amount, 2, '.', ',') }})</strong> to <strong>{{ strtoUpper($x->to_company) }}</strong> ACCT NO. <strong>{{ $x->to_account }}</strong>.
+                    amount of  <strong>PHILIPPINE PESOS {{ $convertedNumber }} ONLY. (PHP {{ number_format($x->amount, 2, '.', ',') }})</strong> to <strong>{{ strtoUpper($x->to_company) }}</strong> ACCT NO. <strong>{{ $x->to_account }}</strong>.
                 </p>
 
                 <p style="margin-top: 1em">
