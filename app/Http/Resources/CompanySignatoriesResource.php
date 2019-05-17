@@ -21,7 +21,8 @@ class CompanySignatoriesResource extends Resource
             'abbrv' => $this->abbrv,
             'department' => $this->department,
             'avatar' => $this->avatar,
-            'signatories' => $this->signatories
+            'signatories' => $this->signatories,
+            'banks' => $this->banks
         ];
     }
 }

@@ -78283,6 +78283,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -78298,56 +78316,79 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return {
             toEdit: {},
             errors: [],
+            banks: [],
             signatories: [],
             signatories2: [],
             loading: false,
             signatory1: [],
-            signatory2: []
+            signatory2: [],
+            selectedBank: []
         };
     },
     mounted: function mounted() {
         this.getCurrentCompany();
         this.getSignatories();
+        this.getBank();
     },
 
 
     methods: {
-        getSignatories: function getSignatories() {
+        getBank: function getBank() {
             var _this = this;
 
-            axios.get('/getSignatories').then(function (response) {
+            axios.get('/getBanks').then(function (response) {
                 var filtered = response.data.map(function (_ref) {
                     var id = _ref.id,
-                        full_name = _ref.full_name;
+                        name = _ref.name,
+                        branch = _ref.branch;
+                    return { id: id, text: name + ' - ' + branch };
+                });
+                return Promise.resolve(filtered).then(function (result) {
+                    _this.banks = result;
+                });
+            });
+        },
+        getSignatories: function getSignatories() {
+            var _this2 = this;
+
+            axios.get('/getSignatories').then(function (response) {
+                var filtered = response.data.map(function (_ref2) {
+                    var id = _ref2.id,
+                        full_name = _ref2.full_name;
                     return { id: id, text: full_name };
                 });
                 return Promise.resolve(filtered).then(function (result) {
-                    _this.signatories = result;
-                    _this.signatories2 = [].concat(_toConsumableArray(_this.signatories));
+                    _this2.signatories = result;
+                    _this2.signatories2 = [].concat(_toConsumableArray(_this2.signatories));
                 });
             });
         },
         getCurrentCompany: function getCurrentCompany() {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.get('/companies/' + this.companyid).then(function (response) {
-                _this2.toEdit = response.data;
+                _this3.toEdit = response.data;
                 if (response.data.signatories.length != 0) {
-                    _this2.signatory1 = response.data.signatories.filter(function (item) {
+                    _this3.signatory1 = response.data.signatories.filter(function (item) {
                         return item.policy_type === 1;
                     }).map(function (item) {
                         return item.id;
                     });
-                    _this2.signatory2 = response.data.signatories.filter(function (item) {
+                    _this3.signatory2 = response.data.signatories.filter(function (item) {
                         return item.policy_type === 2;
                     }).map(function (item) {
+                        return item.id;
+                    });
+                }
+                if (response.data.banks.length != 0) {
+                    _this3.selectedBank = response.data.banks.map(function (item) {
                         return item.id;
                     });
                 }
             });
         },
         companyUpdate: function companyUpdate() {
-            var _this3 = this;
+            var _this4 = this;
 
             console.log('to Edit: ', this.toEdit.name);
             axios.put('/companies/' + this.companyid, {
@@ -78355,7 +78396,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 department: this.toEdit.department,
                 abbrv: this.toEdit.abbrv,
                 signatory1: this.signatory1,
-                signatory2: this.signatory2
+                signatory2: this.signatory2,
+                bank_list: this.selectedBank
             }).then(function (response) {
                 if (response.status == 200) {
                     // console.log('check result: ', response.data.data)
@@ -78363,17 +78405,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 }
             }).catch(function (error) {
                 if (error.response.status == 422) {
-                    _this3.errors = error.response.data.errors;
+                    _this4.errors = error.response.data.errors;
                 }
             });
         },
         myChangeEventSignatory1: function myChangeEventSignatory1(val) {
-            console.log('selected value: ', this.signatory1);
+            // console.log('selected value: ', this.signatory1);
             // console.log('selected value: ', val);
         },
-        mySelectEventSignatory1: function mySelectEventSignatory1(_ref2) {
-            var id = _ref2.id,
-                text = _ref2.text;
+        mySelectEventSignatory1: function mySelectEventSignatory1(_ref3) {
+            var id = _ref3.id,
+                text = _ref3.text;
 
 
             console.log({ id: id, text: text });
@@ -78394,9 +78436,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             console.log(val);
             console.log('signatory 2: ', this.signatory2);
         },
-        mySelectEventSignatory2: function mySelectEventSignatory2(_ref3) {
-            var id = _ref3.id,
-                text = _ref3.text;
+        mySelectEventSignatory2: function mySelectEventSignatory2(_ref4) {
+            var id = _ref4.id,
+                text = _ref4.text;
 
             console.log({ id: id, text: text });
             console.log('signatory 2: ', this.signatory2);
@@ -84680,6 +84722,51 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
+    _vm._m(2),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [
+        _c(
+          "div",
+          {
+            staticClass: "form-group",
+            class: { " has-danger": _vm.errors.bank_list }
+          },
+          [
+            _c("label", [_vm._v("Bank ")]),
+            _vm._v(" "),
+            _c("Select2", {
+              staticClass: "form-control",
+              class: { "is-invalid": _vm.errors.bank_list },
+              attrs: { settings: { multiple: true }, options: _vm.banks },
+              on: {
+                change: function($event) {
+                  _vm.myChangeEventSignatory1($event)
+                },
+                select: function($event) {
+                  _vm.mySelectEventSignatory1($event)
+                }
+              },
+              model: {
+                value: _vm.selectedBank,
+                callback: function($$v) {
+                  _vm.selectedBank = $$v
+                },
+                expression: "selectedBank"
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.bank_list
+              ? _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(_vm._s(_vm.errors.bank_list[0]))
+                ])
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "row mt-3" }, [
       _c("div", { staticClass: "col" }, [
         _c(
@@ -84722,6 +84809,20 @@ var staticRenderFns = [
         _c("div", { staticClass: "col pt-3" }, [
           _c("span", { staticClass: "h3 text-dark" }, [
             _vm._v("Assign Signatories")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "content-header mb-3 mt-2" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col pt-3" }, [
+          _c("span", { staticClass: "h3 text-dark" }, [
+            _vm._v("Nearest Bank Branch")
           ])
         ])
       ])

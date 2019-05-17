@@ -33,4 +33,9 @@ class Bank extends Model
         return $this->hasOne(Manager::class);
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class);
+    }
+
 }

@@ -20,6 +20,15 @@ class Company extends Model
         return !empty($this->department) ? $this->name." - ".$this->department : $this->name;
     }
 
+    /**
+     * Bank branches under company
+     *
+     */
+    public function banks()
+    {
+        return $this->belongsToMany(Bank::class);
+    }
+
     public function signatories()
     {
         return $this->belongsToMany(Signatory::class)->withPivot('policy_type');

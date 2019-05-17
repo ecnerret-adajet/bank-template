@@ -66,6 +66,24 @@
 
         </div>
 
+        <div class="content-header mb-3 mt-2">
+            <div class="row">
+            <div class="col pt-3">
+                <span class="h3 text-dark">Nearest Bank Branch</span>
+            </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div  class="form-group" :class="{ ' has-danger' : errors.bank_list }">
+                    <label>Bank </label>
+                    <Select2 v-model="selectedBank" class="form-control" :class="{ 'is-invalid' : errors.bank_list }" :settings="{ multiple: true }" :options="banks" @change="myChangeEventSignatory1($event)" @select="mySelectEventSignatory1($event)" />
+                    <div v-if="errors.bank_list" class="invalid-feedback">{{ errors.bank_list[0] }}</div>
+                </div>
+            </div>
+        </div>
+
          <div class="row mt-3">
             <div class="col">
                 <button type="submit" class="btn btn-primary btn-block" @click.prevent="companyUpdate">Publish</button>
@@ -90,20 +108,34 @@ export default {
         return {
             toEdit: {},
             errors: [],
+            banks: [],
             signatories: [],
             signatories2: [],
             loading: false,
             signatory1: [],
             signatory2: [],
+            selectedBank: [],
          }
     },
 
     mounted() {
         this.getCurrentCompany()
         this.getSignatories()
+        this.getBank()
     },
 
     methods: {
+
+        getBank() {
+            axios.get('/getBanks')
+            .then(response => {
+                const filtered = response.data.map(({ id, name, branch }) => ({ id: id, text: `${name} - ${branch}` }))
+                return Promise.resolve(filtered)
+                .then(result => {
+                    this.banks = result
+                })
+            })
+        },
 
         getSignatories() {
             axios.get('/getSignatories')
@@ -125,6 +157,9 @@ export default {
                     this.signatory1 = response.data.signatories.filter(item => item.policy_type === 1).map(item => item.id);
                     this.signatory2 = response.data.signatories.filter(item => item.policy_type === 2).map(item => item.id);
                 }
+                if(response.data.banks.length != 0) {
+                    this.selectedBank = response.data.banks.map(item => item.id);
+                }
             })
         },
 
@@ -135,7 +170,8 @@ export default {
                 department: this.toEdit.department,
                 abbrv: this.toEdit.abbrv,
                 signatory1: this.signatory1,
-                signatory2: this.signatory2
+                signatory2: this.signatory2,
+                bank_list: this.selectedBank
             })
             .then(response => {
                 if(response.status == 200) {
@@ -151,7 +187,7 @@ export default {
         },
 
         myChangeEventSignatory1(val){
-            console.log('selected value: ', this.signatory1);
+            // console.log('selected value: ', this.signatory1);
             // console.log('selected value: ', val);
         },
 

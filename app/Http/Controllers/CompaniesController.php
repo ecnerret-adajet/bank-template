@@ -131,7 +131,8 @@ class CompaniesController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'abbrv' => 'required',
-            'signatory1' => 'required'
+            'signatory1' => 'required',
+            'bank_list' => 'required'
         ],[
             'name.required' => 'Company name is required',
             'abbrv.required' => 'Company abbreviation is required',
@@ -141,30 +142,11 @@ class CompaniesController extends Controller
         // Update all fields in company
         $company->update($request->all());
 
-
-        // $existingSignatories1 = $company->primarySignatories->pluck('id');
-        // $addedSignatories1 = array_diff($existingSignatories1->toArray(), $request->input('signatory1'));
-        // if (count($request->input('signatory1')) < 1) {
-        //     $company->signatories()->detach($existingSignatories1);
-        // }
-        // if (count($addedSignatories1) > 0) {
-        //     $company->signatories()->attach($addedSignatories1, ['policy_type' => 1]);
-        // }
-
-        // $existingSignatories2 = $company->secondarySignatories->pluck('id');
-        // $addedSignatories2 = array_diff($existingSignatories2->toArray(), $request->input('signatory2'));
-        // if (count($request->input('signatory2')) < 1) {
-        //     $company->signatories()->detach($existingSignatories2);
-        // }
-        // if (count($addedSignatories2) > 0) {
-        //     $company->signatories()->attach($addedSignatories2, ['policy_type' => 2]);
-        // }
-
-
-
        // Sync array of signatory for primary signatory for a given company [policy_type = 1]
         $company->signatories()->sync($request->input('signatory1'), ['policy_type' => 1]);
 
+        // Sync array of bank for nearest bank branches under current company
+        $company->banks()->sync($request->input('bank_list'));
 
         // //check the existing signatory for secondary signatories [policy_type = 2]
         $existingSignatories = $company->secondarySignatories->pluck('id');
