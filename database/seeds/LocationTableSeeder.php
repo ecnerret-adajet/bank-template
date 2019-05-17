@@ -11,6 +11,12 @@ class LocationTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('locations')->insert([
+            [ 'name' => 'Manila'],
+            [ 'name' => 'Bataan'],
+            [ 'name' => 'Isabela'],
+            [ 'name' => 'Iloilo'],
+            [ 'name' => 'Roxas'],
+        ]);
     }
 }
