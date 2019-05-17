@@ -19,6 +19,10 @@ Route::group(['middleware' => 'auth:api'], function() {
         'create', 'edit'
     ]);
 
+    Route::resource('locations','Api\LocationsApiController')->except([
+        'create','edit'
+    ]);
+
     //Signatories API
     Route::get('assigned-signatories/{company}','CompaniesController@getCompanyAssignedSignatories');
 

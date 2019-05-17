@@ -132,7 +132,8 @@ class CompaniesController extends Controller
             'name' => 'required',
             'abbrv' => 'required',
             'signatory1' => 'required',
-            'bank_list' => 'required'
+            'bank_list' => 'required',
+            'location_list' => 'required'
         ],[
             'name.required' => 'Company name is required',
             'abbrv.required' => 'Company abbreviation is required',
@@ -142,11 +143,17 @@ class CompaniesController extends Controller
         // Update all fields in company
         $company->update($request->all());
 
+        // Sync array of location
+        $company->location()->associate($request->input('location_list'));
+        $company->save();
+
        // Sync array of signatory for primary signatory for a given company [policy_type = 1]
         $company->signatories()->sync($request->input('signatory1'), ['policy_type' => 1]);
 
         // Sync array of bank for nearest bank branches under current company
-        $company->banks()->sync($request->input('bank_list'));
+        if(!empty($request->bank_list)) {
+            $company->banks()->sync($request->input('bank_list'));
+        }
 
         // //check the existing signatory for secondary signatories [policy_type = 2]
         $existingSignatories = $company->secondarySignatories->pluck('id');

@@ -38,6 +38,16 @@
             </div>
         </div>
 
+         <div class="row">
+            <div class="col">
+                    <div class="form-group" :class="{ ' has-danger' : errors.location_list }">
+                    <label for="exampleSelect2">Location</label>
+                    <Select2 v-model="toEdit.location_list" class="form-control" :class="{ 'is-invalid' : errors.location_list }" :settings="{ multiple: false }" :options="locations" @change="myChangeEventSignatory1($event)" @select="mySelectEventSignatory1($event)" />
+                     <div v-if="errors.location_list" class="invalid-feedback">{{ errors.location_list[0] }}</div>
+                </div>
+            </div>
+        </div>
+
         <div class="content-header mb-3 mt-2">
             <div class="row">
             <div class="col pt-3">
@@ -109,6 +119,7 @@ export default {
             toEdit: {},
             errors: [],
             banks: [],
+            locations: [],
             signatories: [],
             signatories2: [],
             loading: false,
@@ -122,9 +133,21 @@ export default {
         this.getCurrentCompany()
         this.getSignatories()
         this.getBank()
+        this.getLocations()
     },
 
     methods: {
+
+        getLocations() {
+            axios.get('/api/locations')
+            .then(response => {
+                const filtered = response.data.map(({ id, name }) => ({ id: id, text: name}))
+                return Promise.resolve(filtered)
+                .then(result => {
+                    this.locations = result
+                })
+            })
+        },
 
         getBank() {
             axios.get('/getBanks')
@@ -171,7 +194,8 @@ export default {
                 abbrv: this.toEdit.abbrv,
                 signatory1: this.signatory1,
                 signatory2: this.signatory2,
-                bank_list: this.selectedBank
+                bank_list: this.selectedBank,
+                location_list: this.toEdit.location_list
             })
             .then(response => {
                 if(response.status == 200) {

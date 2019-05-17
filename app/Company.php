@@ -29,6 +29,11 @@ class Company extends Model
         return $this->belongsToMany(Bank::class);
     }
 
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
     public function signatories()
     {
         return $this->belongsToMany(Signatory::class)->withPivot('policy_type');

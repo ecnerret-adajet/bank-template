@@ -12,6 +12,6 @@ class Location extends Model
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class);
+        return $this->hasMany(Company::class);
     }
 }
