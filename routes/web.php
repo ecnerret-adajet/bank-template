@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth'], function() {
     //Route Setup for bank listing
     Route::resource('/banks','BanksController');
     Route::get('/getBanks','BanksController@getBank');
+    Route::get('/banks-accounts','BanksController@getBankWithAccounts');
 
     // Route Setup for payees - managers check
     Route::get('/payees','ManagerChecksController@getPayee');

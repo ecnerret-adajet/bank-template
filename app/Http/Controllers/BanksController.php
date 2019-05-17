@@ -31,6 +31,20 @@ class BanksController extends Controller
     }
 
     /**
+     * Return banks with assigned accounts only
+     *
+     * @return json
+     */
+    public function getBankWithAccounts()
+    {
+        $banks = Bank::has('accounts')
+                ->with('manager','accounts')
+                ->get();
+
+        return $banks;
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

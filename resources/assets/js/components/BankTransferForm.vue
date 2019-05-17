@@ -171,7 +171,7 @@ export default {
 
     methods: {
         getBank() {
-            axios.get('/getBanks')
+            axios.get('/banks-accounts')
             .then(response => this.banks = response.data);
         },
 
