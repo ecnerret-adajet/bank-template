@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         'create','edit'
     ]);
 
+    // Fetch near bank
+    Route::get('/companies-near-branch/{company}','CompaniesController@getCompanyNearBranch');
+
     //Signatories API
     Route::get('assigned-signatories/{company}','CompaniesController@getCompanyAssignedSignatories');
 

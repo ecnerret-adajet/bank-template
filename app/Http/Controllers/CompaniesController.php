@@ -35,6 +35,17 @@ class CompaniesController extends Controller
     }
 
     /**
+     * Fetch branches with assigned managers only for managers check input
+     *
+     * @return void
+     */
+    public function getCompanyNearBranch($company)
+    {
+        return Company::whereId($company)
+                ->with('banks','banks.manager')->get();
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

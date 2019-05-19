@@ -5,12 +5,12 @@
             <div class="row mb-2">
                 <div class="col">
                     <span class="text-muted text-uppercase small">Bank Name:</span> <br/>
-                    <span class="h4 text-dark" v-if="selectedManager"> {{ getSelectedBank.bank }} </span>
+                    <span class="h4 text-dark" v-if="selectedNearBank"> {{ getSelectedBank.name }} </span>
                     <span class="h4 text-dark" v-else> N/A </span>
                 </div>
                 <div class="col">
                     <span class="text-muted text-uppercase small">Branch:</span> <br/>
-                    <span class="h4 text-dark" v-if="selectedManager"> {{ getSelectedBank.branch }} </span>
+                    <span class="h4 text-dark" v-if="selectedNearBank"> {{ getSelectedBank.branch }} </span>
                     <span class="h4 text-dark" v-else> N/A </span>
                 </div>
             </div>
@@ -46,11 +46,11 @@
             <div class="col">
                 <div class="form-group">
                     <label>Bank Branch</label>
-                    <select class="form-control" name="payroll_type" v-model="selectedManager">
+                    <select class="form-control" name="payroll_type" v-model="selectedNearBank">
                         <option value="" disabled selected>Select Branch Manager</option>
-                        <option v-for="(manager,m) in managers" :key="m" selected :value="manager.id">{{ manager.bank + ' - ' + manager.branch }}</option>
+                        <option v-for="(manager,m) in nearBanks" :key="m" selected :value="manager.id">{{ manager.name + ' - ' + manager.branch }}</option>
                     </select>
-
+                    <div v-if="emptyNearBank" class="text-danger">No assigned near bank branch found.</div>
                 </div>
             </div>
         </div>
@@ -106,12 +106,13 @@ export default {
     data() {
         return {
             types: [],
-            managers: [],
+            nearBanks: [],
             companies: [],
             signatories: [],
             signatories2: [],
+            emptyNearBank: false,
             selectedCompany: '',
-            selectedManager: '',
+            selectedNearBank: '',
             selectedType: '',
             signatory1: '',
             signatory2: '',
@@ -122,12 +123,14 @@ export default {
         this.getPayrollTypes()
         this.getCompanies()
         this.getSignatories()
-        this.getManagers()
+        // this.getManagers()
     },
 
     watch: {
         selectedCompany() {
             this.getSignatories()
+            this.getNearestBank()
+            console.log('check empty nearBanks: ', this.emptyNearBank)
         }
     },
 
@@ -154,10 +157,29 @@ export default {
             }
         },
 
-        getManagers() {
-            axios.get('/getManagers')
-            .then(response => this.managers = response.data);
+        getNearestBank() {
+            axios.get(`/api/companies-near-branch/${this.selectedCompany}`)
+            .then(response => {
+                return response.data.map(item => {
+                    console.log('bank cound: ', item.banks.length)
+                    if(item.banks.length > 0) {
+                        this.emptyNearBank = false
+                        this.nearBanks = item.banks
+                    }
+
+                    if(item.banks.length == 0) {
+                        this.emptyNearBank = true
+                        this.nearBanks = []
+                        this.selectedNearBank = ''
+                    }
+                })
+            })
         },
+
+        // getManagers() {
+        //     axios.get('/getManagers')
+        //     .then(response => this.nearBanks = response.data);
+        // },
 
         postPayroll() {
             axios.post('/payrolls', {
@@ -179,22 +201,26 @@ export default {
 
     computed: {
 
+        selectedManager() {
+            let selectedBank = this.nearBanks.find(item => item.id === this.selectedNearBank);
+            return selectedBank.manager.id;
+        },
+
+        nearestBank() {
+            return this.nearBanks.filter(item)
+        },
+
         allowToSubmit() {
             return this.selectedType == '' ||
                 this.selectedCompany == '' ||
-                this.selectedManager == '' ||
+                this.selectedNearBank == '' ||
                 this.signatory1 == '';
         },
 
-        // secondSignatory() {
-        //     if(this.signatory1) {
-        //         return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
-        //     }
-        // },
 
         getSelectedBank() {
-            if(this.selectedManager) {
-                return this.managers.filter(manager => manager.id == this.selectedManager)[0];
+            if(this.selectedNearBank) {
+                return this.nearBanks.filter(manager => manager.id == this.selectedNearBank)[0];
             }
         }
 

@@ -62032,12 +62032,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     data: function data() {
         return {
             types: [],
-            managers: [],
+            nearBanks: [],
             companies: [],
             signatories: [],
             signatories2: [],
+            emptyNearBank: false,
             selectedCompany: '',
-            selectedManager: '',
+            selectedNearBank: '',
             selectedType: '',
             signatory1: '',
             signatory2: ''
@@ -62047,13 +62048,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.getPayrollTypes();
         this.getCompanies();
         this.getSignatories();
-        this.getManagers();
+        // this.getManagers()
     },
 
 
     watch: {
         selectedCompany: function selectedCompany() {
             this.getSignatories();
+            this.getNearestBank();
+            console.log('check empty nearBanks: ', this.emptyNearBank);
         }
     },
 
@@ -62087,13 +62090,32 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 });
             }
         },
-        getManagers: function getManagers() {
+        getNearestBank: function getNearestBank() {
             var _this4 = this;
 
-            axios.get('/getManagers').then(function (response) {
-                return _this4.managers = response.data;
+            axios.get('/api/companies-near-branch/' + this.selectedCompany).then(function (response) {
+                return response.data.map(function (item) {
+                    console.log('bank cound: ', item.banks.length);
+                    if (item.banks.length > 0) {
+                        _this4.emptyNearBank = false;
+                        _this4.nearBanks = item.banks;
+                    }
+
+                    if (item.banks.length == 0) {
+                        _this4.emptyNearBank = true;
+                        _this4.nearBanks = [];
+                        _this4.selectedNearBank = '';
+                    }
+                });
             });
         },
+
+
+        // getManagers() {
+        //     axios.get('/getManagers')
+        //     .then(response => this.nearBanks = response.data);
+        // },
+
         postPayroll: function postPayroll() {
             axios.post('/payrolls', {
                 manager_list: this.selectedManager,
@@ -62110,23 +62132,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
 
     computed: {
-        allowToSubmit: function allowToSubmit() {
-            return this.selectedType == '' || this.selectedCompany == '' || this.selectedManager == '' || this.signatory1 == '';
-        },
-
-
-        // secondSignatory() {
-        //     if(this.signatory1) {
-        //         return this.signatories.filter(signatory => signatory.full_name != this.signatory1);
-        //     }
-        // },
-
-        getSelectedBank: function getSelectedBank() {
+        selectedManager: function selectedManager() {
             var _this5 = this;
 
-            if (this.selectedManager) {
-                return this.managers.filter(function (manager) {
-                    return manager.id == _this5.selectedManager;
+            var selectedBank = this.nearBanks.find(function (item) {
+                return item.id === _this5.selectedNearBank;
+            });
+            return selectedBank.manager.id;
+        },
+        nearestBank: function nearestBank() {
+            return this.nearBanks.filter(item);
+        },
+        allowToSubmit: function allowToSubmit() {
+            return this.selectedType == '' || this.selectedCompany == '' || this.selectedNearBank == '' || this.signatory1 == '';
+        },
+        getSelectedBank: function getSelectedBank() {
+            var _this6 = this;
+
+            if (this.selectedNearBank) {
+                return this.nearBanks.filter(function (manager) {
+                    return manager.id == _this6.selectedNearBank;
                 })[0];
             }
         }
@@ -62336,7 +62361,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("p", [_vm._v("Applicants Talbe")]),
+    _c("p", [_vm._v("Applicants Table")]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-bordered mt-3" }, [
       _vm._m(0),
@@ -62640,9 +62665,9 @@ var render = function() {
           _vm._v(" "),
           _c("br"),
           _vm._v(" "),
-          _vm.selectedManager
+          _vm.selectedNearBank
             ? _c("span", { staticClass: "h4 text-dark" }, [
-                _vm._v(" " + _vm._s(_vm.getSelectedBank.bank) + " ")
+                _vm._v(" " + _vm._s(_vm.getSelectedBank.name) + " ")
               ])
             : _c("span", { staticClass: "h4 text-dark" }, [_vm._v(" N/A ")])
         ]),
@@ -62654,7 +62679,7 @@ var render = function() {
           _vm._v(" "),
           _c("br"),
           _vm._v(" "),
-          _vm.selectedManager
+          _vm.selectedNearBank
             ? _c("span", { staticClass: "h4 text-dark" }, [
                 _vm._v(" " + _vm._s(_vm.getSelectedBank.branch) + " ")
               ])
@@ -62801,8 +62826,8 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.selectedManager,
-                  expression: "selectedManager"
+                  value: _vm.selectedNearBank,
+                  expression: "selectedNearBank"
                 }
               ],
               staticClass: "form-control",
@@ -62817,7 +62842,7 @@ var render = function() {
                       var val = "_value" in o ? o._value : o.value
                       return val
                     })
-                  _vm.selectedManager = $event.target.multiple
+                  _vm.selectedNearBank = $event.target.multiple
                     ? $$selectedVal
                     : $$selectedVal[0]
                 }
@@ -62830,7 +62855,7 @@ var render = function() {
                 [_vm._v("Select Branch Manager")]
               ),
               _vm._v(" "),
-              _vm._l(_vm.managers, function(manager, m) {
+              _vm._l(_vm.nearBanks, function(manager, m) {
                 return _c(
                   "option",
                   {
@@ -62838,12 +62863,18 @@ var render = function() {
                     attrs: { selected: "" },
                     domProps: { value: manager.id }
                   },
-                  [_vm._v(_vm._s(manager.bank + " - " + manager.branch))]
+                  [_vm._v(_vm._s(manager.name + " - " + manager.branch))]
                 )
               })
             ],
             2
-          )
+          ),
+          _vm._v(" "),
+          _vm.emptyNearBank
+            ? _c("div", { staticClass: "text-danger" }, [
+                _vm._v("No assigned near bank branch found.")
+              ])
+            : _vm._e()
         ])
       ])
     ]),

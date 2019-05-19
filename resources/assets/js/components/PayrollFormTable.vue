@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Applicants Talbe</p>
+        <p>Applicants Table</p>
         <table class="table table-bordered mt-3">
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
                  <button v-else type="button" class="btn btn-primary btn-block" @click="updateItem(applicant)">Update</button>
             </td>
         </tr>
-        
+
         <tr>
             <td>
                 <div class="form-group">
@@ -47,7 +47,7 @@
             </td>
         </tr>
          </tbody>
-    </table> 
+    </table>
 
     </div>
 </template>
@@ -134,7 +134,7 @@ export default {
         }
     }
 
-    
+
 }
 </script>
 

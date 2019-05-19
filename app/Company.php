@@ -26,7 +26,7 @@ class Company extends Model
      */
     public function banks()
     {
-        return $this->belongsToMany(Bank::class);
+        return $this->belongsToMany(Bank::class)->withTimestamps();
     }
 
     public function location()
