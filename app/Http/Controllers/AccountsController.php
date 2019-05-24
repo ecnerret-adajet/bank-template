@@ -53,7 +53,7 @@ class AccountsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'account_number' => 'required|max:12|min:12',
+            'account_number' => 'required|unique:accounts',
             'bank_list' => 'required',
             'company_list' => 'required'
         ]);
@@ -100,7 +100,7 @@ class AccountsController extends Controller
     public function update(Request $request, Account $account)
     {
         $this->validate($request, [
-            'account_number' => 'required|max:12|min:12',
+            'account_number' => 'required|unique:accounts,account_number'.$account->id,
             'bank_list' => 'required',
             'company_list' => 'required'
         ]);

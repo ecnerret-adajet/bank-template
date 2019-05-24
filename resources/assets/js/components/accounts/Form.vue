@@ -30,7 +30,7 @@
 
                 <div class="form-group" :class="{ ' has-danger' : errors.account_number }">
                     <label>Account Number</label>
-                    <input type="text" :class="{ 'is-invalid' : errors.account_number }" class="form-control acc_format" id="name" v-model="toSubmit.account_number" placeholder="Enter Account Number">
+                    <input type="text" :class="{ 'is-invalid' : errors.account_number }" class="form-control" id="name" v-model="toSubmit.account_number" placeholder="Enter Account Number">
                     <div v-if="errors.account_number" class="invalid-feedback">{{ errors.account_number[0] }}</div>
                 </div>
 
