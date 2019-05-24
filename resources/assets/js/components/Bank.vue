@@ -85,6 +85,7 @@
 
         <!-- Create and Edit Module -->
         <bank-form :showModal="showModal"
+                    :banks="banksSelection"
                     :is-create="isCreate"
                     :to-edit="toEdit"
                     @editResponse="editResponse"
@@ -125,6 +126,7 @@ export default {
         return {
             loading: false,
             banks: [],
+            banksSelection: [],
             toEdit: {},
             toDelete: {},
             showModalDelete: false,
@@ -186,8 +188,18 @@ export default {
             .then(response => {
                 this.banks = response.data
                 this.loading = false
+                return response.data
+            })
+            .then(response => {
+                const filtered = response.map(item => item.name);
+                const uniqueFiltered = filtered.filter((item, index) => filtered.indexOf(item) === index);
+                return Promise.resolve(uniqueFiltered)
+                .then(result => {
+                    this.banksSelection = result
+                });
             });
         },
+
 
         setPage(pageNumber) {
             this.currentPage = pageNumber;

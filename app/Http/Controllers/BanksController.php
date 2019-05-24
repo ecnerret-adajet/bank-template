@@ -64,7 +64,7 @@ class BanksController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'branch' => 'required',
+            'branch' => 'required|string|unique:banks',
             'location' => 'required'
         ]);
 
@@ -105,7 +105,7 @@ class BanksController extends Controller
     {
          $this->validate($request, [
             'name' => 'required',
-            'branch' => 'required',
+            'branch' => 'required|string|unique:banks,branch'.$bank->id,
             'location' => 'required'
         ]);
 

@@ -14,7 +14,14 @@
 
                 <div class="form-group" :class="{ ' has-danger' : errors.name }">
                     <label>Bank Name</label>
-                    <input type="text" class="form-control" id="name" v-model="toSubmit.name" :class="{ 'is-invalid' : errors.name }" placeholder="Enter Name">
+                    <vue-bootstrap-typeahead
+                    type="text"
+                    placeholder="Enter Bank Name.."
+                    class="form-control"
+                    v-model="toSubmit.name"
+                    :data="banks"
+                    />
+                    <!-- <input type="text" class="form-control" id="name" v-model="toSubmit.name" :class="{ 'is-invalid' : errors.name }" placeholder="Enter Name"> -->
                     <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
                 </div>
 
@@ -43,11 +50,16 @@
         </div>
 </template>
 <script>
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import Toasted from 'vue-toasted';
 
 export default {
 
-    props: ['toEdit','showModal','isCreate'],
+    props: ['toEdit','showModal','isCreate','banks'],
+
+    components: {
+        VueBootstrapTypeahead
+    },
 
     data() {
         return {
