@@ -4,7 +4,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteAccountLabel">Delete an account</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" @click="closeModal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
                 <button type="button" class="btn btn-primary"  @click.prevent="deleteAccount">Submit</button>
             </div>
             </div>
@@ -46,6 +46,10 @@ export default {
             });
         },
 
+        closeModal() {
+            $('#deleteAccount').modal('hide')
+            return this.$emit('returnShowModalDelete',false)
+        },
 
         deleteAccount() {
             axios.delete(`/accounts/${this.toDelete.id}`)

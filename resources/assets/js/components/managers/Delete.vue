@@ -4,7 +4,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteManagerLabel">Delete a manager</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" @click="closeModal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
                 <button type="button" class="btn btn-primary"  @click.prevent="deleteManager">Submit</button>
             </div>
             </div>
@@ -44,6 +44,11 @@ export default {
                 position: "bottom-right",
                 duration : 5000
             });
+        },
+
+        closeModal() {
+            $('#deleteManager').modal('hide')
+            return this.$emit('returnShowModalDelete',false)
         },
 
 
