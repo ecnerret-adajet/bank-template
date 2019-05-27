@@ -80,12 +80,12 @@ export default {
         showModal() {
              if(this.showModal == true) {
                 $('#newBank').modal('show')
-                console.log('chec initial tosubmit: ', this.toSubmit)
             }
         },
         toEdit() {
             if (this.isCreate === false || Object.keys(this.toEdit).length != 0) {
                 this.toSubmit = this.toEdit
+                this.$refs.typeahead.$data.inputValue = this.toEdit.name
             }
         }
     },
@@ -126,7 +126,6 @@ export default {
                 this.returnMessage("Added successfully!")
                 this.resetFields()
                 this.closeForm()
-                console.log('check store tosubmit: ', this.toSubmit)
             })
             .catch(error => {
                 if(error.response.status == 422) {

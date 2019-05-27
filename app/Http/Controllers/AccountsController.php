@@ -100,7 +100,7 @@ class AccountsController extends Controller
     public function update(Request $request, Account $account)
     {
         $this->validate($request, [
-            'account_number' => 'required|unique:accounts,account_number'.$account->id,
+            'account_number' => 'required|unique:accounts,account_number,'.$account->id,
             'bank_list' => 'required',
             'company_list' => 'required'
         ]);
