@@ -80,7 +80,12 @@ export default {
 
     methods: {
         resetFields() {
-            this.toSubmit = {}
+            this.toSubmit = {
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
+            }
         },
 
         returnMessage(message) {

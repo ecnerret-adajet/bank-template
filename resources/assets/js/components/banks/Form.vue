@@ -15,6 +15,8 @@
                 <div class="form-group" :class="{ ' has-danger' : errors.name }">
                     <label>Bank Name</label>
                     <vue-bootstrap-typeahead
+                    ref="typeahead"
+                    size="sm"
                     type="text"
                     placeholder="Enter Bank Name.."
                     class="form-control"
@@ -78,6 +80,7 @@ export default {
         showModal() {
              if(this.showModal == true) {
                 $('#newBank').modal('show')
+                console.log('chec initial tosubmit: ', this.toSubmit)
             }
         },
         toEdit() {
@@ -89,7 +92,12 @@ export default {
 
     methods: {
         resetFields() {
-            this.toSubmit = {}
+            this.toSubmit = {
+                name: '',
+                branch: '',
+                location: ''
+            }
+            this.$refs.typeahead.$data.inputValue = ''
         },
 
         returnMessage(message) {
@@ -118,6 +126,7 @@ export default {
                 this.returnMessage("Added successfully!")
                 this.resetFields()
                 this.closeForm()
+                console.log('check store tosubmit: ', this.toSubmit)
             })
             .catch(error => {
                 if(error.response.status == 422) {
@@ -153,7 +162,7 @@ export default {
             });
         },
 
-        closeForm(event) {
+        closeForm() {
             this.errors = []
             this.$emit('returnToEdit', {})
             this.$emit('returnShowModal',false)

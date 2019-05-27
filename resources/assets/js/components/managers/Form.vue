@@ -112,7 +112,13 @@ export default {
         },
 
         resetFields() {
-            this.toSubmit = {}
+            this.toSubmit = {
+                selectedBank: '',
+                title: '',
+                first_name: '',
+                middle_name: '',
+                last_name: '',
+            }
         },
 
         returnMessage(message) {

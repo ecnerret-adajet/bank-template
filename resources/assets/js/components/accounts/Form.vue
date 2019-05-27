@@ -94,7 +94,11 @@ export default {
     methods: {
 
         resetFields() {
-            this.toSubmit = {}
+            this.toSubmit = {
+                bank_list: '',
+                company_list: '',
+                account_number: '',
+            }
         },
 
         returnMessage(message) {
@@ -168,7 +172,7 @@ export default {
             });
         },
 
-        closeForm(event) {
+        closeForm() {
             this.errors = []
             this.$emit('returnToEdit', {})
             this.$emit('returnShowModal',false)

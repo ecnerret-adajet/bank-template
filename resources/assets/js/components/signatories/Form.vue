@@ -75,7 +75,11 @@ export default {
     methods: {
 
         resetFields() {
-            this.toSubmit = {}
+            this.toSubmit = {
+                first_name: '',
+                middle_name: '',
+                last_name: '',
+            }
         },
 
         returnMessage(message) {
