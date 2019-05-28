@@ -108,8 +108,8 @@
         $tempNum = explode( '.' , $x->amount);
 
         $convertedNumber = count($tempNum) > 1 ?
-                           strtoUpper($f->format($tempNum[0])) . ' AND ' . strtoUpper($f->format($tempNum[1]) . ' CENTAVOS ') :
-                           strtoUpper($f->format($tempNum[0]))
+                           strtoUpper($f->format($tempNum[0])) . ' AND ' . strtoUpper($f->format(strlen($tempNum[1]) == 1 ? $tempNum[1].'0' : $tempNum[1]) . ' CENTAVOS ') :
+                           strtoUpper($f->format($tempNum[0]));
 
     @endphp
 
