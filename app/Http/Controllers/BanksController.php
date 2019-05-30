@@ -38,7 +38,7 @@ class BanksController extends Controller
     public function getBankWithAccounts()
     {
         $banks = Bank::has('accounts')
-                ->with('manager','accounts')
+                ->with('manager','accounts','accounts.company.location')
                 ->get();
 
         return $banks;

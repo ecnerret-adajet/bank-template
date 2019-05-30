@@ -20,6 +20,8 @@ class AccountResource extends Resource
             'account_number' => $this->account_number,
             'bank' => $this->bank,
             'company' => $this->company,
+            'account_company' =>  $this->account_number." - ".$this->company->abbrv,
+            'company_location' => $this->company->location ? $this->account_number." - ".$this->company->abbrv.' - '.$this->company->location->name : $this->account_number." - ".$this->company->abbrv
         ];
     }
 }

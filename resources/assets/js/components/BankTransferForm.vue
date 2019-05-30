@@ -61,7 +61,7 @@
                     <label>From Account</label>
                     <select class="form-control" name="from_account" v-model="selectedFromAccount">
                         <option value="" disabled selected>Select Account Number</option>
-                        <option v-for="(account,a) in fromAccount" :key="a" selected :value="account.id">{{ account.account_company }}</option>
+                        <option v-for="(account,a) in fromAccount" :key="a" selected :value="account.id">{{  account.company.location ? account.account_company + ' - ' + account.company.location.name : account.account_company  }}</option>
                     </select>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <label>To Account</label>
                     <select class="form-control" name="to_account" v-model="selectedToAccount">
                         <option value="" disabled selected>Select Account Number</option>
-                        <option v-for="(account,a) in toAccount" :key="a" selected :value="account.id">{{ account.account_company }}</option>
+                        <option v-for="(account,a) in toAccount" :key="a" selected :value="account.id">{{ account.company_location }}</option>
                     </select>
                 </div>
             </div>
@@ -130,6 +130,8 @@ export default {
             banks: [],
             signatories: [],
             signatories2: [],
+            accounts: [],
+            loadAccounts: false,
             selectedBank: '',
             selectedToAccount: '',
             selectedFromAccount: '',
@@ -155,6 +157,7 @@ export default {
 
     created() {
         this.getBank()
+        this.getAllAccounts()
         this.getSignatories()
     },
 
@@ -173,6 +176,15 @@ export default {
         getBank() {
             axios.get('/banks-accounts')
             .then(response => this.banks = response.data);
+        },
+
+        getAllAccounts() {
+            this.loadAccounts = true;
+            axios.get('/accounts')
+            .then(response => {
+                this.accounts = response.data
+                this.loadAccounts = false;
+            });
         },
 
         getSignatories() {
@@ -228,7 +240,8 @@ export default {
 
         toAccount() {
             if(this.selectedFromAccount) {
-                return this.getSelectedBank.map(x => x.accounts.filter(account => account.id != this.selectedFromAccount))[0];
+                // return this.getSelectedBank.map(x => x.accounts.filter(account => account.id != this.selectedFromAccount))[0];
+                return this.accounts.filter(account => account.id != this.selectedFromAccount);
             }
         },
 
@@ -240,7 +253,7 @@ export default {
 
         toCompany() {
             if(this.selectedToAccount) {
-                return this.fromAccount.filter(account => account.id == this.selectedToAccount)[0];
+                return this.accounts.filter(account => account.id == this.selectedToAccount)[0];
             }
         },
 
