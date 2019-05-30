@@ -35,7 +35,7 @@
                  <button v-else type="button" class="btn btn-primary btn-block" @click="updateItem(payee)">Update</button>
             </td>
         </tr>
-        
+
         <tr>
             <td>
                 <div class="form-group">
@@ -62,14 +62,39 @@
             </td>
         </tr>
          </tbody>
-    </table> 
+    </table>
 
 
     <div class="row mt-3">
         <div class="col">
+
+            <div class="form-group text-right" :class="{ ' has-danger' : mc_cost !== 0 }">
+                <label>MC Cost</label>
+                <select :class="{ 'is-invalid' : mc_cost === '' }" class="form-control w-25 ml-auto" v-model="mc_cost">
+                    <option value="3" selected>3</option>
+                    <option value="50" selected>50</option>
+                </select>
+                <div v-if="mc_cost === ''" class="invalid-feedback">MC cost is required</div>
+            </div>
+
+
+            <!-- <div class="form-group text-right" :class="{ ' has-danger' : mc_cost !== 0 }">
+            <label>MC Cost:</label> -->
+            <!-- <input type="number" class="form-control w-25 ml-auto" disabled id="grand-total" name="mc_cost" v-model="totalMcCost" placeholder="MC Cost"> -->
+            <!-- <select :class="{ 'is-invalid' : mc_cost !== 0 }" class="form-control w-25 ml-auto" v-model="mc_cost">
+                <option value="" selected>Select MC Cost</option>
+                <option v-for="(cost,i) in mc_cost_select" :key="i" selected :value="cost">{{ cost }}</option>
+            </select>
+            <div v-if="mc_cost !== 0" class="invalid-feedback">MC cost is required</div>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
             <div class="form-group text-right">
-            <label>MC Cost:</label>
-            <input type="number" class="form-control w-25 ml-auto" disabled id="grand-total" name="mc_cost" v-model="totalMcCost" placeholder="MC Cost">
+            <label>Total MC Cost:</label>
+            <input type="number" class="form-control w-25 ml-auto" id="grand-total" disabled  name="grand_total" v-model="totalMcCost" placeholder="Grand Total">
             </div>
         </div>
     </div>
@@ -97,7 +122,7 @@ export default {
             nature: '',
             ref_num: '',
             amount: '',
-            mc_cost: '',
+            mc_cost: 3,
             payees: [],
             beforeEditCache: {
                 name: '',
@@ -162,7 +187,7 @@ export default {
         addItem() {
 
             axios.post('/payees/' + this.user_id , {
-                name: this.name, 
+                name: this.name,
                 nature: this.nature,
                 ref_num: this.ref_num,
                 amount: this.amount,
@@ -227,7 +252,7 @@ export default {
         formatPrice(value) {
             let val = (value/1).toFixed(2).replace(',', '.')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        } 
+        }
     },
 
     computed: {
@@ -247,10 +272,10 @@ export default {
 
         totalMcCost() {
             var total = 0;
-            total = Number(this.payees.length) * 50;
+            total = Number(this.payees.length) * this.mc_cost;
             return total;
         }
     }
-    
+
 }
 </script>
