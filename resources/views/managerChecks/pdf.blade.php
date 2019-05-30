@@ -78,7 +78,26 @@
         </tr>
     </table>
 
-    <table class="borderless">
+
+       <table class="borderless" style="margin-top: 1em">
+        <tr>
+            <td>
+                <strong>
+                <span>
+                {{ $x->manager->bank->name }}
+                </span> <br/>
+                <span>
+                    {{ $x->manager->bank->branch }}
+                </span> <br/>
+                <span>
+                    {{ $x->manager->bank->location }}
+                </span>
+                </strong>
+            </td>
+        </tr>
+    </table>
+
+    <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
                 <strong>
@@ -96,21 +115,6 @@
     </table>
 
     <table class="borderless" style="margin-top: 1em">
-        <tr>
-            <td>
-                <strong>
-                <span>
-                {{ $x->manager->bank->name }}
-                </span> <br/>
-                <span>
-                    {{ $x->manager->bank->branch }}
-                </span> <br/>
-                <span>
-                    {{ $x->manager->bank->location }}
-                </span>
-                </strong>
-            </td>
-        </tr>
          <tr>
              <td>
                 <p>
@@ -171,7 +175,7 @@
     <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
-                Please debit to BPI account no. {{ $x->account_number }}
+                Please debit from BPI account no. {{ $x->account_number }}
             </td>
         </tr>
         <tr>

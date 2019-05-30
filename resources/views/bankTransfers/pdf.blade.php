@@ -69,24 +69,8 @@
         </tr>
     </table>
 
-    <table class="borderless">
-        <tr>
-            <td>
-                <strong>
-                {{ $x->manager->full_name }}
-                </strong> <br/>
-                <span>
-                    Branch Manager
-                </span> <br/>
-                <span>
 
-                </span>
-
-            </td>
-        </tr>
-    </table>
-
-    <table class="borderless" style="margin-top: 1em">
+      <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
                 <strong>
@@ -100,6 +84,23 @@
                     {{ $x->manager->bank->location }}
                 </span>
                 </strong>
+            </td>
+        </tr>
+    </table>
+
+    <table class="borderless" style="margin-top: 1em">
+        <tr>
+            <td>
+                <strong>
+                {{ $x->manager->full_name }}
+                </strong> <br/>
+                <span>
+                    Branch Manager
+                </span> <br/>
+                <span>
+
+                </span>
+
             </td>
         </tr>
     </table>

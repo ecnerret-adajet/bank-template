@@ -77,7 +77,26 @@
         </tr>
     </table>
 
-    <table class="borderless">
+
+    <table class="borderless" style="margin-top: 1em">
+        <tr>
+            <td>
+                <strong>
+                <span>
+                {{ $x->manager->bank->name }}
+                </span> <br/>
+                <span>
+                    {{ $x->manager->bank->branch }}
+                </span> <br/>
+                <span>
+                    {{ $x->manager->bank->location }}
+                </span>
+                </strong>
+            </td>
+        </tr>
+    </table>
+
+    <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
                 <strong>
@@ -97,21 +116,6 @@
     <table class="borderless" style="margin-top: 1em">
         <tr>
             <td>
-                <strong>
-                <span>
-                {{ $x->manager->bank->name }}
-                </span> <br/>
-                <span>
-                    {{ $x->manager->bank->branch }}
-                </span> <br/>
-                <span>
-                    {{ $x->manager->bank->location }}
-                </span>
-                </strong>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <p>
                     <strong>
                        {{ strtoUpper($x->type->name) }}
@@ -122,7 +126,7 @@
                 </p>
 
                 <p>
-                    This is to request from your good office to endorse our new employee with your corresponding BPI Branch for
+                    This is to request from your good office to endorse our new employee with your corresponding BPI Branch(es) for
                     his/her application for payroll ATM account.
                 </p>
 
@@ -156,7 +160,7 @@
         </tr>
         <tr>
             <td>
-                Hope for your kind assistance. Thank you
+                Hoping for your kind assistance. Thank you.
             </td>
         </tr>
         <tr>

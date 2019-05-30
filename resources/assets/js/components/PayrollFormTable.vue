@@ -54,12 +54,17 @@
 <script>
 export default {
     props: ['user_id'],
+
+    props: {
+        'user_id': String,
+        'banks': Array
+    },
+
     data() {
         return {
             name: '',
             branch: '',
             applicants: [],
-            banks: [],
             beforeEditCache: {
                 name: '',
                 company: '',
@@ -79,7 +84,7 @@ export default {
 
     created() {
         this.getApplicants()
-        this.getBanks()
+        // this.getBanks()
     },
 
     methods: {
@@ -93,10 +98,10 @@ export default {
             this.branch = '';
         },
 
-        getBanks() {
-            axios.get('/getBanks')
-            .then(response => this.banks = response.data);
-        },
+        // getBanks() {
+        //     axios.get('/getBanks')
+        //     .then(response => this.banks = response.data);
+        // },
 
         addItem() {
             axios.post('/applicants/' + this.user_id, {

@@ -20,7 +20,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>Application Type</label>
-                    <select class="form-control" name="payroll_type" v-model="selectedType">
+                    <select class="form-control"  v-model="selectedType">
                         <option value="" disabled selected>Select Application Type</option>
                         <option v-for="(type,t) in types" :key="t" selected :value="type.id">{{ type.name }}</option>
                     </select>
@@ -33,7 +33,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>Company</label>
-                    <select class="form-control" name="payroll_type" v-model="selectedCompany">
+                    <select class="form-control"  v-model="selectedCompany">
                         <option value="" disabled selected>Select Company</option>
                         <option v-for="(company,c) in companies" :key="c" selected :value="company.id">{{ company.department ? company.department + ' - ' + company.name : company.name }}</option>
                     </select>
@@ -46,7 +46,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>Bank Branch</label>
-                    <select class="form-control" name="payroll_type" v-model="selectedNearBank">
+                    <select class="form-control"  v-model="selectedNearBank">
                         <option value="" disabled selected>Select Branch Manager</option>
                         <option v-for="(manager,m) in nearBanks" :key="m" selected :value="manager.id">{{ manager.name + ' - ' + manager.branch }}</option>
                     </select>
@@ -57,7 +57,7 @@
 
         <div class="row mt-2">
             <div class="col">
-                <app-payroll-form-table :user_id="user_id"></app-payroll-form-table>
+                <app-payroll-form-table :user_id="user_id" :banks="nearBanks"></app-payroll-form-table>
             </div>
         </div>
 
@@ -128,8 +128,8 @@ export default {
 
     watch: {
         selectedCompany() {
-            this.getSignatories()
             this.getNearestBank()
+            this.getSignatories()
             console.log('check empty nearBanks: ', this.emptyNearBank)
         }
     },
@@ -158,6 +158,8 @@ export default {
         },
 
         getNearestBank() {
+            this.nearBanks = []
+            this.selectedNearBank = ''
             axios.get(`/api/companies-near-branch/${this.selectedCompany}`)
             .then(response => {
                 return response.data.map(item => {
