@@ -24,7 +24,7 @@ class Payroll extends Model
 
     public function manager()
     {
-        return $this->belongsTo(manager::class);
+        return $this->belongsTo(Manager::class);
     }
 
     public function applicants()
@@ -44,10 +44,10 @@ class Payroll extends Model
 
     //Queue Scope
 
-    public function scopeCurrentUser($query) 
+    public function scopeCurrentUser($query)
     {
         return $query->where('user_id',Auth::user()->id)->get();
-    } 
+    }
 
     // Custom JSON Casting
 
