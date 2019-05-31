@@ -5,7 +5,7 @@
             <div class="row">
             <div class="col">
                 <span class="h3 text-dark">All Companies</span>
-                <button type="button" class="float-right btn btn-primary"  data-toggle="modal" data-target="#newCompany">
+                <button type="button" class="float-right btn btn-primary" @click="openCreateModal()">
                     Add Company
                 </button>
             </div><!-- /.col -->
@@ -87,41 +87,12 @@
 
 
         <!-- Add New Bank Modal -->
-        <div class="modal fade" id="newCompany" tabindex="-1" role="dialog" aria-labelledby="newCompanyLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newCompanyLabel">Add New Company</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+        <company-form :showModal="showModal"
+                    :is-create="isCreate"
+                    @returnShowModal="showModal = $event"
+                    @storeResponse="storeResponse">
+        </company-form>
 
-                <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" class="form-control"  v-model="name" placeholder="Enter Company Name">
-                </div>
-
-                <div class="form-group">
-                    <label>Department</label>
-                    <input type="text" class="form-control"  v-model="department" placeholder="Enter Department">
-                </div>
-
-                <div class="form-group">
-                    <label>Abbrv</label>
-                    <input type="text" class="form-control"  v-model="abbrv" placeholder="Enter Abbreviation">
-                </div>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" :disabled="validateFields" @click.prevent="storeCompany" data-dismiss="modal">Submit</button>
-            </div>
-            </div>
-        </div>
-        </div>
 
 
     </div>
@@ -131,6 +102,7 @@
 import Toasted from 'vue-toasted';
 import moment from 'moment';
 import VueContentPlaceholders from 'vue-content-placeholders';
+import Form from './companies/Form.vue';
 
 Vue.use(Toasted)
 
@@ -138,11 +110,14 @@ export default {
 
     components: {
         VueContentPlaceholders,
+        companyForm: Form,
     },
 
     data() {
         return {
             loading: false,
+            isCreate: false,
+            showModal: false,
             companies: [],
             avatar_link: '/storage/',
             avatar: 'companies/avatar.png',
@@ -171,22 +146,14 @@ export default {
             .then(response => this.companies = response.data)
         },
 
-        storeCompany() {
-            axios.post('/companies', {
-                name : this.name,
-                department : this.department,
-                abbrv : this.abbrv,
-                avatar : this.avatar
-            })
-            .then(response => {
-                this.companies.unshift(response.data)
-                Vue.toasted.show("Added Successfully!", {
-                    theme: "primary",
-                    position: "bottom-right",
-                    duration : 5000
-                });
-            })
+        storeResponse(event) {
             this.resetFields()
+            return this.getCompanies()
+        },
+
+        openCreateModal() {
+            this.showModal = true;
+            this.isCreate = true;
         },
 
         setPage(pageNumber) {

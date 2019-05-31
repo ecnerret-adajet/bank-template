@@ -75,36 +75,42 @@ class CompaniesController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'department' => 'required',
+            // 'department' => 'required',
             'abbrv' => 'required',
-            'avatar' => 'required'
+            // 'avatar' => 'required'
         ]);
 
-        $company = Company::create($request->all());
+        $company = Company::create([
+            'name' => $request->name,
+            'department' => $request->department,
+            'abbrv' => $request->abbrv
+        ]);
 
           // Sync array of signatory for primary signatory for a given company [policy_type = 1]
-        $company->signatories()->sync($request->input('signatory1'), ['policy_type' => 1]);
+        // $company->signatories()->sync($request->input('signatory1'), ['policy_type' => 1]);
 
-        // //check the existing signatory for secondary signatories [policy_type = 2]
-        $existingSignatories = $company->secondarySignatories->pluck('id');
-        // will compare the given secondary signatory from exisitng secondary signatories = new array
-        $addedSignatories = array_diff($request->input('signatory2'), $existingSignatories->toArray());
+        // // //check the existing signatory for secondary signatories [policy_type = 2]
+        // $existingSignatories = $company->secondarySignatories->pluck('id');
+        // // will compare the given secondary signatory from exisitng secondary signatories = new array
+        // $addedSignatories = array_diff($request->input('signatory2'), $existingSignatories->toArray());
 
-        //check if input type for secondary signatories has an array passed
-        if (count($request->input('signatory2')) < 1) {
-            // if empty, all existing secondary signatory will detach
-            $company->signatories()->detach($existingSignatories);
-        }
+        // //check if input type for secondary signatories has an array passed
+        // if (count($request->input('signatory2')) < 1) {
+        //     // if empty, all existing secondary signatory will detach
+        //     $company->signatories()->detach($existingSignatories);
+        // }
 
-        if (count($addedSignatories) > 0) {
-            // will attached the filtered array as new secondary signatories [policy_type = 2]
-            $company->signatories()->attach($addedSignatories, ['policy_type' => 2]);
-        }
+        // if (count($addedSignatories) > 0) {
+        //     // will attached the filtered array as new secondary signatories [policy_type = 2]
+        //     $company->signatories()->attach($addedSignatories, ['policy_type' => 2]);
+        // }
 
-        return [
-            'data' => new CompanyResource($company),
-            'redirect' => route('master-data')
-        ];
+        // return [
+        //     'data' => new CompanyResource($company),
+        //     'redirect' => route('master-data')
+        // ];
+
+        return new CompanyResource($company);
 
     }
 

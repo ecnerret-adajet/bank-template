@@ -20,6 +20,7 @@
                     type="text"
                     placeholder="Enter Bank Name.."
                     class="form-control"
+                    :class="{ 'is-invalid' : errors.name }"
                     v-model="toSubmit.name"
                     :data="banks"
                     />
