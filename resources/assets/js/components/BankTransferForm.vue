@@ -241,7 +241,8 @@ export default {
         toAccount() {
             if(this.selectedFromAccount) {
                 // return this.getSelectedBank.map(x => x.accounts.filter(account => account.id != this.selectedFromAccount))[0];
-                return this.accounts.filter(account => account.id != this.selectedFromAccount);
+                let findBankName = this.banks.find(item => item.id === this.selectedBank);
+                return this.accounts.filter(account => account.id != this.selectedFromAccount && account.bank.name === findBankName.name);
             }
         },
 
