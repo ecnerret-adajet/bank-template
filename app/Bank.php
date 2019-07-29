@@ -30,7 +30,7 @@ class Bank extends Model
 
     public function manager()
     {
-        return $this->hasOne(Manager::class);
+        return $this->belongsTo(Manager::class);
     }
 
     public function companies()

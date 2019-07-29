@@ -40,6 +40,15 @@
                     <div v-if="errors.location" class="invalid-feedback">{{ errors.location[0] }}</div>
                 </div>
 
+                <div class="form-group" :class="{ ' has-danger' : errors.manager_id }">
+                    <label>Manager Name</label>
+                    <select class="form-control" v-model="toSubmit.manager_id" :class="{ 'is-invalid' : errors.manager_id }">
+                        <option value=""  selected>All Banks</option>
+                        <option v-for="(manager,i) in managers" :key="i" selected :value="manager.id">{{ manager.first_name + ' ' + manager.last_name  }}</option>
+                    </select>
+                    <div v-if="errors.manager_id" class="invalid-feedback">{{ errors.manager_id[0] }}</div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="closeForm">Cancel</button>
@@ -58,7 +67,7 @@ import Toasted from 'vue-toasted';
 
 export default {
 
-    props: ['toEdit','showModal','isCreate','banks'],
+    props: ['toEdit','showModal','isCreate','banks','managers'],
 
     components: {
         VueBootstrapTypeahead
@@ -71,7 +80,8 @@ export default {
             toSubmit: {
                 name: '',
                 branch: '',
-                location: ''
+                location: '',
+                manager_id: ''
             },
 
         }
@@ -92,6 +102,7 @@ export default {
     },
 
     methods: {
+        
         resetFields() {
             this.toSubmit = {
                 name: '',
@@ -114,7 +125,8 @@ export default {
             axios.post('/banks', {
                 name : this.toSubmit.name,
                 branch : this.toSubmit.branch,
-                location: this.toSubmit.location
+                location: this.toSubmit.location,
+                manager_id: this.toSubmit.manager_id
             })
             .then(response => {
                 if(response.status === 200) {
@@ -141,7 +153,8 @@ export default {
             axios.put(`/banks/${this.toSubmit.id}`,{
                 name : this.toSubmit.name,
                 branch : this.toSubmit.branch,
-                location: this.toSubmit.location
+                location: this.toSubmit.location,
+                manager_id: this.toSubmit.manager_id
             })
             .then(response => {
                 if(response.status === 200) {

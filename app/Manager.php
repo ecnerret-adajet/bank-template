@@ -24,6 +24,11 @@ class Manager extends Model
         return $this->belongsTo(Bank::class);
     }
 
+    public function banks()
+    {
+        return $this->hasMany(Bank::class);
+    }
+
     // Mutator
 
     public function getFullNameAttribute()

@@ -65,10 +65,14 @@ class BanksController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'branch' => 'required|string|unique:banks',
-            'location' => 'required'
+            'location' => 'required',
+            'manager_id' => 'required',
         ]);
 
         $bank = Auth::user()->banks()->create($request->all());
+        $bank->manager()->associate($request->input('manager_id'));
+        $bank->save();
+        
         return $bank;
     }
 
@@ -106,10 +110,14 @@ class BanksController extends Controller
          $this->validate($request, [
             'name' => 'required',
             'branch' => 'required|string|unique:banks,branch,'.$bank->id,
-            'location' => 'required'
+            'location' => 'required',
+            'manager_id' => 'required'
         ]);
 
         $bank->update($request->all());
+        $bank->manager()->associate($request->input('manager_id'));
+        $bank->save();
+
         return $bank;
     }
 

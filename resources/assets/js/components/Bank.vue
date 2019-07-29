@@ -85,6 +85,7 @@
 
         <!-- Create and Edit Module -->
         <bank-form :showModal="showModal"
+                    :managers="managers"
                     :banks="banksSelection"
                     :is-create="isCreate"
                     :to-edit="toEdit"
@@ -126,6 +127,7 @@ export default {
         return {
             loading: false,
             banks: [],
+            managers: [],
             banksSelection: [],
             toEdit: {},
             toDelete: {},
@@ -140,9 +142,19 @@ export default {
 
     created() {
         this.getBanks()
+        this.getManagers()
     },
 
     methods: {
+
+        getManagers() {
+            this.loading = true
+            axios.get('/managers')
+            .then(response => {
+                this.managers = response.data
+                this.loading = false
+            });
+        },
 
         editResponse(event) {
             let findIndex = this.banks.findIndex(item => item.id === event.id);

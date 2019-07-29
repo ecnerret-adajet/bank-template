@@ -130,7 +130,6 @@ export default {
         selectedCompany() {
             this.getNearestBank()
             this.getSignatories()
-            console.log('check empty nearBanks: ', this.emptyNearBank)
         }
     },
 
@@ -163,7 +162,8 @@ export default {
             axios.get(`/api/companies-near-branch/${this.selectedCompany}`)
             .then(response => {
                 return response.data.map(item => {
-                    console.log('bank cound: ', item.banks.length)
+                    console.log('bank count: ', item.banks.length)
+                    console.log('bank items: ', item.banks)
                     if(item.banks.length > 0) {
                         this.emptyNearBank = false
                         this.nearBanks = item.banks
