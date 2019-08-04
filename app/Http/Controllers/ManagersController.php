@@ -53,7 +53,7 @@ class ManagersController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'first_name' => 'required',
-            'middle_name' => 'required',
+            // 'middle_name' => 'required',
             'last_name' => 'required',
             'bank_list' => 'required'
         ]);
@@ -99,7 +99,7 @@ class ManagersController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'first_name' => 'required',
-            'middle_name' => 'required',
+            // 'middle_name' => 'required',
             'last_name' => 'required',
             'bank_list' => 'required'
         ]);

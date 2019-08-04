@@ -66,13 +66,13 @@ class BanksController extends Controller
             'name' => 'required',
             'branch' => 'required|string|unique:banks',
             'location' => 'required',
-            'manager_id' => 'required',
+            // 'manager_id' => 'required',
         ]);
 
         $bank = Auth::user()->banks()->create($request->all());
-        $bank->manager()->associate($request->input('manager_id'));
+        // $bank->manager()->associate($request->input('manager_id'));
         $bank->save();
-        
+
         return $bank;
     }
 
