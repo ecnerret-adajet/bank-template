@@ -126,7 +126,7 @@
                 </p>
 
                 <p>
-                    This is to request from your good office to endorse our new employee with your corresponding BPI Branch(es) for
+                    This is to request from your good office to endorse our new employee with your corresponding Bank Branch(es) for
                     his/her application for payroll ATM account.
                 </p>
 
@@ -138,7 +138,7 @@
         <thead>
             <tr class="pad">
                 <th class="pad">Employee Name</th>
-                <th class="pad">BPI Branch</th>
+                <th class="pad">Branch</th>
             </tr>
         </thead>
         <tbody>
