@@ -21,7 +21,8 @@ class CompanyResource extends Resource
             'department' => $this->department,
             'abbrv' => $this->abbrv,
             'avatar' => $this->avatar,
-            'location' => $this->location
+            'location' => $this->location,
+            'bank_code' => $this->location,
         ];
     }
 }
