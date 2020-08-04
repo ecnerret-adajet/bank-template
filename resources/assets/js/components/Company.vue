@@ -27,6 +27,7 @@
                     <th scope="col" class="text-dark" >Avatar</th>
                     <th scope="col" class="text-dark" >Company</th>
                     <th scope="col" class="text-dark" >Division</th>
+                    <th scope="col" class="text-dark" >Bank Code</th>
                     <th scope="col" class="text-dark" >Option</th>
                 </tr>
             </thead>
@@ -37,6 +38,7 @@
                     </td>
                     <td>{{ company.name }}</td>
                     <td>{{ company.department }}</td>
+                    <td>{{ company.bank_code }}</td>
                     <td>
                           <!-- Default dropleft button -->
                         <div class="btn-group dropleft">

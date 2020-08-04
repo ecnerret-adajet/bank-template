@@ -22,7 +22,7 @@ class CompanyResource extends Resource
             'abbrv' => $this->abbrv,
             'avatar' => $this->avatar,
             'location' => $this->location,
-            'bank_code' => $this->location,
+            'bank_code' => $this->bank_code,
         ];
     }
 }
