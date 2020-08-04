@@ -139,6 +139,7 @@
             <tr class="pad">
                 <th class="pad">Employee Name</th>
                 <th class="pad">Branch</th>
+                <th class="pad">Bank Code</th>
             </tr>
         </thead>
         <tbody>
@@ -146,6 +147,7 @@
                 <tr class="pad">
                     <td class="pad">{{ $applicant->name }}</td>
                     <td class="pad">{{ $applicant->branch }}</td>
+                    <td class="pad">{{ $x->company->bank_code }}</td>
                 </tr>
             @endforeach
         </tbody>

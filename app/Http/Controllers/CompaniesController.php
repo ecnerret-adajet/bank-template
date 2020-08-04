@@ -77,13 +77,15 @@ class CompaniesController extends Controller
             'name' => 'required',
             // 'department' => 'required',
             'abbrv' => 'required',
+            'bank_code' => 'required',
             // 'avatar' => 'required'
         ]);
 
         $company = Company::create([
             'name' => $request->name,
             'department' => $request->department,
-            'abbrv' => $request->abbrv
+            'abbrv' => $request->abbrv,
+            'bank_code' => $request->bank_code
         ]);
 
           // Sync array of signatory for primary signatory for a given company [policy_type = 1]
@@ -148,12 +150,14 @@ class CompaniesController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'abbrv' => 'required',
+            'bank_code' => 'required',
             'signatory1' => 'required',
             'bank_list' => 'required',
             'location_list' => 'required'
         ],[
             'name.required' => 'Company name is required',
             'abbrv.required' => 'Company abbreviation is required',
+            'bank_code.required' => 'Company bank code is required',
             'signatory1.required' => 'Primary signatory is required'
         ]);
 

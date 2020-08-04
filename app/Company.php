@@ -10,6 +10,7 @@ class Company extends Model
         'name',
         'department',
         'abbrv',
+        'bank_code'
         // 'avatar'
     ];
 

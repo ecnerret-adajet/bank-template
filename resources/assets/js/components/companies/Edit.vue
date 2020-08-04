@@ -40,6 +40,13 @@
 
          <div class="row">
             <div class="col">
+                    <div class="form-group" :class="{ ' has-danger' : errors.bank_code }">
+                    <label for="exampleSelect2">Bank Code</label>
+                   <input type="text" placeholder="Enter Bank Code" class="form-control" :class="{ 'is-invalid' : errors.bank_code }" v-model="toEdit.bank_code">
+                    <div v-if="errors.bank_code" class="invalid-feedback">{{ errors.bank_code[0] }}</div>
+                </div>
+            </div>
+            <div class="col">
                     <div class="form-group" :class="{ ' has-danger' : errors.location_list }">
                     <label for="exampleSelect2">Location</label>
                     <Select2 v-model="toEdit.location_list" class="form-control" :class="{ 'is-invalid' : errors.location_list }" :settings="{ multiple: false }" :options="locations" @change="myChangeEventSignatory1($event)" @select="mySelectEventSignatory1($event)" />

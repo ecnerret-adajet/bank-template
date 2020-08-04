@@ -31,6 +31,12 @@
                     <div v-if="errors.abbrv" class="invalid-feedback">{{ errors.abbrv[0] }}</div>
                 </div>
 
+                <div class="form-group" :class="{ ' has-danger' : errors.bank_code }">
+                    <label>Bank Code</label>
+                    <input type="text" class="form-control" id="name" :class="{ 'is-invalid' : errors.bank_code }" v-model="toSubmit.bank_code" placeholder="Enter Abbreviation">
+                    <div v-if="errors.bank_code" class="invalid-feedback">{{ errors.bank_code[0] }}</div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="closeForm">Cancel</button>
@@ -61,7 +67,8 @@ export default {
             toSubmit: {
                 name: '',
                 department: '',
-                abbrv: ''
+                abbrv: '',
+                bank_code: ''
             },
 
         }
@@ -86,7 +93,8 @@ export default {
             this.toSubmit = {
                 name: '',
                 department: '',
-                abbrv: ''
+                abbrv: '',
+                bank_code: ''
             }
         },
 
@@ -103,7 +111,8 @@ export default {
             axios.post('/companies', {
                 name : this.toSubmit.name,
                 department : this.toSubmit.department,
-                abbrv: this.toSubmit.abbrv
+                abbrv: this.toSubmit.abbrv,
+                bank_code: this.toSubmit.bank_code
             })
             .then(response => {
                 if(response.status === 201) {
