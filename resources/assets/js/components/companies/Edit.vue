@@ -198,6 +198,7 @@ export default {
             axios.put(`/companies/${this.companyid }`, {
                 name: this.toEdit.name,
                 department: this.toEdit.department,
+                bank_code: this.toEdit.bank_code,
                 abbrv: this.toEdit.abbrv,
                 signatory1: this.signatory1,
                 signatory2: this.signatory2,
